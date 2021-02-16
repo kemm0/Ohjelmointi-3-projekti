@@ -1,6 +1,7 @@
 QT += quick
 QT += charts
 QT += quickcontrols2
+QT += network
 
 CONFIG += c++11
 
