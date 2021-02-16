@@ -9,17 +9,50 @@ Window {
     visible: true
     title: qsTr("Upea GUI")
     color: "#e3e3e3"
-    GraphMenu{
-        id: topMenu
+    Rectangle{
+        id: mainMenu
+        width: parent.width
+        height: mainWindow.height * 0.05
         anchors.top: parent.top
+        color: "blue"
+        TopMenu{
+            anchors.fill: parent
+        }
+    }
+    Rectangle{
+        width: parent.width
+        height: mainWindow.height * 0.05
+        anchors.top: mainMenu.bottom
+        color: "red"
+        anchors.topMargin: 5
+        TabMenu{
+            id: tabs
+            anchors.fill: parent
+        }
+    }
+    Rectangle{
         anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        width: mainWindow.width/2
+        height: mainWindow.height/2
+        color: "white"
+        border.color: "black"
+        border.width: 1
+        ListView{
+            width: parent.width
+            height: parent.height
+            model: DataList{}
+            delegate: Text{
+                text: name + ": " + value + ": " + latest_update + ": " + graphColor
+            }
+        }
     }
 
     Rectangle{
         width: mainWindow.width/2
         height: mainWindow.height/2
         anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.right: parent.right
         GraphBox{
             id: graph
             anchors.fill: parent

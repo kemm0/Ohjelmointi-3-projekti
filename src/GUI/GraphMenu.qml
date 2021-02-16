@@ -5,7 +5,6 @@ Item {
     Button {
         id: button1
         text: "Button 1"
-        anchors.left: parent.left
     }
     Button {
         text: "Button 2"
