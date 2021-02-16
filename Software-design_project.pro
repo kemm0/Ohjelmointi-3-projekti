@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        src/data.cpp \
         src/main.cpp
 
 RESOURCES += \
@@ -27,3 +28,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     res/API_config \
+
+HEADERS += \
+    src/data.hh
