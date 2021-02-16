@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 #endif
 
     QApplication app(argc, argv);
-    QQuickStyle::setStyle("Universal");
+    QQuickStyle::setStyle("Fusion");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

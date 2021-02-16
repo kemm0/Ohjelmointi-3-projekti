@@ -4,5 +4,9 @@
         <file>GraphBox.qml</file>
         <file>TopMenu.qml</file>
         <file>GraphMenu.qml</file>
+        <file>TabMenu.qml</file>
+        <file>DataModel.qml</file>
+        <file>DataPanel.qml</file>
+        <file>GraphView.qml</file>
     </qresource>
 </RCC>
