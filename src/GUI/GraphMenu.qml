@@ -1,13 +1,15 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.12
 
-Item {
-    Button {
-        id: button1
-        text: "Button 1"
-    }
-    Button {
-        text: "Button 2"
-        anchors.left: button1.right
+/*
+  Menu for Graph operations
+*/
+
+Rectangle {
+    Row {
+        Button {
+            id: button1
+            text: "Action 1"
+        }
     }
 }
