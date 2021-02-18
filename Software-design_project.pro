@@ -17,8 +17,6 @@ RESOURCES += \
     src/GUI/qml.qrc
 
 
-#don't know if this is the best option, but it works
-LIBS += -LC:/OpenSSL/bin
 
 
 # Additional import path used to resolve QML modules in Qt Creator's code model

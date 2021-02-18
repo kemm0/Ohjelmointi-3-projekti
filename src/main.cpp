@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     auto data = new Data;
 
 
-    data->fetchDataFinGrid("https://www.google.com/");
+    data->fetchDataFinGrid("https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::simple&place=Pirkkala&timestep=30&parameters=t2m,ws_10min,n_man");
 
 
     QQuickStyle::setStyle("Fusion");
