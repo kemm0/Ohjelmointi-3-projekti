@@ -3,14 +3,19 @@
 
 #include <QObject>
 #include <map>
-#include <QNetworkAccessManager>
 #include <memory>
+#include <iostream>
+#include <QApplication>
+#include <QNetworkReply>
 
-class Data
+class QNetworkAccessManager;
+
+class Data : public QObject
 {
+    Q_OBJECT
 public:
 
-    Data(std::shared_ptr<QNetworkAccessManager> manager);
+    explicit Data(QObject *parent = nullptr);
 
     /**
      * @brief Method used to fetch data from FMI's API
@@ -21,10 +26,13 @@ public:
     /**
      * @brief Method used to fetch data from FinGrid's API
      */
-    void fetchDataFinGrid();
+    void fetchDataFinGrid(const QString &url);
 
+private Q_SLOTS:
+    void downloadCompleted(QNetworkReply *);
+    void error(QNetworkReply::NetworkError code);
 private:
-    std::shared_ptr<QNetworkAccessManager> manager_;
+    QNetworkAccessManager *manager_;
 };
 
 #endif // DATA_HH
