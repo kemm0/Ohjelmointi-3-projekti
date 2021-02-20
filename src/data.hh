@@ -29,8 +29,8 @@ public:
     void fetchDataFinGrid(const QString &url);
 
 private Q_SLOTS:
-    void downloadCompleted(QNetworkReply *);
-    void error(QNetworkReply::NetworkError code);
+    void downloadCompleted(QNetworkReply *reply);
+    void error(QNetworkReply::NetworkError error);
 private:
     QNetworkAccessManager *manager_;
 };
