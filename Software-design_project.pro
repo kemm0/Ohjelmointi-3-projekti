@@ -10,6 +10,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        src/controller.cpp \
         src/data.cpp \
         src/main.cpp
 
@@ -34,6 +35,7 @@ DISTFILES += \
     res/API_config \
 
 HEADERS += \
+    src/controller.hh \
     src/data.hh
 
 
