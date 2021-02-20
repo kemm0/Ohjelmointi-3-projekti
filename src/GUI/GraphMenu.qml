@@ -8,8 +8,9 @@ import QtQuick.Controls 2.12
 Rectangle {
     Row {
         Button {
-            id: button1
-            text: "Action 1"
+            id: dataButton
+            text: "AddData"
+            onClicked: view.addData()
         }
     }
 }

@@ -23,6 +23,7 @@ Window {
         height: mainWindow.height/2
     }
     GraphView{
+        id: graphView
         width: mainWindow.width/2
         height: mainWindow.height/2
         anchors.verticalCenter: parent.verticalCenter
