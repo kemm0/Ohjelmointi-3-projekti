@@ -17,13 +17,13 @@ void Data::fetchdDataFMI()
 
 }
 
-void Data::fetchDataFinGrid(const QString &url)
+void Data::fetchData(const QString &url)
 {
 
     QNetworkRequest req = QNetworkRequest(url);
 
     //used to set the api key for requests
-    req.setRawHeader(QByteArray("x-api-key"),QByteArray(""));
+    //req.setRawHeader(QByteArray("x-api-key"),QByteArray(""));
 
     QNetworkReply *reply = manager_->get(req);
 
@@ -34,8 +34,39 @@ void Data::fetchDataFinGrid(const QString &url)
 
 void Data::downloadCompleted(QNetworkReply *reply)
 {
+
+    QXmlStreamReader xml;
+    QByteArray answer = reply->readAll();
+    xml.addData(answer);
     //after the download, read the data
-    qDebug() << reply->readAll();
+
+
+
+
+    while (!xml.atEnd()){
+        xml.readNext();
+
+        if (xml.isStartElement()){
+            if(xml.name() == "Time"){
+                QString time = xml.readElementText();
+                qDebug() << time;
+                dates.push_back(time);
+            }
+
+            else if (xml.name() == "ParameterValue"){
+                QString value = xml.readElementText();
+                double temp = value.toDouble();
+                qDebug() << temp;
+                temps.push_back(temp);
+            }
+        }
+
+
+    }
+    if (xml.hasError()){
+        qDebug() << "XML error: " << xml.errorString().data();
+    }
+    //qDebug() << answer;
     reply->deleteLater();
 }
 
