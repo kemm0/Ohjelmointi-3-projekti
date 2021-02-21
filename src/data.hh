@@ -25,8 +25,15 @@ public:
 
     /**
      * @brief Method used to fetch data from FinGrid's API
+     * @param url Url of the API
      */
     void fetchData(const QString &url);
+
+    /**
+     * @brief Used to return the values vector
+     * @return "values" -vector
+     */
+    std::vector<std::pair<QString,double>> returnValues();
 
 private Q_SLOTS:
     void downloadCompleted(QNetworkReply *reply);

@@ -32,6 +32,11 @@ void Data::fetchData(const QString &url)
 
 }
 
+std::vector<std::pair<QString, double> > Data::returnValues()
+{
+    return values;
+}
+
 void Data::downloadCompleted(QNetworkReply *reply)
 {
 
