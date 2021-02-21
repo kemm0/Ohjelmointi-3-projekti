@@ -35,6 +35,8 @@ private:
     QNetworkAccessManager *manager_;
     std::vector<double> temps;
     std::vector<QString> dates;
+
+    std::vector<std::pair<QString,double>> values;
 };
 
 #endif // DATA_HH
