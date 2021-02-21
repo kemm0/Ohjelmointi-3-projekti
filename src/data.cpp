@@ -3,6 +3,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QtDebug>
+#include <QXmlStreamReader>
 
 Data::Data(QObject *parent):
     QObject(parent)
@@ -22,7 +23,7 @@ void Data::fetchDataFinGrid(const QString &url)
     QNetworkRequest req = QNetworkRequest(url);
 
     //used to set the api key for requests
-    req.setRawHeader(QByteArray("x-api-key"),QByteArray("TVJel2EJEE3txr1XXtVt57X3H1Kyspyd3pHLvw4X"));
+    req.setRawHeader(QByteArray("x-api-key"),QByteArray(""));
 
     QNetworkReply *reply = manager_->get(req);
 
