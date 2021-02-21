@@ -66,6 +66,12 @@ void Data::downloadCompleted(QNetworkReply *reply)
     if (xml.hasError()){
         qDebug() << "XML error: " << xml.errorString().data();
     }
+
+    for (unsigned int i = 0; i < temps.size();++i){
+        std::pair<QString,double> value = std::make_pair(dates[i],temps[i]);
+        values.push_back(value);
+    }
+
     //qDebug() << answer;
     reply->deleteLater();
 }
