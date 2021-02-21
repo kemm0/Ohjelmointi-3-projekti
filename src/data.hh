@@ -26,13 +26,15 @@ public:
     /**
      * @brief Method used to fetch data from FinGrid's API
      */
-    void fetchDataFinGrid(const QString &url);
+    void fetchData(const QString &url);
 
 private Q_SLOTS:
     void downloadCompleted(QNetworkReply *reply);
     void error(QNetworkReply::NetworkError error);
 private:
     QNetworkAccessManager *manager_;
+    std::vector<double> temps;
+    std::vector<QString> dates;
 };
 
 #endif // DATA_HH
