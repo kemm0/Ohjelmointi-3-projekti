@@ -1,5 +1,5 @@
-import QtQuick 2.0
-
+import QtQuick 2.15
+import QtCharts 2.15
 /*
   Contains the Graph and Graph graphMenu
   */
@@ -7,13 +7,17 @@ import QtQuick 2.0
 Rectangle{
     border.color: "black"
     border.width: 1
-    GraphBox{
-        id: graph
+    ChartView {
+        antialiasing: true
         anchors.fill: parent
-    }
-    GraphMenu{
-        id: graphMenu
-        anchors.top: graph.bottom
-        anchors.left: graph.left
+        LineSeries {
+            name: "Temperature"
+            id: lineSeries
+            color: "red"
+        }
+        Component.onCompleted:
+        {
+            view.lineSeries = lineSeries;
+        }
     }
 }

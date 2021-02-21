@@ -12,11 +12,6 @@ Data::Data(QObject *parent):
     connect(manager_,&QNetworkAccessManager::finished, this, &Data::downloadCompleted);
 }
 
-void Data::fetchdDataFMI()
-{
-
-}
-
 void Data::fetchData(const QString &url)
 {
 
@@ -32,7 +27,7 @@ void Data::fetchData(const QString &url)
 
 }
 
-std::vector<std::pair<QString, double> > Data::returnValues()
+std::vector<std::pair<QDateTime, qreal> > Data::getValues()
 {
     return values;
 }
@@ -53,16 +48,18 @@ void Data::downloadCompleted(QNetworkReply *reply)
 
         if (xml.isStartElement()){
             if(xml.name() == "Time"){
-                QString time = xml.readElementText();
-                qDebug() << time;
-                dates.push_back(time);
+                std::string timeValue =  xml.readElementText().toStdString();
+                int y = std::stoi(timeValue.substr(0,4));
+                int m = std::stoi(timeValue.substr(5,2));
+                int d = std::stoi(timeValue.substr(8,2));
+                QDateTime dateTime;
+                dateTime.setDate(QDate(y,m,d));
+                dates.push_back(dateTime);
             }
 
             else if (xml.name() == "ParameterValue"){
-                QString value = xml.readElementText();
-                double temp = value.toDouble();
-                qDebug() << temp;
-                temps.push_back(temp);
+                double tempValue = xml.readElementText().toDouble();
+                temps.push_back(qreal(tempValue));
             }
         }
 
@@ -73,7 +70,7 @@ void Data::downloadCompleted(QNetworkReply *reply)
     }
 
     for (unsigned int i = 0; i < temps.size();++i){
-        std::pair<QString,double> value = std::make_pair(dates[i],temps[i]);
+        std::pair<QDateTime,qreal> value = std::make_pair(dates[i],temps[i]);
         values.push_back(value);
     }
 

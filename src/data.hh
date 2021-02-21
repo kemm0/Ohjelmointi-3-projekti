@@ -7,6 +7,7 @@
 #include <iostream>
 #include <QApplication>
 #include <QNetworkReply>
+#include <QDateTime>
 
 class QNetworkAccessManager;
 
@@ -17,14 +18,9 @@ public:
 
     explicit Data(QObject *parent = nullptr);
 
+
     /**
      * @brief Method used to fetch data from FMI's API
-     */
-    void fetchdDataFMI();
-
-
-    /**
-     * @brief Method used to fetch data from FinGrid's API
      * @param url Url of the API
      */
     void fetchData(const QString &url);
@@ -33,17 +29,17 @@ public:
      * @brief Used to return the values vector
      * @return "values" -vector
      */
-    std::vector<std::pair<QString,double>> returnValues();
+    std::vector<std::pair<QDateTime,qreal>> getValues();
 
 private Q_SLOTS:
     void downloadCompleted(QNetworkReply *reply);
     void error(QNetworkReply::NetworkError error);
 private:
     QNetworkAccessManager *manager_;
-    std::vector<double> temps;
-    std::vector<QString> dates;
+    std::vector<qreal> temps;
+    std::vector<QDateTime> dates;
 
-    std::vector<std::pair<QString,double>> values;
+    std::vector<std::pair<QDateTime,qreal>> values;
 };
 
 #endif // DATA_HH

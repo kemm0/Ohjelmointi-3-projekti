@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QLineSeries>
 #include <QChart>
+#include <QDateTime>
 
 class View : public QObject
 {
@@ -11,13 +12,13 @@ class View : public QObject
     Q_PROPERTY(QtCharts::QLineSeries* lineSeries READ getLineSeries WRITE setLineSeries NOTIFY lineSeriesSignal)
 
 public:
-    View(QObject* parent = nullptr);
+    explicit View(QObject* parent = nullptr);
     virtual ~View();
 
     QtCharts::QLineSeries* getLineSeries() const;
     void setLineSeries(QtCharts::QLineSeries *lineSeries);
 
-    Q_INVOKABLE void addData();
+    Q_INVOKABLE void setData(std::vector<std::pair<QDateTime,qreal>>);
     Q_INVOKABLE void clearData();
 
 signals:
@@ -25,8 +26,6 @@ signals:
 
 private:
     QtCharts::QLineSeries* lineSeries_;
-    float x = 0;
-    float y = 0;
 };
 
 #endif // VIEW_HH

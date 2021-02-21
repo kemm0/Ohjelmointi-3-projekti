@@ -3,14 +3,15 @@
 
 #include <QObject>
 #include <memory>
-
-class Data;
+#include "data.hh"
+#include "view.hh"
 
 class Controller : public QObject
 {
     Q_OBJECT
 public:
-    explicit Controller(std::shared_ptr<Data> data,
+    explicit Controller(Data* data,
+                        View* view,
                         QObject *parent = nullptr);
 
 
@@ -21,7 +22,8 @@ signals:
 
 
 private:
-    std::shared_ptr<Data> data_;
+    Data* data_;
+    View* view_;
 
 };
 

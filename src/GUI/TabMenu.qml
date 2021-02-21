@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Controls 2.12
 
 /*
@@ -7,17 +7,8 @@ import QtQuick.Controls 2.12
 Rectangle{
     TabBar {
         TabButton {
-            text: "Electricity"
-            width: implicitWidth
-        }
-        TabButton {
             text: "Weather"
             width: implicitWidth
         }
-        TabButton {
-            text: "Forecast"
-            width: implicitWidth
-        }
     }
-
 }

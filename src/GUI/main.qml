@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
+import QtQuick.Layouts 1.0
 
 
 Window {
@@ -13,7 +14,7 @@ Window {
         id: tabs
         width: parent.width
         height: childrenRect.height
-        anchors.top: mainMenu.bottom
+        anchors.top: mainWindow.bottom
         anchors.topMargin: 5
     }
     DataPanel{
