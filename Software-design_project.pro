@@ -12,7 +12,8 @@ CONFIG += c++11
 SOURCES += \
         src/controller.cpp \
         src/data.cpp \
-        src/main.cpp
+        src/main.cpp \
+        src/view.cpp
 
 RESOURCES += \
     src/GUI/qml.qrc
@@ -36,6 +37,7 @@ DISTFILES += \
 
 HEADERS += \
     src/controller.hh \
-    src/data.hh
+    src/data.hh \
+    src/view.hh
 
 
