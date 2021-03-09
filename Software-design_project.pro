@@ -12,6 +12,7 @@ CONFIG += c++11
 SOURCES += \
         src/controller.cpp \
         src/data.cpp \
+        src/datamodel.cpp \
         src/main.cpp \
         src/view.cpp
 
@@ -38,6 +39,7 @@ DISTFILES += \
 HEADERS += \
     src/controller.hh \
     src/data.hh \
+    src/datamodel.hh \
     src/view.hh
 
 
