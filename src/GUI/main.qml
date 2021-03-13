@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
-import QtQuick.Layouts 1.0
+import QtQuick.Layouts 1.15
 
 
 Window {
@@ -10,24 +10,20 @@ Window {
     visible: true
     title: qsTr("Upea GUI")
     color: "#e3e3e3"
-    TabMenu{
+    TabMenu {
         id: tabs
         width: parent.width
         height: childrenRect.height
         anchors.top: mainWindow.bottom
         anchors.topMargin: 5
     }
-    DataPanel{
+    Layouts {
+        id: layout
+        currentIndex: tabs.currentIndex
+        width: parent.width
+        height: parent.height
+        anchors.top: parent.top
         anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
-        width: mainWindow.width/2
-        height: mainWindow.height/2
     }
-    GraphView{
-        id: graphView
-        width: mainWindow.width/2
-        height: mainWindow.height/2
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
-    }
+
 }

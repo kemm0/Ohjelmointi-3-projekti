@@ -4,5 +4,6 @@
         <file>TabMenu.qml</file>
         <file>DataPanel.qml</file>
         <file>GraphView.qml</file>
+        <file>Layouts.qml</file>
     </qresource>
 </RCC>
