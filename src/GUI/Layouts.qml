@@ -7,6 +7,7 @@ StackLayout {
         id: weatherTab
         DataPanel{
             anchors.left: parent.left
+            anchors.margins: 10
             anchors.verticalCenter: parent.verticalCenter
             width: mainWindow.width/2
             height: mainWindow.height/2
@@ -14,6 +15,7 @@ StackLayout {
         GraphView{
             id: graphView
             anchors.right: parent.right
+            anchors.margins: 10
             anchors.verticalCenter: parent.verticalCenter
             width: mainWindow.width/2
             height: mainWindow.height/2

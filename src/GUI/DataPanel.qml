@@ -7,22 +7,45 @@ Rectangle{
     border.color: "black"
     border.width: 1
     Column{
+        padding: 10
+        spacing: 5
         id: options
-        RadioButton{
-            text: "Temperature"
-            checked: true
+        Datatype{
+
         }
         Label{
             text: "Start time"
         }
-        TextField{
-            text: "2021-02-20T22:30:00Z"
+        Row {
+            TextField {
+                id: lowerLimitDate
+                text: "2021-02-20"
+            }
+            TextField {
+                id: lowerLimitTime
+                text: "22:30:00"
+            }
         }
         Label{
             text: "End time"
         }
-        TextField{
-            text: "2021-02-21T10:00:00Z"
+        Row {
+            TextField{
+                id: upperLimitDate
+                text: "2021-02-21"
+            }
+            TextField{
+                id: upperLimitTime
+                text: "10:00:00"
+            }
+        }
+        CheckBox{
+            checked: false
+            text: "Show average (monthly)"
+        }
+        CheckBox{
+            checked: false
+            text: "Show average min & max (monthly)"
         }
         Button {
             id: dataButton

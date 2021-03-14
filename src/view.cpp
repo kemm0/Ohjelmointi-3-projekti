@@ -3,7 +3,9 @@
 
 View::View(QObject* parent) :
     QObject{parent},
-    lineSeries_{} {
+    lineSeries_{},
+    upperLimitTime_(QDateTime::currentDateTime()) {
+        lowerLimitTime_ = upperLimitTime_.addSecs(-7200);
 }
 
 View::~View(){
@@ -24,7 +26,6 @@ void View::setLineSeries(QtCharts::QLineSeries *lineSeries){
 }
 
 void View::setData(std::vector<std::pair<QDateTime,qreal>> data ){
-    // tää varmaan yhdistetään jotenkin APIin :-D
     if (lineSeries_)
     {
         lineSeries_->clear();

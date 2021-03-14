@@ -26,6 +26,8 @@ signals:
 
 private:
     QtCharts::QLineSeries* lineSeries_;
+    QDateTime upperLimitTime_;
+    QDateTime lowerLimitTime_;
 };
 
 #endif // VIEW_HH
