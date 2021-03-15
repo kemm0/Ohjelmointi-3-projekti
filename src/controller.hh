@@ -15,7 +15,8 @@ public:
                         QObject *parent = nullptr);
 
 
-    Q_INVOKABLE void fetchData();
+    void fetchData();
+    Q_INVOKABLE void onRefresh(QString startDate, QString startTime, QString endDate, QString endTime);
 
 
 signals:
