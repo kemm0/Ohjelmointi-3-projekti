@@ -17,7 +17,6 @@ Rectangle{
         }
         Component.onCompleted:
         {
-            view.lineSeries = lineSeries;
         }
     }
 }

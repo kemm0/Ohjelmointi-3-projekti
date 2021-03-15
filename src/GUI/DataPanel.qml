@@ -50,7 +50,7 @@ Rectangle{
         Button {
             id: dataButton
             text: "Refresh"
-            onClicked: controller.fetchData()
+            onClicked: controller.getNewData()
         }
     }
 }

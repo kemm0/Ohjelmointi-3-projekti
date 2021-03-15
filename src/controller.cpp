@@ -1,17 +1,27 @@
 #include "controller.hh"
 
-Controller::Controller(Data* data,
-                       View* view,
-                       QObject *parent) :
-    QObject(parent),
-    data_{data},
-    view_{view}
+
+
+Controller::Controller(std::shared_ptr<Backend> backend, std::shared_ptr<View> view, QObject *parent)
+    : QObject(parent),
+      backend_{backend},
+      view_{view}
 {
 
 }
 
-void Controller::fetchData()
+void Controller::getNewData()
 {
-    auto data = data_->getValues();
-    view_->setData(data);
+}
+
+void  Controller::getExistingData()
+{
+}
+
+void Controller::loadData()
+{
+}
+
+void Controller::loadPreferences()
+{
 }

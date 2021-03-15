@@ -3,27 +3,32 @@
 
 #include <QObject>
 #include <memory>
+#include "datamodel.hh"
 #include "data.hh"
 #include "view.hh"
+#include "DataRequest.h"
+#include "backend.h"
 
 class Controller : public QObject
 {
     Q_OBJECT
 public:
-    explicit Controller(Data* data,
-                        View* view,
+    explicit Controller(std::shared_ptr<Backend> backend,
+                        std::shared_ptr<View> view,
                         QObject *parent = nullptr);
 
 
-    Q_INVOKABLE void fetchData();
+    Q_INVOKABLE void getNewData();
+    Q_INVOKABLE void getExistingData();
+    Q_INVOKABLE void loadData();
+    Q_INVOKABLE void loadPreferences();
 
 
 signals:
 
-
 private:
-    Data* data_;
-    View* view_;
+    std::shared_ptr<Backend> backend_;
+    std::shared_ptr<View> view_;
 
 };
 

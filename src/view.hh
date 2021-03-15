@@ -5,27 +5,23 @@
 #include <QLineSeries>
 #include <QChart>
 #include <QDateTime>
+#include "data.hh"
 
 class View : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QtCharts::QLineSeries* lineSeries READ getLineSeries WRITE setLineSeries NOTIFY lineSeriesSignal)
 
 public:
     explicit View(QObject* parent = nullptr);
     virtual ~View();
 
-    QtCharts::QLineSeries* getLineSeries() const;
-    void setLineSeries(QtCharts::QLineSeries *lineSeries);
-
-    Q_INVOKABLE void setData(std::vector<std::pair<QDateTime,qreal>>);
-    Q_INVOKABLE void clearData();
-
-signals:
-    void lineSeriesSignal();
+    Q_INVOKABLE void setChartData(QString chart_id,std::vector<std::shared_ptr<Data>> data);
+    Q_INVOKABLE void removeChart(QString chart_id);
+    Q_INVOKABLE void addChart(std::vector<std::shared_ptr<Data>> data);
+    Q_INVOKABLE void changeGridSize(int size);
 
 private:
-    QtCharts::QLineSeries* lineSeries_;
+    std::map<QString,std::vector<QtCharts::QLineSeries*>> chartData;
     QDateTime upperLimitTime_;
     QDateTime lowerLimitTime_;
 };
