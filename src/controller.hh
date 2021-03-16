@@ -6,7 +6,6 @@
 #include "datamodel.hh"
 #include "data.hh"
 #include "view.hh"
-#include "DataRequest.h"
 #include "backend.h"
 
 class Controller : public QObject
@@ -17,12 +16,10 @@ public:
                         std::shared_ptr<View> view,
                         QObject *parent = nullptr);
 
-
     Q_INVOKABLE void getNewData();
     Q_INVOKABLE void getExistingData();
     Q_INVOKABLE void loadData();
     Q_INVOKABLE void loadPreferences();
-
 
 signals:
 

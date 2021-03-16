@@ -5,7 +5,7 @@
 #include <QDateTime>
 #include "Datatypes.h"
 
-struct dataRequest{
+struct DataRequest{
     QString id;
     Datatype datatype;
     QDateTime startTime;

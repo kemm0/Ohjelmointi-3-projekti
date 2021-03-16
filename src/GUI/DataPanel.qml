@@ -6,6 +6,12 @@ import QtQuick.Controls 2.15
 Rectangle{
     border.color: "black"
     border.width: 1
+    property alias startDateText: startDate.text
+    property alias startTimeText: startTime.text
+    property alias endDateText: endDate.text
+    property alias endTimeText: endTime.text
+    property alias showMonthlyAvg: monthlyAvg.checked
+    property alias showMonthlyMinMaxAvg: monthlyMinMaxAvg.checked
     Column{
         padding: 10
         spacing: 5
@@ -18,12 +24,12 @@ Rectangle{
         }
         Row {
             TextField {
-                id: lowerLimitDate
-                text: "2021-02-20"
+                id: startDate
+                text: view.startDateValue
             }
             TextField {
-                id: lowerLimitTime
-                text: "22:30:00"
+                id: startTime
+                text: view.startTimeValue
             }
         }
         Label{
@@ -31,26 +37,32 @@ Rectangle{
         }
         Row {
             TextField{
-                id: upperLimitDate
-                text: "2021-02-21"
+                id: endDate
+                text: view.endDateValue
             }
             TextField{
-                id: upperLimitTime
-                text: "10:00:00"
+                id: endTime
+                text: view.endTimeValue
             }
         }
         CheckBox{
+            id: monthlyAvg
             checked: false
             text: "Show average (monthly)"
         }
         CheckBox{
+            id: monthlyMinMaxAvg
             checked: false
             text: "Show average min & max (monthly)"
         }
         Button {
             id: dataButton
             text: "Refresh"
-            onClicked: controller.getNewData()
+            onClicked: {
+                view.setProperties(startDateText, startTimeText, endDateText,
+                             endTimeText, showMonthlyAvg, showMonthlyMinMaxAvg);
+                controller.getNewData();
+            }
         }
     }
 }
