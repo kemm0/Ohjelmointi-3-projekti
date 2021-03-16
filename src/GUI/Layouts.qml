@@ -1,24 +1,29 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.12
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 StackLayout {
+    clip: true
     Item {
         id: weatherTab
-        DataPanel{
-            anchors.left: parent.left
-            anchors.margins: 10
-            anchors.verticalCenter: parent.verticalCenter
-            width: mainWindow.width/2
-            height: mainWindow.height/2
-        }
-        GraphView{
-            id: graphView
-            anchors.right: parent.right
-            anchors.margins: 10
-            anchors.verticalCenter: parent.verticalCenter
-            width: mainWindow.width/2
-            height: mainWindow.height/2
+        SplitView{
+            anchors.fill: parent
+            orientation: Qt.Horizontal
+            SplitView{
+                orientation: Qt.Vertical
+                SplitView.minimumWidth: dataPanel.childrenRect.width
+                DataPanel{
+                    id: dataPanel
+                    SplitView.minimumHeight: parent.height/2
+                }
+                DataList{
+                    id: dataList
+                }
+            }
+            GraphView{
+                id: graphView
+            }
+
         }
     }
     Item {

@@ -1,24 +1,24 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.12
+import QtQuick.Controls 2.15
 
 /*
   Menu for choosing tabs
 */
 TabBar {
     TabButton {
-        text: "Weather"
+        text: "Tab 1"
         width: implicitWidth
     }
     TabButton {
-        text: "Electricity"
+        text: "Tab 2"
         width: implicitWidth
     }
     TabButton {
-        text: "Forecast"
+        text: "Tab 3"
         width: implicitWidth
     }
     TabButton {
-        text: "Data"
+        text: "Tab 4"
         width: implicitWidth
     }
 }

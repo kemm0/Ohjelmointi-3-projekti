@@ -4,7 +4,6 @@
 #include <QObject>
 #include "datamodel.hh"
 #include "api_caller.h"
-#include "Datatypes.h"
 #include <memory>
 #include "data.hh"
 #include "DataRequest.h"

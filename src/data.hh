@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QDateTime>
-#include "Datatypes.h"
 
 class Data : public QObject
 {

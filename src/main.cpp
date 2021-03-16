@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     //https://opendata.fmi.fi/wfs?request=getFeature&version=2.0.0&storedquery_id=fmi::observations::weather::simple&place=Pirkkala&starttime=2021-01-19T09:00:00Z&endtime=2021-01-24T14:00:00Z&timestep=30&parameters=t2m
 
 
-    QQuickStyle::setStyle("Fusion");
+    QQuickStyle::setStyle("Material");
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("view", view.get());

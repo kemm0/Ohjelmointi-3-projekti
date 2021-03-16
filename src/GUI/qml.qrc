@@ -6,5 +6,6 @@
         <file>GraphView.qml</file>
         <file>Layouts.qml</file>
         <file>Datatype.qml</file>
+        <file>DataList.qml</file>
     </qresource>
 </RCC>

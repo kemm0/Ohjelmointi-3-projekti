@@ -12,7 +12,14 @@ Controller::Controller(std::shared_ptr<Backend> backend, std::shared_ptr<View> v
 
 void Controller::getNewData()
 {
-    qDebug()<<"new data fetched";
+    DataRequest request;
+    request.startTime = view_->getStartTime();
+    request.endTime = view_->getEndTime();
+    request.datatype = view_->getDataType();
+    request.showMonthlyAvg = view_->getShowMonthlyAvg();
+    request.showMonthlyMinMaxAvg = view_->getShowMonthlyMinMaxAvg();
+    std::vector<std::shared_ptr<Data>> response = backend_->fetchNewData(request);
+    qDebug()<<"data Request sent";
 }
 
 void  Controller::getExistingData()

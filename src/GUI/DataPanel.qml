@@ -3,21 +3,21 @@ import QtQuick.Controls 2.15
 /*
   A Panel where the user can choose from many data options. Chosen data is then displayed on the graph
   */
-Rectangle{
-    border.color: "black"
-    border.width: 1
+
+Item{
     property alias startDateText: startDate.text
     property alias startTimeText: startTime.text
     property alias endDateText: endDate.text
     property alias endTimeText: endTime.text
     property alias showMonthlyAvg: monthlyAvg.checked
     property alias showMonthlyMinMaxAvg: monthlyMinMaxAvg.checked
+    clip: true
     Column{
         padding: 10
         spacing: 5
         id: options
         Datatype{
-
+            id: dataTypeSelection
         }
         Label{
             text: "Start time"
@@ -59,7 +59,7 @@ Rectangle{
             id: dataButton
             text: "Refresh"
             onClicked: {
-                view.setProperties(startDateText, startTimeText, endDateText,
+                view.setProperties(dataTypeSelection.currentText, startDateText, startTimeText, endDateText,
                              endTimeText, showMonthlyAvg, showMonthlyMinMaxAvg);
                 controller.getNewData();
             }

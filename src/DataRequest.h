@@ -3,11 +3,9 @@
 
 #include <QObject>
 #include <QDateTime>
-#include "Datatypes.h"
 
 struct DataRequest{
-    QString id;
-    Datatype datatype;
+    QString datatype;
     QDateTime startTime;
     QDateTime endTime;
     QString location;

@@ -40,7 +40,6 @@ DISTFILES += \
 
 HEADERS += \
     src/DataRequest.h \
-    src/Datatypes.h \
     src/api_caller.h \
     src/backend.h \
     src/controller.hh \
