@@ -25,3 +25,23 @@ void Data::setData(QString id, QString datatype, QString unit, dataVector dataVa
     dataValues_ = dataValues;
 
 }
+
+QString Data::getId()
+{
+    return id_;
+}
+
+QString Data::getDatatype()
+{
+    return datatype_;
+}
+
+QString Data::getUnit()
+{
+    return unit_;
+}
+
+dataVector Data::getDataValues()
+{
+    return dataValues_;
+}
