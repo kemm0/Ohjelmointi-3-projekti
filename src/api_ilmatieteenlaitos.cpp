@@ -57,5 +57,5 @@ std::shared_ptr<Data> API_Ilmatieteenlaitos::parse(QNetworkReply *reply)
 
 QString API_Ilmatieteenlaitos::formURL(DataRequest)
 {
-    return baseURL_;
+    return baseURL_ + "fmi::observations::weather::simple&place=Pirkkala&starttime=2021-01-19T09:00:00Z&endtime=2021-01-24T14:00:00Z&timestep=30&parameters=t2m";
 }

@@ -15,7 +15,7 @@ private Q_SLOTS:
 private:
     QString formURL(DataRequest);
 
-    QString baseURL_;
+    QString baseURL_ = "http://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=";
 };
 
 #endif // API_ILMATIETEENLAITOS_HH

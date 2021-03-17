@@ -2,7 +2,7 @@
 
 Backend::Backend(QObject *parent) : QObject(parent)
 {
-
+    apiCaller_ = std::make_shared<API_caller>();
 }
 
 std::map<QString, std::vector<std::shared_ptr<Data> > > Backend::getExistingData(QString id)
@@ -10,9 +10,9 @@ std::map<QString, std::vector<std::shared_ptr<Data> > > Backend::getExistingData
     return {};
 }
 
-std::vector<std::shared_ptr<Data> > Backend::fetchNewData(DataRequest request)
+std::shared_ptr<Data> Backend::fetchNewData(DataRequest request)
 {
-    return {};
+    return apiCaller_->fetchData(request);
 }
 
 std::vector<std::shared_ptr<Data> > Backend::loadData(QString filepath)
