@@ -6,7 +6,22 @@
 #include <QXmlStreamReader>
 
 Data::Data(QObject *parent):
-    QObject(parent)
+    QObject(parent),
+    id_(""),
+    datatype_(""),
+    unit_(""),
+    dataValues_({}),
+    monthlyAvg_({}),
+    monthlyMinMaxAvg_({})
 {
+
+}
+
+void Data::setData(QString id, QString datatype, QString unit, dataVector dataValues)
+{
+    id_ = id;
+    datatype_ = datatype;
+    unit_ = unit;
+    dataValues_ = dataValues;
 
 }
