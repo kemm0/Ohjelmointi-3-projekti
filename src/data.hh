@@ -17,17 +17,24 @@ public:
      * @param datatype
      * @param unit
      * @param dataValues
-     * @param monthlyAvg
-     * @param monthlyMinMaxAvg
      */
     void setData(QString id, QString datatype, QString unit,dataVector dataValues);
+
+    QString getId();
+    QString getDatatype();
+    QString getUnit();
+    dataVector getDataValues();
+
+
 private:
+
 QString id_;
 QString datatype_;
 QString unit_;
 dataVector dataValues_;
 dataVector monthlyAvg_;
 dataVector monthlyMinMaxAvg_;
+
 };
 
 #endif // DATA_HH
