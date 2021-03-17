@@ -13,17 +13,34 @@ Window {
     title: qsTr("Upea GUI")
     color: "#e3e3e3"
 
-    TabMenu {
-        id: tabs
-        width: parent.width
-        height: 48
-    }
-    Layouts {
-        id: layout
-        currentIndex: tabs.currentIndex
-        width: parent.width
-        height: parent.height
-        anchors.top: tabs.bottom
+    DataPanel{
+        id: kusi
     }
 
+    Rectangle {
+        id: settingsView
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        width: 400
+        TabMenu{
+            id: tabs
+            width: parent.width
+            height: 48
+        }
+        Layouts {
+            id: layout
+            currentIndex: tabs.currentIndex
+            width: parent.width
+            anchors.top: tabs.bottom
+            anchors.bottom: parent.bottom
+        }
+    }
+    GraphView{
+        anchors.left: settingsView.right
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        id: graphView
+    }
 }

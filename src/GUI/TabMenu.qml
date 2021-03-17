@@ -6,19 +6,19 @@ import QtQuick.Controls 2.15
 */
 TabBar {
     TabButton {
-        text: "Tab 1"
+        text: "Chart 1"
         width: implicitWidth
     }
     TabButton {
-        text: "Tab 2"
+        text: "Chart 2"
         width: implicitWidth
     }
     TabButton {
-        text: "Tab 3"
+        text: "Chart 3"
         width: implicitWidth
     }
     TabButton {
-        text: "Tab 4"
+        text: "Chart 4"
         width: implicitWidth
     }
 }

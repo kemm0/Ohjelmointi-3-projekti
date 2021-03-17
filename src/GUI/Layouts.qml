@@ -5,34 +5,31 @@ import QtQuick.Layouts 1.15
 StackLayout {
     clip: true
     Item {
-        id: weatherTab
-        SplitView{
+        id: chart1
+        DataPanel{
+            id: dataPanel1
             anchors.fill: parent
-            orientation: Qt.Horizontal
-            SplitView{
-                orientation: Qt.Vertical
-                SplitView.minimumWidth: dataPanel.childrenRect.width
-                DataPanel{
-                    id: dataPanel
-                    SplitView.minimumHeight: parent.height/2
-                }
-                DataList{
-                    id: dataList
-                }
-            }
-            GraphView{
-                id: graphView
-            }
-
         }
     }
     Item {
-        id: electricityTab
+        id: chart2
+        DataPanel{
+            id: dataPanel2
+            anchors.fill: parent
+        }
     }
     Item {
-        id: forecastTab
+        id: chart3
+        DataPanel{
+            id: dataPanel3
+            anchors.fill: parent
+        }
     }
     Item {
-        id: dataTab
+        id: chart4
+        DataPanel{
+            id: dataPanel4
+            anchors.fill: parent
+        }
     }
 }
