@@ -4,7 +4,6 @@ API::API(QObject *parent) : QObject(parent)
 {
     manager_ = new QNetworkAccessManager(this);
     connect(manager_,&QNetworkAccessManager::finished, this, &API::parse);
-    requestedData_ = nullptr;
 }
 
 void API::fetchData(DataRequest dataRequest)

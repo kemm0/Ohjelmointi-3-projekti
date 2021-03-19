@@ -2,7 +2,7 @@
 
 API_caller::API_caller(QObject *parent) : QObject(parent)
 {
-
+    APIs_["Ilmatieteenlaitos"] = std::make_shared<API_Ilmatieteenlaitos>();
 }
 
 void API_caller::fetchData(DataRequest dataRequest)
@@ -13,8 +13,8 @@ void API_caller::fetchData(DataRequest dataRequest)
     //} else {
     //    return APIs_.find(dataRequest.datatype)->second->fetchData(dataRequest);
     //}
-    auto api_it = std::make_shared<API_Ilmatieteenlaitos>();
-    api_it->fetchData(dataRequest);
+
+    APIs_["Ilmatieteenlaitos"]->fetchData(dataRequest);
 }
 
 std::map<QString, std::shared_ptr<API> > API_caller::getAPIs()

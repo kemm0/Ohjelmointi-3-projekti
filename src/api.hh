@@ -26,8 +26,6 @@ signals:
 
 protected:
     virtual QString formURL(DataRequest) = 0;
-
-    std::shared_ptr<Data> requestedData_;
     QString baseURL_;
 
 private:
