@@ -18,9 +18,8 @@ void Controller::getNewData()
     request.datatype = view_->getDataType();
     request.showMonthlyAvg = view_->getShowMonthlyAvg();
     request.showMonthlyMinMaxAvg = view_->getShowMonthlyMinMaxAvg();
-    std::shared_ptr<Data> response = backend_->fetchNewData(request);
+    backend_->fetchNewData(request);
     qDebug()<<"data Request sent";
-    qDebug()<<request.datatype;
 }
 
 void  Controller::getExistingData()

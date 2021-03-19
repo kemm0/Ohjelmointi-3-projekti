@@ -2,12 +2,11 @@
 
 API_Ilmatieteenlaitos::API_Ilmatieteenlaitos(QObject *parent) : API(parent)
 {
-
+    baseURL_ = "http://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=";
 }
 
-std::shared_ptr<Data> API_Ilmatieteenlaitos::parse(QNetworkReply *reply)
+void API_Ilmatieteenlaitos::parse(QNetworkReply *reply)
 {
-
     QXmlStreamReader xml;
     QByteArray answer = reply->readAll();
     xml.addData(answer);
@@ -51,8 +50,10 @@ std::shared_ptr<Data> API_Ilmatieteenlaitos::parse(QNetworkReply *reply)
     //qDebug() << answer;
     reply->deleteLater();
 
+
     auto data = std::make_shared<Data>();
-    return data;
+    requestedData_->setData("id", "datatype", "unit", values);
+    emit dataParsed(data);
 }
 
 QString API_Ilmatieteenlaitos::formURL(DataRequest)
