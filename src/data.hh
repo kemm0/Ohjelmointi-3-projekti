@@ -9,8 +9,8 @@ class Data : public QObject
 {
     Q_OBJECT
 public:
-    explicit Data(QObject *parent = nullptr);
-
+     Data(QObject *parent = nullptr);
+     virtual ~Data();
     /**
      * @brief setData
      * @param id
@@ -18,12 +18,12 @@ public:
      * @param unit
      * @param dataValues
      */
-    void setData(QString id, QString datatype, QString unit,dataVector dataValues);
+    virtual void setData(QString id, QString datatype, QString unit,dataVector dataValues);
 
-    QString getId();
-    QString getDatatype();
-    QString getUnit();
-    dataVector getDataValues();
+    virtual QString getId();
+    virtual QString getDatatype();
+    virtual QString getUnit();
+    virtual dataVector getDataValues();
 
 
 private:
