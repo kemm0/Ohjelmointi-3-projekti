@@ -18,7 +18,8 @@ SOURCES += \
         src/data.cpp \
         src/datamodel.cpp \
         src/main.cpp \
-        src/view.cpp
+        src/view.cpp \
+        src/weatherdata.cpp
 
 RESOURCES += \
     src/GUI/qml.qrc
@@ -49,6 +50,7 @@ HEADERS += \
     src/controller.hh \
     src/data.hh \
     src/datamodel.hh \
-    src/view.hh
+    src/view.hh \
+    src/weatherdata.hh
 
 
