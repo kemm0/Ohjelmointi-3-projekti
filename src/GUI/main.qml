@@ -27,6 +27,12 @@ Window {
             id: tabs
             width: parent.width
             height: 48
+            Component.onCompleted: {
+                view.currentChartIndex = currentIndex;
+            }
+            onCurrentIndexChanged: {
+                view.currentChartIndex = currentIndex;
+            }
         }
         Layouts {
             id: layout

@@ -1,21 +1,48 @@
 #include "view.hh"
 #include <QDebug>
-
+#include <QString>
+#include <QDateTimeAxis>
+#include <QValueAxis>
+#include <QLineSeries>
 
 View::View(QObject* parent) :
     QObject{parent},
     startTime_(QDateTime::currentDateTime())
 {
         endTime_ = startTime_.addSecs(-7200);
-        chartData = {};
-        srand(time(NULL));
+        charts = {};
 }
 
 View::~View(){
 }
 
-void View::setChartData(QString chart_id, std::vector<std::shared_ptr<Data> > data)
+void View::addChartData(int chartIndex, std::vector<std::pair<QDateTime, qreal>> data)
 {
+    QtCharts::QDateTimeAxis* xAxis = new QtCharts::QDateTimeAxis();
+    xAxis->setMin(data[0].first);
+    xAxis->setMax(data[data.size()-1].first);
+    charts[chartIndex]->setAxisX(xAxis);
+    QtCharts::QLineSeries* series = new QtCharts::QLineSeries();
+    for(unsigned int i = 0; i < data.size(); i++){
+        series->append(data[i].first.toMSecsSinceEpoch(),data[i].second);
+    }
+    charts[chartIndex]->addSeries(series);
+}
+
+void View::removeChart(int index)
+{
+
+}
+
+void View::clearChart(int index)
+{
+    try {
+        for(unsigned int i = 0; i < charts[index]->series().length(); i++){
+            delete charts[index]->series()[i];
+        }
+    }  catch (...) {
+        qDebug()<<"Ei voi clearata ;(";
+    }
 }
 
 QString View::getStartDateValue()
@@ -63,26 +90,14 @@ QDateTime View::getEndTime()
     return endTime_;
 }
 
-QString View::getCurrentChartID()
+int View::getCurrentChartIndex() const
 {
-    return currentChartID;
+    return currentChartIndex;
 }
 
-QString View::generateChartID()
+void View::setCurrentChartIndex(int value)
 {
-    bool taken = true;
-    int index = chartData.size();
-    QString id;
-    while(taken){
-        id = "Chart " + QString::number(index);
-        if(chartData.find(id) == chartData.end()){
-            taken = false;
-        }
-        else{
-            index += 1;
-        }
-    }
-    return id;
+    currentChartIndex = value;
 }
 
 void View::setProperties(QString dataType, QString startDate, QString startTime,
@@ -94,19 +109,24 @@ void View::setProperties(QString dataType, QString startDate, QString startTime,
     showMonthlyAvg_ = showMonthlyAvg;
     showMonthlyMinMaxAvg_ = showMonthlyMinMaxAvg;
     dataType_ = dataType;
+    charts[currentChartIndex]->setTitle(dataType);
+    qDebug()<<currentChartIndex;
 }
 
-void View::removeChart(QString chart_id)
+int View::setChartFromSeries(int index, QtCharts::QLineSeries *series)
 {
-
+    try {
+        charts[index] = series->chart();
+        return index;
+    }  catch (...) {
+        charts.append(series->chart());
+        return charts.length() - 1;
+    }
 }
 
-void View::addChart(std::vector<std::shared_ptr<Data> > data)
+int View::addChartFromSeries(QtCharts::QLineSeries *series)
 {
-
-}
-
-void View::changeGridSize(int size)
-{
-
+    charts.append(series->chart());
+    charts[charts.length()-1]->series()[0]->setName("Data " + QString::number(charts.length()));
+    return charts.length() - 1;
 }

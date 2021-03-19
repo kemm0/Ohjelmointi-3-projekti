@@ -21,17 +21,21 @@ class View : public QObject
     Q_PROPERTY(bool showMonthlyAvg_ READ getShowMonthlyAvg NOTIFY showMonthlyAvgChanged)
     Q_PROPERTY(bool showMonthlyMinMaxAvg_ READ getShowMonthlyMinMaxAvg NOTIFY showMonthlyMinMaxAvgChanged)
     Q_PROPERTY(QString dataType_ READ getDataType NOTIFY dataTypeChanged)
+    Q_PROPERTY(int currentChartIndex READ getCurrentChartIndex WRITE setCurrentChartIndex NOTIFY currentChartIndexChanged)
+
 public:
     explicit View(QObject* parent = nullptr);
     virtual ~View();
 
-    Q_INVOKABLE void setChartData(QString chart_id,std::vector<std::shared_ptr<Data>> data);
-    Q_INVOKABLE void removeChart(QString chart_id);
-    Q_INVOKABLE void addChart(std::vector<std::shared_ptr<Data>> data);
-    Q_INVOKABLE void changeGridSize(int size);
-    Q_INVOKABLE void setProperties(QString dataType_, QString startDate, QString startTime,
+    Q_INVOKABLE void addChartData(int chartIndex, std::vector<std::pair<QDateTime,qreal>> data);
+    Q_INVOKABLE void removeChart(int index);
+    Q_INVOKABLE void clearChart(int index);
+    Q_INVOKABLE void setProperties(QString dataType, QString startDate, QString startTime,
                                    QString endDate, QString endTime,
                                    bool showMonthlyAvg, bool showMonthlyMinMaxAvg);
+    Q_INVOKABLE int setChartFromSeries(int index, QtCharts::QLineSeries* series); //tallentaa qml:stä napatun lineserieksen chartin. Palauttaa indeksin charts-listassa
+    Q_INVOKABLE int addChartFromSeries(QtCharts::QLineSeries* series);
+
     QString getStartDateValue();
     QString getStartTimeValue();
     QString getEndDateValue();
@@ -42,25 +46,25 @@ public:
     QDateTime getStartTime();
     QDateTime getEndTime();
 
-    QString getCurrentChartID();
+    int getCurrentChartIndex() const;
+    void setCurrentChartIndex(int value);
 
 private:
-    std::map<QString,std::vector<QtCharts::QLineSeries*>> chartData;
+    QList<QtCharts::QChart*> charts;
 
     QDateTime startTime_;
     QDateTime endTime_;
     bool showMonthlyAvg_;
     bool showMonthlyMinMaxAvg_;
     QString dataType_;
-    QString currentChartID;
-
-    QString generateChartID();
+    int currentChartIndex;
 
 signals:
     void timeChanged();
     void showMonthlyMinMaxAvgChanged();
     void showMonthlyAvgChanged();
     void dataTypeChanged();
+    void currentChartIndexChanged();
 };
 
 #endif // VIEW_HH

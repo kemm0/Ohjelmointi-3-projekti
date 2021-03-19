@@ -25,9 +25,6 @@ Item{
                 DateTimeAxis{
                 }
             }
-            Component.onCompleted:
-            {
-            }
         }
         ChartView {
             antialiasing: true
@@ -41,9 +38,6 @@ Item{
                 DateTimeAxis{
 
                 }
-            }
-            Component.onCompleted:
-            {
             }
         }
         ChartView {
@@ -59,9 +53,6 @@ Item{
             DateTimeAxis{
 
             }
-            Component.onCompleted:
-            {
-            }
         }
         ChartView {
             antialiasing: true
@@ -76,10 +67,12 @@ Item{
 
                 }
             }
-            Component.onCompleted:
-            {
-            }
         }
-
+        Component.onCompleted: {
+            view.addChartFromSeries(lineSeries1);
+            view.addChartFromSeries(lineSeries2);
+            view.addChartFromSeries(lineSeries3);
+            view.addChartFromSeries(lineSeries4);
+        }
     }
 }
