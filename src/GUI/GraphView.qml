@@ -1,23 +1,85 @@
 import QtQuick 2.15
 import QtCharts 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.12
+
 /*
   Contains the Graph and Graph graphMenu
   */
 
 Item{
     clip: true
-    ChartView {
-        antialiasing: true
-        width: parent.width
-        height: parent.height - 30
-        LineSeries {
-            name: "Temperature"
-            id: lineSeries
-            color: "red"
+    GridLayout{
+        anchors.fill: parent
+        columns: 2
+        id: chartGrid
+        ChartView {
+            antialiasing: true
+            GridLayout.fillHeight: true
+            GridLayout.fillWidth: true
+            id: chart1
+            LineSeries {
+                name: "Temperature"
+                id: lineSeries1
+                color: "red"
+                DateTimeAxis{
+                }
+            }
+            Component.onCompleted:
+            {
+            }
         }
-        Component.onCompleted:
-        {
+        ChartView {
+            antialiasing: true
+            GridLayout.fillHeight: true
+            GridLayout.fillWidth: true
+            id: chart2
+            LineSeries {
+                name: "Temperature"
+                id: lineSeries2
+                color: "red"
+                DateTimeAxis{
+
+                }
+            }
+            Component.onCompleted:
+            {
+            }
         }
+        ChartView {
+            antialiasing: true
+            GridLayout.fillHeight: true
+            GridLayout.fillWidth: true
+            id: chart3
+            LineSeries {
+                name: "Temperature"
+                id: lineSeries3
+                color: "red"
+            }
+            DateTimeAxis{
+
+            }
+            Component.onCompleted:
+            {
+            }
+        }
+        ChartView {
+            antialiasing: true
+            GridLayout.fillHeight: true
+            GridLayout.fillWidth: true
+            id: chart4
+            LineSeries {
+                name: "Temperature"
+                id: lineSeries4
+                color: "red"
+                DateTimeAxis{
+
+                }
+            }
+            Component.onCompleted:
+            {
+            }
+        }
+
     }
 }
