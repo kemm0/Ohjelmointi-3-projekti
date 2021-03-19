@@ -2,15 +2,22 @@
 
 API_caller::API_caller(QObject *parent) : QObject(parent)
 {
-
+    APIs_["Ilmatieteenlaitos"] = std::make_shared<API_Ilmatieteenlaitos>();
 }
 
-std::shared_ptr<Data> API_caller::fetchData(DataRequest dataRequest)
+void API_caller::fetchData(DataRequest dataRequest)
 {
-    if (APIs_.find(dataRequest.datatype) == APIs_.end()) {
-        qDebug() << "Invalid datatype.";
-        return nullptr;
-    } else {
-        return APIs_.find(dataRequest.datatype)->second->fetchData(dataRequest);
-    }
+    //if (APIs_.find(dataRequest.datatype) == APIs_.end()) {
+    //    qDebug() << "Invalid datatype.";
+    //    return nullptr;
+    //} else {
+    //    return APIs_.find(dataRequest.datatype)->second->fetchData(dataRequest);
+    //}
+
+    APIs_["Ilmatieteenlaitos"]->fetchData(dataRequest);
+}
+
+std::map<QString, std::shared_ptr<API> > API_caller::getAPIs()
+{
+    return APIs_;
 }

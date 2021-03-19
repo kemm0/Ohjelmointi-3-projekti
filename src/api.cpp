@@ -6,7 +6,7 @@ API::API(QObject *parent) : QObject(parent)
     connect(manager_,&QNetworkAccessManager::finished, this, &API::parse);
 }
 
-std::shared_ptr<Data> API::fetchData(DataRequest dataRequest)
+void API::fetchData(DataRequest dataRequest)
 {
     QNetworkRequest req = QNetworkRequest(formURL(dataRequest));
 
@@ -17,8 +17,6 @@ std::shared_ptr<Data> API::fetchData(DataRequest dataRequest)
 
     //connect to error slot if error signaled
     connect(reply, &QNetworkReply::errorOccurred, this, &API::error);
-
-    return nullptr;
 }
 
 void API::error(QNetworkReply::NetworkError error)

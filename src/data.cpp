@@ -17,6 +17,11 @@ Data::Data(QObject *parent):
 
 }
 
+Data::~Data()
+{
+
+}
+
 void Data::setData(QString id, QString datatype, QString unit, dataVector dataValues)
 {
     id_ = id;
@@ -45,3 +50,4 @@ dataVector Data::getDataValues()
 {
     return dataValues_;
 }
+

@@ -1,9 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 ComboBox {
     currentIndex: 0
-    width: 200
+    width: 300
     model: ListModel {
         id: datas
         ListElement {text: "Datatype"}
@@ -18,4 +19,5 @@ ComboBox {
         ListElement {text: "Wind"}
         ListElement {text: "Cloudiness"}
     }
+    onActivated: locationMenu.getModel()
 }

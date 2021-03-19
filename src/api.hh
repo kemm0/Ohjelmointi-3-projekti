@@ -15,17 +15,21 @@ class API : public QObject
     Q_OBJECT
 public:
     explicit API(QObject *parent = nullptr);
-    std::shared_ptr<Data> fetchData(DataRequest dataRequest);
+    void fetchData(DataRequest dataRequest);
 
 private Q_SLOTS:
-    virtual std::shared_ptr<Data> parse(QNetworkReply *reply) = 0;
+    virtual void parse(QNetworkReply *reply) = 0;
     void error(QNetworkReply::NetworkError error);
 
-private:
-    virtual QString formURL(DataRequest) = 0;
+signals:
+     void dataParsed(std::shared_ptr<Data>);
 
-    QNetworkAccessManager *manager_;
+protected:
+    virtual QString formURL(DataRequest) = 0;
     QString baseURL_;
+
+private:
+    QNetworkAccessManager *manager_;
 };
 
 #endif // API_HH

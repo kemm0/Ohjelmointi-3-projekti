@@ -22,7 +22,7 @@ Window {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        width: 400
+        width: 350
         TabMenu{
             id: tabs
             width: parent.width
