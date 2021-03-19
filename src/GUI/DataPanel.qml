@@ -12,14 +12,17 @@ Item{
     property alias showMonthlyAvg: monthlyAvg.checked
     property alias showMonthlyMinMaxAvg: monthlyMinMaxAvg.checked
     clip: true
-    Column{
+    Column {
         padding: 10
         spacing: 5
         id: options
-        Datatype{
+        Datatype {
             id: dataTypeSelection
         }
-        Label{
+        LocationMenu {
+            id: locationMenu
+        }
+        Label {
             text: "Start time"
         }
         Row {
@@ -32,25 +35,25 @@ Item{
                 text: view.startTimeValue
             }
         }
-        Label{
+        Label {
             text: "End time"
         }
         Row {
-            TextField{
+            TextField {
                 id: endDate
                 text: view.endDateValue
             }
-            TextField{
+            TextField {
                 id: endTime
                 text: view.endTimeValue
             }
         }
-        CheckBox{
+        CheckBox {
             id: monthlyAvg
             checked: false
             text: "Show average (monthly)"
         }
-        CheckBox{
+        CheckBox {
             id: monthlyMinMaxAvg
             checked: false
             text: "Show average min & max (monthly)"
