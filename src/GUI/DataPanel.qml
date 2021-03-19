@@ -67,5 +67,15 @@ Item{
                 controller.getNewData();
             }
         }
+        Row {
+            Button {
+                id: saveButton
+                text: "Save Data"
+            }
+            Button {
+                id: loadButton
+                text: "Load Data"
+            }
+        }
     }
 }
