@@ -11,6 +11,9 @@
 class Controller : public QObject
 {
     Q_OBJECT
+
+public slots:
+    void sendDataToView(std::vector<std::pair<QDateTime,qreal>> data);
 public:
     explicit Controller(std::shared_ptr<Backend> backend,
                         std::shared_ptr<View> view,

@@ -7,9 +7,9 @@
 
 View::View(QObject* parent) :
     QObject{parent},
-    startTime_(QDateTime::currentDateTime())
+    startTime_(QDateTime::currentDateTime().addSecs(-7200*4)),
+    endTime_(QDateTime::currentDateTime())
 {
-        endTime_ = startTime_.addSecs(-7200);
         charts = {};
 }
 
@@ -18,15 +18,23 @@ View::~View(){
 
 void View::addChartData(int chartIndex, std::vector<std::pair<QDateTime, qreal>> data)
 {
-    QtCharts::QDateTimeAxis* xAxis = new QtCharts::QDateTimeAxis();
-    xAxis->setMin(data[0].first);
-    xAxis->setMax(data[data.size()-1].first);
-    charts[chartIndex]->setAxisX(xAxis);
-    QtCharts::QLineSeries* series = new QtCharts::QLineSeries();
+    auto series = dynamic_cast<QtCharts::QLineSeries*>(charts[chartIndex]->series()[0]);
     for(unsigned int i = 0; i < data.size(); i++){
         series->append(data[i].first.toMSecsSinceEpoch(),data[i].second);
     }
-    charts[chartIndex]->addSeries(series);
+    auto axisList = charts[chartIndex]->series()[0]->attachedAxes();
+    axisList[0]->setMin(data[0].first);
+    axisList[0]->setMax(data[data.size()-1].first);
+    std::vector<qreal> yValues = {};
+    for(unsigned int i = 0; i < data.size(); i++){
+        yValues.push_back(data.at(i).second);
+        //qDebug()<<QString("%1 : %2").arg(data[i].first.toString(),QString::number(data[i].second));
+    }
+    qreal min = *std::min_element(yValues.begin(),yValues.end());
+    qreal max = *std::max_element(yValues.begin(),yValues.end());
+
+    axisList[1]->setMin(min);
+    axisList[1]->setMax(max);
 }
 
 void View::removeChart(int index)
@@ -110,7 +118,7 @@ void View::setProperties(QString dataType, QString startDate, QString startTime,
     showMonthlyMinMaxAvg_ = showMonthlyMinMaxAvg;
     dataType_ = dataType;
     charts[currentChartIndex]->setTitle(dataType);
-    qDebug()<<currentChartIndex;
+    //qDebug()<<currentChartIndex;
 }
 
 int View::setChartFromSeries(int index, QtCharts::QLineSeries *series)
@@ -128,5 +136,8 @@ int View::addChartFromSeries(QtCharts::QLineSeries *series)
 {
     charts.append(series->chart());
     charts[charts.length()-1]->series()[0]->setName("Data " + QString::number(charts.length()));
+    auto axis = series->attachedAxes()[0];
+    axis->setMin(startTime_);
+    axis->setMax(endTime_);
     return charts.length() - 1;
 }

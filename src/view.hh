@@ -26,8 +26,6 @@ class View : public QObject
 public:
     explicit View(QObject* parent = nullptr);
     virtual ~View();
-
-    Q_INVOKABLE void addChartData(int chartIndex, std::vector<std::pair<QDateTime,qreal>> data);
     Q_INVOKABLE void removeChart(int index);
     Q_INVOKABLE void clearChart(int index);
     Q_INVOKABLE void setProperties(QString dataType, QString startDate, QString startTime,
@@ -35,6 +33,7 @@ public:
                                    bool showMonthlyAvg, bool showMonthlyMinMaxAvg);
     Q_INVOKABLE int setChartFromSeries(int index, QtCharts::QLineSeries* series); //tallentaa qml:stä napatun lineserieksen chartin. Palauttaa indeksin charts-listassa
     Q_INVOKABLE int addChartFromSeries(QtCharts::QLineSeries* series);
+    Q_INVOKABLE void addChartData(int chartIndex, std::vector<std::pair<QDateTime,qreal>> data);
 
     QString getStartDateValue();
     QString getStartTimeValue();

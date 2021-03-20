@@ -5,6 +5,7 @@
 #include <QDateTime>
 
 struct DataRequest{
+    int id;
     QString datatype;
     QDateTime startTime;
     QDateTime endTime;

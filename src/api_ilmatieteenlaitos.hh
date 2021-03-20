@@ -8,10 +8,11 @@ class API_Ilmatieteenlaitos : public API
     Q_OBJECT
 public:
     explicit API_Ilmatieteenlaitos(QObject *parent = nullptr);
+    static const QString datetimeFormat;
 
 private Q_SLOTS:
     void parse(QNetworkReply *reply);
-    QString formURL(DataRequest);
+    QString formURL(DataRequest request);
 };
 
 #endif // API_ILMATIETEENLAITOS_HH

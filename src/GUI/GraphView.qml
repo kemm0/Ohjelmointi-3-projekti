@@ -9,6 +9,8 @@ import QtQuick.Layouts 1.12
 
 Item{
     clip: true
+    property date minDate: new Date();
+    property date maxDate: new Date(Date.now());
     GridLayout{
         anchors.fill: parent
         columns: 2
@@ -18,11 +20,13 @@ Item{
             GridLayout.fillHeight: true
             GridLayout.fillWidth: true
             id: chart1
+
             LineSeries {
                 name: "Temperature"
                 id: lineSeries1
                 color: "red"
-                DateTimeAxis{
+                axisX: DateTimeAxis{
+                    max: maxDate
                 }
             }
         }
@@ -35,8 +39,8 @@ Item{
                 name: "Temperature"
                 id: lineSeries2
                 color: "red"
-                DateTimeAxis{
-
+                axisX: DateTimeAxis{
+                    max: maxDate
                 }
             }
         }
@@ -49,9 +53,9 @@ Item{
                 name: "Temperature"
                 id: lineSeries3
                 color: "red"
-            }
-            DateTimeAxis{
-
+                axisX: DateTimeAxis{
+                    max: maxDate
+                }
             }
         }
         ChartView {
@@ -63,8 +67,8 @@ Item{
                 name: "Temperature"
                 id: lineSeries4
                 color: "red"
-                DateTimeAxis{
-
+                axisX: DateTimeAxis{
+                    max: maxDate
                 }
             }
         }
