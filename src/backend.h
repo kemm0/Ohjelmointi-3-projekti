@@ -17,6 +17,7 @@ public:
     void fetchNewData(DataRequest request);
     std::vector<std::shared_ptr<Data>> loadData(QString filepath);
     std::vector<std::shared_ptr<Data>> loadPreferences(QString filepath);
+    QMap<QString,QVector<QString>> availableLocationsByAPI();
 
 private Q_SLOTS:
     void requestParsed(std::shared_ptr<Data> data);

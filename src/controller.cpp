@@ -17,7 +17,6 @@ Controller::Controller(std::shared_ptr<Backend> backend, std::shared_ptr<View> v
       view_{view}
 {
     connect(backend_.get(),&Backend::requestComplete,this, &Controller::sendDataToView);
-
 }
 
 void Controller::getNewData()
@@ -29,6 +28,7 @@ void Controller::getNewData()
     request.datatype = view_->getDataType();
     request.showMonthlyAvg = view_->getShowMonthlyAvg();
     request.showMonthlyMinMaxAvg = view_->getShowMonthlyMinMaxAvg();
+    request.location = view_->getLocation();
     backend_->fetchNewData(request);
     qDebug()<<"data Request sent";
 }

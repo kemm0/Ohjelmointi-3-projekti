@@ -9,18 +9,18 @@ ComboBox {
         id: listElements
         ListElement {text: "Suomi"}
     }
+
     function getModel() {
-        if (dataTypeSelection.currentIndex < 7){
+        if (dataTypeSelection.currentIndex < 6){
             listElements.clear();
-            listElements.append({text: "Suomi"})
+            listElements.append({text: "Finland"})
             currentIndex = 0;
         } else {
             listElements.clear();
-            listElements.append({text: "Hervanta"});
             listElements.append({text: "Tampere"});
-            listElements.append({text: "lappeen Ranta"});
-            listElements.append({text: "turku"});
-            listElements.append({text: "Hese"});
+            listElements.append({text: "Helsinki"});
+            listElements.append({text: "Turku"});
+            listElements.append({text: "Pirkkala"});
             currentIndex = 0;
         }
     }

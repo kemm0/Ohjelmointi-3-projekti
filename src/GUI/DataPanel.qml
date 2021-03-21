@@ -12,6 +12,11 @@ Item{
     property alias showMonthlyAvg: monthlyAvg.checked
     property alias showMonthlyMinMaxAvg: monthlyMinMaxAvg.checked
     clip: true
+    function updateDataProperties(){
+        view.setProperties(dataTypeSelection.currentText, locationMenu.currentText, startDateText, startTimeText, endDateText,
+                     endTimeText, showMonthlyAvg, showMonthlyMinMaxAvg);
+    }
+
     Column {
         padding: 10
         spacing: 5
@@ -58,13 +63,22 @@ Item{
             checked: false
             text: "Show average min & max (monthly)"
         }
-        Button {
-            id: dataButton
-            text: "Refresh"
-            onClicked: {
-                view.setProperties(dataTypeSelection.currentText, startDateText, startTimeText, endDateText,
-                             endTimeText, showMonthlyAvg, showMonthlyMinMaxAvg);
-                controller.getNewData();
+        Row{
+            Button {
+                id: addButton
+                text: "Add"
+                onClicked: {
+                    updateDataProperties();
+                    controller.getNewData();
+                }
+            }
+            Button {
+                id: clearButton
+                text: "Clear"
+                onClicked: {
+                    updateDataProperties();
+                    view.clearChart(view.currentChartIndex)
+                }
             }
         }
         Row {

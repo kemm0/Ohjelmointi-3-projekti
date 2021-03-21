@@ -1,6 +1,9 @@
 #include "api_ilmatieteenlaitos.hh"
 
 const QString API_Ilmatieteenlaitos::datetimeFormat = "yyyy-MM-dd'T'hh:mm':00Z'";
+const QVector<QString> API_Ilmatieteenlaitos::locations = {
+    "Pirkkala","Helsinki","Tampere"
+};
 
 API_Ilmatieteenlaitos::API_Ilmatieteenlaitos(QObject *parent) : API(parent)
 {
@@ -56,10 +59,15 @@ void API_Ilmatieteenlaitos::parse(QNetworkReply *reply)
     emit dataParsed(data);
 }
 
+QVector<QString> API_Ilmatieteenlaitos::availableLocations()
+{
+    return locations;
+}
+
 QString API_Ilmatieteenlaitos::formURL(DataRequest request)
 {
     QString startTime = request.startTime.toString(datetimeFormat);
     QString endTime = request.endTime.toString(datetimeFormat);
-    QString parameterUrl = QString("fmi::observations::weather::simple&place=Pirkkala&starttime=%1&endtime=%2&timestep=30&parameters=t2m").arg(startTime,endTime);
+    QString parameterUrl = QString("fmi::observations::weather::simple&place=%1&starttime=%2&endtime=%3&timestep=30&parameters=t2m").arg(request.location,startTime,endTime);
     return baseURL_ + parameterUrl; //"fmi::observations::weather::simple&place=Pirkkala&starttime=2021-01-19T09:00:00Z&endtime=2021-01-24T14:00:00Z&timestep=30&parameters=t2m";
 }

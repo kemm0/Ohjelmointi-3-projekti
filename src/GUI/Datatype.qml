@@ -3,11 +3,10 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 ComboBox {
-    currentIndex: 0
+    currentIndex: 7
     width: 300
     model: ListModel {
         id: datas
-        ListElement {text: "Datatype"}
         ListElement {text: "Electricity consumption"}
         ListElement {text: "Tentative production prediction"}
         ListElement {text: "Electricity production"}
@@ -19,5 +18,6 @@ ComboBox {
         ListElement {text: "Wind"}
         ListElement {text: "Cloudiness"}
     }
-    onActivated: locationMenu.getModel()
+    Component.onCompleted: locationMenu.getModel()
+    onCurrentIndexChanged: locationMenu.getModel()
 }

@@ -28,6 +28,16 @@ std::vector<std::shared_ptr<Data> > Backend::loadPreferences(QString filepath)
     return {};
 }
 
+QMap<QString, QVector<QString> > Backend::availableLocationsByAPI()
+{
+    auto APIs = apiCaller_->getAPIs();
+    QMap<QString,QVector<QString>> locationsByAPI;
+    for(auto const& api : APIs){
+        locationsByAPI[api.first] = APIs[api.first]->availableLocations();
+    }
+    return locationsByAPI;
+}
+
 void Backend::requestParsed(std::shared_ptr<Data> data)
 {
     qDebug()<<"request complete";
