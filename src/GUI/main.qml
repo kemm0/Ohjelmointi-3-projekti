@@ -13,9 +13,7 @@ Window {
     title: qsTr("Upea GUI")
     color: "#e3e3e3"
 
-    DataPanel{
-        id: kusi
-    }
+
 
     Rectangle {
         id: settingsView
@@ -34,14 +32,22 @@ Window {
                 view.currentChartIndex = currentIndex;
             }
         }
-        Layouts {
+        StackLayout {
             id: layout
             currentIndex: tabs.currentIndex
             width: parent.width
             anchors.top: tabs.bottom
             anchors.bottom: parent.bottom
+            clip: true
+            PowerPanel{
+                id: powerpanel
+            }
+            WeatherPanel{
+                id: weatherpanel
+            }
         }
-    }
+        }
+
     GraphView{
         anchors.left: settingsView.right
         anchors.right: parent.right

@@ -9,35 +9,49 @@ Item{
     property alias startTimeText: startTime.text
     property alias endDateText: endDate.text
     property alias endTimeText: endTime.text
-    property alias showMonthlyAvg: monthlyAvg.checked
-    property alias showMonthlyMinMaxAvg: monthlyMinMaxAvg.checked
     clip: true
-    function updateDataProperties(){
-        view.setProperties(dataTypeSelection.currentText, locationMenu.currentText, startDateText, startTimeText, endDateText,
-                     endTimeText, showMonthlyAvg, showMonthlyMinMaxAvg);
-    }
 
     Column {
         padding: 10
         spacing: 5
         id: options
-        Datatype {
-            id: dataTypeSelection
+        ComboBox {
+            width: 300
+            model: ListModel {
+                id: dataTypes
+                ListElement {text: "Temperature"}
+                ListElement {text: "Average Temperature"}
+                ListElement {text: "Average minimum temperature"}
+                ListElement {text: "Average maximum temperature"}
+                ListElement {text: "Observed wind"}
+                ListElement {text: "Observed cloudiness"}
+                ListElement {text: "Predicted temperature"}
+                ListElement {text: "Predicted wind"}
+            }
         }
-        LocationMenu {
-            id: locationMenu
+        ComboBox{
+            id: locations
+            width: 300
+            model: ListModel {
+                id: listElements
+                ListElement {text: "Tampere"}
+                ListElement {text: "Pirkkala"}
+                ListElement {text: "Helsinki"}
+                ListElement {text: "Turku"}
+            }
         }
+
         Label {
             text: "Start time"
         }
         Row {
             TextField {
                 id: startDate
-                text: view.startDateValue
+                text: new Date().toLocaleDateString(Locale.ShortFormat)
             }
             TextField {
                 id: startTime
-                text: view.startTimeValue
+                text: new Date().toLocaleTimeString(Locale.ShortFormat)
             }
         }
         Label {
@@ -46,39 +60,21 @@ Item{
         Row {
             TextField {
                 id: endDate
-                text: view.endDateValue
+                text: new Date().toLocaleDateString(Locale.ShortFormat)
             }
             TextField {
                 id: endTime
-                text: view.endTimeValue
+                text: new Date().toLocaleTimeString(Locale.ShortFormat)
             }
-        }
-        CheckBox {
-            id: monthlyAvg
-            checked: false
-            text: "Show average (monthly)"
-        }
-        CheckBox {
-            id: monthlyMinMaxAvg
-            checked: false
-            text: "Show average min & max (monthly)"
         }
         Row{
             Button {
                 id: addButton
                 text: "Add"
-                onClicked: {
-                    updateDataProperties();
-                    controller.getNewData();
-                }
             }
             Button {
                 id: clearButton
                 text: "Clear"
-                onClicked: {
-                    updateDataProperties();
-                    view.clearChart(view.currentChartIndex)
-                }
             }
         }
         Row {

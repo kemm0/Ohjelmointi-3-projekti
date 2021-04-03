@@ -2,10 +2,11 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>TabMenu.qml</file>
-        <file>DataPanel.qml</file>
         <file>GraphView.qml</file>
-        <file>Layouts.qml</file>
-        <file>Datatype.qml</file>
-        <file>LocationMenu.qml</file>
+        <file>WeatherPanel.qml</file>
+        <file>PowerPanel.qml</file>
+        <file>SaveDataWindow.qml</file>
+        <file>LoadDataWindow.qml</file>
+        <file>SaveImageWindow.qml</file>
     </qresource>
 </RCC>

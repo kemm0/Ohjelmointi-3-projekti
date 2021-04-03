@@ -8,75 +8,82 @@ import QtQuick.Layouts 1.12
   */
 
 Item{
+    property var chart: chart
+    property var chartImg
     clip: true
-    property date minDate: new Date();
-    property date maxDate: new Date(Date.now());
-    GridLayout{
-        anchors.fill: parent
-        columns: 2
-        id: chartGrid
-        ChartView {
-            antialiasing: true
-            GridLayout.fillHeight: true
-            GridLayout.fillWidth: true
-            id: chart1
+    ChartView {
+        id: chart
+        width: parent.width
+        height: parent.height - 40
+        antialiasing: true
+        Rectangle {
+            id: scrollMask
+            visible: false
+        }
+        MouseArea{
+            anchors.fill: parent
+            onWheel: {
+                var zoomAmount = wheel.angleDelta.y / 120
+                if(zoomAmount > 0){
+                    chart.zoom(1.1)
+                }
+                if(zoomAmount < 0){
+                    chart.zoom(0.9)
+                }
+            }
+            onMouseXChanged: {
+                if((mouse.buttons & Qt.LeftButton) == Qt.LeftButton){
+                    chart.scrollLeft(mouseX - scrollMask.x)
+                    scrollMask.x = mouseX
+                }
+            }
+            onMouseYChanged: {
+                if((mouse.buttons & Qt.LeftButton) == Qt.LeftButton){
+                    chart.scrollUp(mouseY - scrollMask.y)
+                    scrollMask.y = mouseY
+                }
+            }
 
-            LineSeries {
-                name: "Temperature"
-                id: lineSeries1
-                color: "red"
-                axisX: DateTimeAxis{
-                    max: maxDate
+            onPressed: {
+                if (mouse.button == Qt.LeftButton) {
+                    scrollMask.x = mouseX
+                    scrollMask.y = mouseY
                 }
             }
         }
-        ChartView {
-            antialiasing: true
-            GridLayout.fillHeight: true
-            GridLayout.fillWidth: true
-            id: chart2
-            LineSeries {
-                name: "Temperature"
-                id: lineSeries2
-                color: "red"
-                axisX: DateTimeAxis{
-                    max: maxDate
-                }
+        LineSeries {
+            XYPoint { x: 0; y: 0 }
+            XYPoint { x: 1.1; y: 2.1 }
+            XYPoint { x: 1.9; y: 3.3 }
+            XYPoint { x: 2.1; y: 2.1 }
+            XYPoint { x: 2.9; y: 4.9 }
+            XYPoint { x: 3.4; y: 3.0 }
+            XYPoint { x: 4.1; y: 3.3 }
+        }
+    }
+    RowLayout{
+        anchors.top: chart.bottom
+        height: 40
+        Button{
+            text: "Reset Zoom"
+            onClicked: chart.zoomReset()
+        }
+        Button{
+            text: "Save image"
+            onClicked: {
+                /*chart.grabToImage(function(result){
+                    chartImg = result
+                    var component = Qt.createComponent("SaveImageWindow.qml")
+                    var window = component.createObject(parent,{
+                                                            image: chartImg
+                                                        })
+                    window.show()
+                    console.log("asd")
+                })*/
             }
         }
-        ChartView {
-            antialiasing: true
-            GridLayout.fillHeight: true
-            GridLayout.fillWidth: true
-            id: chart3
-            LineSeries {
-                name: "Temperature"
-                id: lineSeries3
-                color: "red"
-                axisX: DateTimeAxis{
-                    max: maxDate
-                }
-            }
-        }
-        ChartView {
-            antialiasing: true
-            GridLayout.fillHeight: true
-            GridLayout.fillWidth: true
-            id: chart4
-            LineSeries {
-                name: "Temperature"
-                id: lineSeries4
-                color: "red"
-                axisX: DateTimeAxis{
-                    max: maxDate
-                }
-            }
-        }
-        Component.onCompleted: {
-            view.addChartFromSeries(lineSeries1);
-            view.addChartFromSeries(lineSeries2);
-            view.addChartFromSeries(lineSeries3);
-            view.addChartFromSeries(lineSeries4);
-        }
+    }
+
+    Component.onCompleted: {
     }
 }
