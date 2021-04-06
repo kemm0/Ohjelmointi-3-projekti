@@ -10,8 +10,8 @@ Window {
     width: 300
     height: 300
     visible: true
-    title: qsTr("Upea GUI")
-    required property var image
+    title: qsTr("Save chart as image")
+    signal accepted(string folder, string filename)
     Item{
         anchors.fill: parent
         Column{
@@ -44,9 +44,8 @@ Window {
             Button{
                 text: "Save"
                 onClicked:{
-                    //save file
-                    //image.url = folderInput.text
-                    image.saveToFile(fileNameInput.text + ".png")
+                    //send accepted signal
+                    window.accepted(folderInput.text,fileNameInput.text)
                     close()
                 }
             }

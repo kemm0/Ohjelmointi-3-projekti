@@ -5,14 +5,23 @@ import QtQuick.Controls 2.15
   */
 
 Item{
-    property alias startDateText: startDate.text
-    property alias startTimeText: startTime.text
-    property alias endDateText: endDate.text
-    property alias endTimeText: endTime.text
+    id: powerPanel
     property alias dataTypeSelection: dataTypesList.currentText
     clip: true
+
+    property var startDateTime: new Date()
+    property var endDateTime: new Date()
+
     property var dataSelectionList: []
     property var idCounter: 0
+
+    property string dateFormat: 'dd.MM.yyyy'
+    property string timeFormat: 'hh.mm'
+
+    signal dataAdded(var dataProperties)
+    signal dataModified(var dataProperties)
+    signal dataRemoved(var ID)
+
     Column {
         padding: 10
         spacing: 5
@@ -49,11 +58,24 @@ Item{
         Row {
             TextField {
                 id: startDate
-                text: new Date().toLocaleDateString(Locale.ShortFormat)
+                onTextChanged: {
+                    var date = Date.fromLocaleDateString(Qt.locale(), startDate.text, dateFormat)
+                    if(date instanceof Date && !isNaN(date)){
+                        startDateTime.setFullYear(date.getFullYear())
+                        startDateTime.setMonth(date.getMonth())
+                        startDateTime.setDate(date.getDate())
+                    }
+                }
             }
             TextField {
                 id: startTime
-                text: new Date().toLocaleTimeString(Locale.ShortFormat)
+                onTextChanged: {
+                    var date = Date.fromLocaleTimeString(Qt.locale(), startTime.text, timeFormat)
+                    if(date instanceof Date && !isNaN(date)){
+                        startDateTime.setHours(date.getHours())
+                        startDateTime.setMinutes(date.getMinutes())
+                    }
+                }
             }
         }
         Label {
@@ -62,11 +84,24 @@ Item{
         Row {
             TextField {
                 id: endDate
-                text: new Date().toLocaleDateString(Locale.ShortFormat)
+                onTextChanged: {
+                    var date = Date.fromLocaleDateString(Qt.locale(), endDate.text, dateFormat)
+                    if(date instanceof Date && !isNaN(date)){
+                        endDateTime.setFullYear(date.getFullYear())
+                        endDateTime.setMonth(date.getMonth())
+                        endDateTime.setDate(date.getDate())
+                    }
+                }
             }
             TextField {
                 id: endTime
-                text: new Date().toLocaleTimeString(Locale.ShortFormat)
+                onTextChanged: {
+                    var date = Date.fromLocaleTimeString(Qt.locale(), endTime.text, timeFormat)
+                    if(date instanceof Date && !isNaN(date)){
+                        endDateTime.setHours(date.getHours())
+                        endDateTime.setMinutes(date.getMinutes())
+                    }
+                }
             }
         }
         Row{
@@ -76,15 +111,14 @@ Item{
                 onClicked: {
                     idCounter = idCounter + 1
                     const newData = {
-                                    id: idCounter,
+                                    id: idCounter.toString(),
                                     dataType: dataTypeSelection,
-                                    startDate: startDateText,
-                                    startTime: startTimeText,
-                                    endDate: endDateText,
-                                    endTime: endTimeText
+                                    startDate: new Date(startDateTime.getTime()),
+                                    endDate: new Date(endDateTime.getTime())
                                 }
                     dataSelectionList = dataSelectionList.concat(newData)
                     dataListModel.append(newData)
+                    powerPanel.dataAdded(newData)
                 }
             }
             Button {
@@ -93,26 +127,29 @@ Item{
                 onClicked: {
                     if(dataSelectionList.length != 0){
 
-                        const newData = {
+                        const updatedData = {
                                         id: dataSelectionList[dataList.currentIndex].id,
                                         dataType: dataTypeSelection,
-                                        startDate: startDateText,
-                                        startTime: startTimeText,
-                                        endDate: endDateText,
-                                        endTime: endTimeText
+                                        startDate: new Date(startDateTime.getTime()),
+                                        endDate: new Date(endDateTime.getTime())
                                     }
-                        dataSelectionList[dataList.currentIndex] = newData
-                        dataListModel.set(dataList.currentIndex,newData)
+                        dataSelectionList[dataList.currentIndex] = updatedData
+                        dataListModel.set(dataList.currentIndex,updatedData)
+                        powerPanel.dataModified(updatedData)
                     }
                 }
             }
             Button {
                 id: clearButton
-                text: "Clear"
+                text: "Remove"
                 onClicked: {
-                    const index = dataList.currentIndex
-                    dataListModel.remove(index)
-                    dataSelectionList = dataSelectionList.splice(index,index)
+                    if(dataSelectionList.length != 0){
+                        const index = dataList.currentIndex
+                        const removedID = dataSelectionList[index].id
+                        dataListModel.remove(index)
+                        dataSelectionList.splice(index,1)
+                        powerPanel.dataRemoved(removedID)
+                    }
                 }
             }
         }
@@ -143,30 +180,30 @@ Item{
         states: [
             State {
                 id: prediction24h
-                property var currentDate: new Date()
+                property var currentDate: new Date(Date.now())
                 name: "prediction24h"
                 PropertyChanges {
                     target: startDate
-                    text: prediction24h.currentDate.toLocaleDateString(Locale.ShortFormat)
+                    text: prediction24h.currentDate.toLocaleDateString(Qt.locale(),dateFormat)
                     enabled: false
                 }
                 PropertyChanges {
                     target: startTime
-                    text: prediction24h.currentDate.toLocaleTimeString(Locale.ShortFormat)
+                    text: prediction24h.currentDate.toLocaleTimeString(Qt.locale(),timeFormat)
                     enabled: false
                 }
                 PropertyChanges {
                     target: endDate
                     text: {
-                        prediction24h.currentDate.setHours(new Date().getHours() + 24)
-                        return prediction24h.currentDate.toLocaleDateString(Locale.ShortFormat)
+                        prediction24h.currentDate.setHours(prediction24h.currentDate.getHours() + 24)
+                        return prediction24h.currentDate.toLocaleDateString(Qt.locale(),dateFormat)
                     }
                     enabled: false
                 }
                 PropertyChanges {
                     target: endTime
                     text: {
-                        return prediction24h.currentDate.toLocaleTimeString(Locale.ShortFormat)
+                        return prediction24h.currentDate.toLocaleTimeString(Qt.locale(),timeFormat)
                     }
                     enabled: false
                 }
@@ -199,11 +236,18 @@ Item{
             if(dataSelectionList.length != 0 && dataSelectionList[currentIndex]){
                 const index = dataTypesList.indexOfValue(dataSelectionList[currentIndex].dataType)
                 dataTypesList.currentIndex = index
-                startDate.text = dataSelectionList[currentIndex].startDate
-                startTime.text = dataSelectionList[currentIndex].startTime
-                endDate.text = dataSelectionList[currentIndex].endDate
-                endTime.text = dataSelectionList[currentIndex].endTime
+                startDate.text = dataSelectionList[currentIndex].startDate.toLocaleDateString(Qt.locale(),dateFormat)
+                startTime.text = dataSelectionList[currentIndex].startDate.toLocaleTimeString(Qt.locale(),timeFormat)
+                endDate.text = dataSelectionList[currentIndex].endDate.toLocaleDateString(Qt.locale(),dateFormat)
+                endTime.text = dataSelectionList[currentIndex].endDate.toLocaleTimeString(Qt.locale(),timeFormat)
             }
         }
+    }
+    Component.onCompleted: {
+        startDateTime.setHours(startDateTime.getHours() - 4)
+        startDate.text = startDateTime.toLocaleDateString(Qt.locale(),dateFormat)
+        startTime.text = startDateTime.toLocaleTimeString(Qt.locale(),timeFormat)
+        endDate.text = endDateTime.toLocaleDateString(Qt.locale(),dateFormat)
+        endTime.text = endDateTime.toLocaleTimeString(Qt.locale(),timeFormat)
     }
 }

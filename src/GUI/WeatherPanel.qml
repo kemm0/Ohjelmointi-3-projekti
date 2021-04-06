@@ -5,39 +5,56 @@ import QtQuick.Controls 2.15
   */
 
 Item{
-    property alias startDateText: startDate.text
-    property alias startTimeText: startTime.text
-    property alias endDateText: endDate.text
-    property alias endTimeText: endTime.text
+    id: weatherPanel
+    property alias dataTypeSelection: dataTypesList.currentText
+    property alias locationSelection: locationsList.currentText
     clip: true
+
+    property var startDateTime: new Date()
+    property var endDateTime: new Date()
+
+    property var dataSelectionList: []
+    property var idCounter: 0
+
+    property string dateFormat: 'dd.MM.yyyy'
+    property string timeFormat: 'hh.mm'
+
+    signal dataAdded(var dataProperties)
+    signal dataModified(var dataProperties)
+    signal dataRemoved(var ID)
 
     Column {
         padding: 10
         spacing: 5
         id: options
         ComboBox {
+            id: dataTypesList
             width: 300
             model: ListModel {
-                id: dataTypes
+                id: dataTypesModel
                 ListElement {text: "Temperature"}
-                ListElement {text: "Average Temperature"}
-                ListElement {text: "Average minimum temperature"}
                 ListElement {text: "Average maximum temperature"}
+                ListElement {text: "Average minimum temperature"}
+                ListElement {text: "Average temperature"}
                 ListElement {text: "Observed wind"}
                 ListElement {text: "Observed cloudiness"}
-                ListElement {text: "Predicted temperature"}
                 ListElement {text: "Predicted wind"}
+                ListElement {text: "Predicted temperature"}
+            }
+            onCurrentIndexChanged: {
+                var selectedText = dataTypesModel.get(currentIndex).text
             }
         }
-        ComboBox{
-            id: locations
+
+        ComboBox {
+            id: locationsList
             width: 300
             model: ListModel {
-                id: listElements
+                id: locationsModel
                 ListElement {text: "Tampere"}
-                ListElement {text: "Pirkkala"}
                 ListElement {text: "Helsinki"}
                 ListElement {text: "Turku"}
+                ListElement {text: "Pirkkala"}
             }
         }
 
@@ -47,11 +64,24 @@ Item{
         Row {
             TextField {
                 id: startDate
-                text: new Date().toLocaleDateString(Locale.ShortFormat)
+                onTextChanged: {
+                    var date = Date.fromLocaleDateString(Qt.locale(), startDate.text, dateFormat)
+                    if(date instanceof Date && !isNaN(date)){
+                        startDateTime.setFullYear(date.getFullYear())
+                        startDateTime.setMonth(date.getMonth())
+                        startDateTime.setDate(date.getDate())
+                    }
+                }
             }
             TextField {
                 id: startTime
-                text: new Date().toLocaleTimeString(Locale.ShortFormat)
+                onTextChanged: {
+                    var date = Date.fromLocaleTimeString(Qt.locale(), startTime.text, timeFormat)
+                    if(date instanceof Date && !isNaN(date)){
+                        startDateTime.setHours(date.getHours())
+                        startDateTime.setMinutes(date.getMinutes())
+                    }
+                }
             }
         }
         Label {
@@ -60,32 +90,139 @@ Item{
         Row {
             TextField {
                 id: endDate
-                text: new Date().toLocaleDateString(Locale.ShortFormat)
+                onTextChanged: {
+                    var date = Date.fromLocaleDateString(Qt.locale(), endDate.text, dateFormat)
+                    if(date instanceof Date && !isNaN(date)){
+                        endDateTime.setFullYear(date.getFullYear())
+                        endDateTime.setMonth(date.getMonth())
+                        endDateTime.setDate(date.getDate())
+                    }
+                }
             }
             TextField {
                 id: endTime
-                text: new Date().toLocaleTimeString(Locale.ShortFormat)
+                onTextChanged: {
+                    var date = Date.fromLocaleTimeString(Qt.locale(), endTime.text, timeFormat)
+                    if(date instanceof Date && !isNaN(date)){
+                        endDateTime.setHours(date.getHours())
+                        endDateTime.setMinutes(date.getMinutes())
+                    }
+                }
             }
         }
         Row{
             Button {
                 id: addButton
                 text: "Add"
+                onClicked: {
+                    idCounter = idCounter + 1
+                    const newData = {
+                                    id: idCounter.toString(),
+                                    dataType: dataTypeSelection,
+                                    location: locationSelection,
+                                    startDate: new Date(startDateTime.getTime()),
+                                    endDate: new Date(endDateTime.getTime())
+                                }
+                    dataSelectionList = dataSelectionList.concat(newData)
+                    dataListModel.append(newData)
+                    weatherPanel.dataAdded(newData)
+                }
+            }
+            Button {
+                id: updateButton
+                text: "Update"
+                onClicked: {
+                    if(dataSelectionList.length != 0){
+
+                        const updatedData = {
+                                        id: dataSelectionList[dataList.currentIndex].id,
+                                        dataType: dataTypeSelection,
+                                        location: locationSelection,
+                                        startDate: new Date(startDateTime.getTime()),
+                                        endDate: new Date(endDateTime.getTime())
+                                    }
+                        dataSelectionList[dataList.currentIndex] = updatedData
+                        dataListModel.set(dataList.currentIndex,updatedData)
+                        weatherPanel.dataModified(updatedData)
+                    }
+                }
             }
             Button {
                 id: clearButton
-                text: "Clear"
+                text: "Remove"
+                onClicked: {
+                    if(dataSelectionList.length != 0){
+                        const index = dataList.currentIndex
+                        const removedID = dataSelectionList[index].id
+                        dataListModel.remove(index)
+                        dataSelectionList.splice(index,1)
+                        weatherPanel.dataRemoved(removedID)
+                    }
+                }
             }
         }
+
         Row {
             Button {
                 id: saveButton
                 text: "Save Data"
+                onClicked: {
+                    if(dataSelectionList.length != 0){
+                        var component = Qt.createComponent("SaveDataWindow.qml")
+                        var window = component.createObject(parent,{
+                                                                dataID: dataSelectionList[dataList.currentIndex].id
+                                                            })
+                        window.show()
+                    }
+                }
             }
             Button {
                 id: loadButton
                 text: "Load Data"
+                onClicked: {
+                    var component = Qt.createComponent("LoadDataWindow.qml")
+                    var window = component.createObject()
+                }
             }
         }
+    }
+
+    ListView{
+        id: dataList
+        width: parent.width
+        height: parent.height-options.height
+        anchors.top: options.bottom
+        model: ListModel{
+            id: dataListModel
+        }
+        delegate: Text{
+            text: dataType + " (" + id + ")"
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    dataList.currentIndex = index
+                    dataList.forceActiveFocus()
+                }
+            }
+        }
+        highlight: Rectangle {color: "lightsteelblue"; radius: 5}
+        focus: true
+        onCurrentIndexChanged: {
+            if(dataSelectionList.length != 0 && dataSelectionList[currentIndex]){
+                const index = dataTypesList.indexOfValue(dataSelectionList[currentIndex].dataType)
+                dataTypesList.currentIndex = index
+                startDate.text = dataSelectionList[currentIndex].startDate.toLocaleDateString(Qt.locale(),dateFormat)
+                startTime.text = dataSelectionList[currentIndex].startDate.toLocaleTimeString(Qt.locale(),timeFormat)
+                endDate.text = dataSelectionList[currentIndex].endDate.toLocaleDateString(Qt.locale(),dateFormat)
+                endTime.text = dataSelectionList[currentIndex].endDate.toLocaleTimeString(Qt.locale(),timeFormat)
+            }
+        }
+    }
+    Component.onCompleted: {
+        startDateTime.setHours(startDateTime.getHours() - 4)
+        startDate.text = startDateTime.toLocaleDateString(Qt.locale(),dateFormat)
+        startTime.text = startDateTime.toLocaleTimeString(Qt.locale(),timeFormat)
+        endDate.text = endDateTime.toLocaleDateString(Qt.locale(),dateFormat)
+        endTime.text = endDateTime.toLocaleTimeString(Qt.locale(),timeFormat)
     }
 }

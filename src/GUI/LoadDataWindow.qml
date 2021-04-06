@@ -7,7 +7,7 @@ import Qt.labs.platform 1.0
 
 FileDialog {
     id: fileDialog
-    title: "Please choose a file"
+    title: "Load data from a file"
     folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
     onAccepted: {
         console.log(fileDialog.file)

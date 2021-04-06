@@ -10,7 +10,7 @@ Window {
     width: 300
     height: 300
     visible: true
-    title: qsTr("Upea GUI")
+    title: qsTr("Save data to file")
     required property var dataID
     Item{
         anchors.fill: parent

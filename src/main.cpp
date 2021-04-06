@@ -8,6 +8,7 @@
 #include "controller.hh"
 #include "view.hh"
 #include "backend.h"
+#include <typeinfo>
 int main(int argc, char *argv[])
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -19,13 +20,11 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     auto backend = std::make_shared<Backend>();
-    auto view = std::make_shared<View>();
-    auto controller = std::make_shared<Controller>(backend,view);
+    auto controller = std::make_shared<Controller>(backend);
 
     QQuickStyle::setStyle("Material");
 
     QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty("view", view.get());
     engine.rootContext()->setContextProperty("controller", controller.get());
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
@@ -34,6 +33,7 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
+    controller->setView(engine.rootObjects()[0]);
     return app.exec();
 
 }

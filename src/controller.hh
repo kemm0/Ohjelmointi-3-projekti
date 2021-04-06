@@ -16,19 +16,20 @@ public slots:
     void sendDataToView(std::vector<std::pair<QDateTime,qreal>> data);
 public:
     explicit Controller(std::shared_ptr<Backend> backend,
-                        std::shared_ptr<View> view,
                         QObject *parent = nullptr);
 
-    Q_INVOKABLE void getNewData();
+    Q_INVOKABLE void getNewData(QVariant properties);
     Q_INVOKABLE void getExistingData();
     Q_INVOKABLE void loadData();
     Q_INVOKABLE void loadPreferences();
+    void setView(QObject* view);
 
 signals:
+    void getNewData(DataRequest request);
 
 private:
     std::shared_ptr<Backend> backend_;
-    std::shared_ptr<View> view_;
+    QObject *view_;
 
 };
 

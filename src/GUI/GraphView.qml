@@ -2,13 +2,14 @@ import QtQuick 2.15
 import QtCharts 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
+import Qt.labs.platform 1.0
 
 /*
   Contains the Graph and Graph graphMenu
   */
 
 Item{
-    property var chart: chart
+    property alias chart: chart
     property var chartImg
     clip: true
     ChartView {
@@ -16,6 +17,7 @@ Item{
         width: parent.width
         height: parent.height - 40
         antialiasing: true
+
         Rectangle {
             id: scrollMask
             visible: false
@@ -52,13 +54,6 @@ Item{
             }
         }
         LineSeries {
-            XYPoint { x: 0; y: 0 }
-            XYPoint { x: 1.1; y: 2.1 }
-            XYPoint { x: 1.9; y: 3.3 }
-            XYPoint { x: 2.1; y: 2.1 }
-            XYPoint { x: 2.9; y: 4.9 }
-            XYPoint { x: 3.4; y: 3.0 }
-            XYPoint { x: 4.1; y: 3.3 }
         }
     }
     RowLayout{
@@ -71,19 +66,39 @@ Item{
         Button{
             text: "Save image"
             onClicked: {
-                /*chart.grabToImage(function(result){
-                    chartImg = result
-                    var component = Qt.createComponent("SaveImageWindow.qml")
-                    var window = component.createObject(parent,{
-                                                            image: chartImg
-                                                        })
-                    window.show()
-                    console.log("asd")
-                })*/
+                var component = Qt.createComponent("SaveImageWindow.qml")
+                var window = component.createObject(parent)
+                window.accepted.connect(saveChartImage)
+                window.show()
             }
+        }
+    }
+    function saveChartImage(folder,filename){
+        var filePath = folder.substring(7,folder.length) + "/" + filename + ".png"
+        console.log("saved to: " + filePath)
+        chart.grabToImage(function(result){
+            result.saveToFile(filePath)
+        })
+    }
+    function addSeries(id) {
+        var series = chart.createSeries(ChartView.SeriesTypeLine,id)
+        for(var i = 0; i < 5; i++){
+            series.append(Math.random(),Math.random())
+        }
+    }
+    function removeSeries(id){
+        var series = chart.series(id)
+        graphView.chart.removeSeries(series)
+    }
+    function modifySeries(id){
+        var series = chart.series(id)
+        series.removePoints(0,series.count)
+        for(var i = 0; i < 5; i++){
+            series.append(Math.random(),Math.random())
         }
     }
 
     Component.onCompleted: {
+        chart.removeAllSeries()
     }
 }

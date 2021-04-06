@@ -3,15 +3,16 @@
 
 #include <QObject>
 #include <QDateTime>
+#include <QDebug>
 
 struct DataRequest{
-    int id;
     QString datatype;
     QDateTime startTime;
     QDateTime endTime;
     QString location;
-    bool showMonthlyAvg;
-    bool showMonthlyMinMaxAvg;
+    operator QString() const {
+        return "datatype: " + datatype + ", start time: " + startTime.toString() + ", end time: " + endTime.toString() + ", location: " + location;
+    }
 };
 
 #endif // DATAREQUEST_H
