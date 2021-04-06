@@ -5,7 +5,6 @@
 #include <memory>
 #include "datamodel.hh"
 #include "data.hh"
-#include "view.hh"
 #include "backend.h"
 
 class Controller : public QObject

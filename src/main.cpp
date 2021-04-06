@@ -6,7 +6,6 @@
 #include <memory>
 #include "data.hh"
 #include "controller.hh"
-#include "view.hh"
 #include "backend.h"
 #include <typeinfo>
 int main(int argc, char *argv[])
