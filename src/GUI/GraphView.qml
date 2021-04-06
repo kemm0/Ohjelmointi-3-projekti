@@ -74,7 +74,14 @@ Item{
         }
     }
     function saveChartImage(folder,filename){
-        var filePath = folder.substring(7,folder.length) + "/" + filename + ".png"
+        var filePath
+        if(OS === 'WINDOWS'){
+            filePath = folder.substring(8,folder.length) + "/" + filename + ".png"
+        }
+        else{
+            filePath = folder.substring(7,folder.length) + "/" + filename + ".png"
+        }
+
         console.log("saved to: " + filePath)
         chart.grabToImage(function(result){
             result.saveToFile(filePath)
