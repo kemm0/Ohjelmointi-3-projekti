@@ -55,30 +55,24 @@ Window {
             target: powerpanel
             function onDataAdded(dataProperties){
                 dataAdded(dataProperties)
-                graphView.addSeries(dataProperties.id)
             }
             function onDataRemoved(dataID){
                 dataRemoved(dataID)
-                graphView.removeSeries(dataID)
             }
             function onDataModified(dataProperties){
                 dataModified(dataProperties)
-                graphView.modifySeries(dataProperties.id)
             }
         }
         Connections{
             target: weatherpanel
             function onDataAdded(dataProperties){
                 dataAdded(dataProperties)
-                graphView.addSeries(dataProperties.id)
             }
             function onDataRemoved(dataID){
                 dataRemoved(dataID)
-                graphView.removeSeries(dataID)
             }
             function onDataModified(dataProperties){
                 dataModified(dataProperties)
-                graphView.modifySeries(dataProperties.id)
             }
         }
     }

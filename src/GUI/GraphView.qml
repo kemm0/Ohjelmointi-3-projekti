@@ -9,14 +9,35 @@ import Qt.labs.platform 1.0
   */
 
 Item{
+
+    id: root
     property alias chart: chart
     property var chartImg
+
     clip: true
     ChartView {
         id: chart
         width: parent.width
         height: parent.height - 40
         antialiasing: true
+
+        DateTimeAxis{
+            id: xAxis
+            min: {
+                var date = new Date()
+                date.setHours(date.getHours() - 4 )
+                return date
+            }
+            max: new Date()
+            tickCount: xTickSlider.value
+            format: "d.M.yy h:mm"
+        }
+        ValueAxis{
+            id: yAxis
+            min: 0
+            max: 1
+            tickCount: yTickSlider.value
+        }
 
         Rectangle {
             id: scrollMask
@@ -54,6 +75,14 @@ Item{
             }
         }
         LineSeries {
+            axisX: xAxis
+            axisY: yAxis
+        }
+        Connections{
+            target: controller
+            function onRequestComplete(data){
+                addSeries(data)
+            }
         }
     }
     RowLayout{
@@ -72,10 +101,33 @@ Item{
                 window.show()
             }
         }
+        Slider{
+            id: yTickSlider
+            from: 2
+            value: 10
+            to: 40
+            stepSize: 1
+            width: 20
+        }
+        Label{
+            text: "x Axis ticks: " + yTickSlider.value.toString()
+        }
+
+        Slider{
+            id: xTickSlider
+            from: 2
+            value: 10
+            to: 20
+            stepSize: 1
+        }
+
+        Label{
+            text: "y Axis ticks: " + xTickSlider.value.toString()
+        }
     }
     function saveChartImage(folder,filename){
         var filePath
-        if(OS === 'WINDOWS'){
+        if(OS === 'WINDOWS'){ //OS variable is set in main.cpp
             filePath = folder.substring(8,folder.length) + "/" + filename + ".png"
         }
         else{
@@ -87,10 +139,29 @@ Item{
             result.saveToFile(filePath)
         })
     }
-    function addSeries(id) {
-        var series = chart.createSeries(ChartView.SeriesTypeLine,id)
-        for(var i = 0; i < 5; i++){
-            series.append(Math.random(),Math.random())
+    function addSeries(data) {
+        var dates = data.dates
+        var values = data.values
+
+        if(dates[0] < xAxis.min) xAxis.min = dates[0]
+        if(dates[dates.length-1] > xAxis.max) xAxis.max = dates[dates.length-1]
+
+        var yMin = Math.min(...values)
+        var yMax = Math.max(...values)
+
+        if(yMin < yAxis.min) yAxis.min = yMin
+        if(yMax > yAxis.max) yAxis.max = yMax
+
+        var series = chart.createSeries(ChartView.SeriesTypeLine,data.id,xAxis,yAxis)
+
+        for(var i = 0; i < values.length; i++){
+            series.append(dates[i].getTime(),values[i])
+        }
+
+        for(var j = 0; j < chart.count; j++){
+            var s = chart.series(j)
+            s.axisX = xAxis
+            s.axisY = yAxis
         }
     }
     function removeSeries(id){

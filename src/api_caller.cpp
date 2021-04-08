@@ -13,8 +13,9 @@ void API_caller::fetchData(DataRequest dataRequest)
     //} else {
     //    return APIs_.find(dataRequest.datatype)->second->fetchData(dataRequest);
     //}
-
-    APIs_["Ilmatieteenlaitos"]->fetchData(dataRequest);
+    if(dataRequest.datatype == "Temperature"){
+        APIs_["Ilmatieteenlaitos"]->fetchData(dataRequest);
+    }
 }
 
 std::map<QString, std::shared_ptr<API> > API_caller::getAPIs()

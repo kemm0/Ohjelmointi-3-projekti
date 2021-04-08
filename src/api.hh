@@ -16,7 +16,6 @@ class API : public QObject
 public:
     explicit API(QObject *parent = nullptr);
     void fetchData(DataRequest dataRequest);
-    virtual QVector<QString> availableLocations() = 0;
 
 private Q_SLOTS:
     virtual void parse(QNetworkReply *reply) = 0;

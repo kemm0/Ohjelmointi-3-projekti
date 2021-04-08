@@ -10,9 +10,6 @@ Item{
     property alias locationSelection: locationsList.currentText
     clip: true
 
-    property var startDateTime: new Date()
-    property var endDateTime: new Date()
-
     property var dataSelectionList: []
     property var idCounter: 0
 
@@ -66,10 +63,8 @@ Item{
                 id: startDate
                 onTextChanged: {
                     var date = Date.fromLocaleDateString(Qt.locale(), startDate.text, dateFormat)
-                    if(date instanceof Date && !isNaN(date)){
-                        startDateTime.setFullYear(date.getFullYear())
-                        startDateTime.setMonth(date.getMonth())
-                        startDateTime.setDate(date.getDate())
+                    if(!validDateTimeInput(date)){
+                        weatherPanel.state = ""
                     }
                 }
             }
@@ -77,9 +72,8 @@ Item{
                 id: startTime
                 onTextChanged: {
                     var date = Date.fromLocaleTimeString(Qt.locale(), startTime.text, timeFormat)
-                    if(date instanceof Date && !isNaN(date)){
-                        startDateTime.setHours(date.getHours())
-                        startDateTime.setMinutes(date.getMinutes())
+                    if(!date instanceof Date || isNaN(date)){
+                        console.log("Bad date")
                     }
                 }
             }
@@ -92,10 +86,8 @@ Item{
                 id: endDate
                 onTextChanged: {
                     var date = Date.fromLocaleDateString(Qt.locale(), endDate.text, dateFormat)
-                    if(date instanceof Date && !isNaN(date)){
-                        endDateTime.setFullYear(date.getFullYear())
-                        endDateTime.setMonth(date.getMonth())
-                        endDateTime.setDate(date.getDate())
+                    if(!date instanceof Date || isNaN(date)){
+                        console.log("Bad date")
                     }
                 }
             }
@@ -103,9 +95,8 @@ Item{
                 id: endTime
                 onTextChanged: {
                     var date = Date.fromLocaleTimeString(Qt.locale(), endTime.text, timeFormat)
-                    if(date instanceof Date && !isNaN(date)){
-                        endDateTime.setHours(date.getHours())
-                        endDateTime.setMinutes(date.getMinutes())
+                    if(!date instanceof Date || isNaN(date)){
+                        console.log("Bad date")
                     }
                 }
             }
@@ -115,16 +106,15 @@ Item{
                 id: addButton
                 text: "Add"
                 onClicked: {
-                    idCounter = idCounter + 1
                     const newData = {
-                                    id: idCounter.toString(),
                                     dataType: dataTypeSelection,
                                     location: locationSelection,
-                                    startDate: new Date(startDateTime.getTime()),
-                                    endDate: new Date(endDateTime.getTime())
+                                    startDate: startDate.text,
+                                    startTime: startTime.text,
+                                    endDate: endDate.text,
+                                    endTime: endTime.text
                                 }
-                    dataSelectionList = dataSelectionList.concat(newData)
-                    dataListModel.append(newData)
+                    console.log(newData.startDate, newData.startTime, newData.endDate, newData.endTime)
                     weatherPanel.dataAdded(newData)
                 }
             }
@@ -138,8 +128,10 @@ Item{
                                         id: dataSelectionList[dataList.currentIndex].id,
                                         dataType: dataTypeSelection,
                                         location: locationSelection,
-                                        startDate: new Date(startDateTime.getTime()),
-                                        endDate: new Date(endDateTime.getTime())
+                                        startDate: startDate.text,
+                                        startTime: startTime.text,
+                                        endDate: endDate.text,
+                                        endTime: endTime.text
                                     }
                         dataSelectionList[dataList.currentIndex] = updatedData
                         dataListModel.set(dataList.currentIndex,updatedData)
@@ -211,18 +203,58 @@ Item{
             if(dataSelectionList.length != 0 && dataSelectionList[currentIndex]){
                 const index = dataTypesList.indexOfValue(dataSelectionList[currentIndex].dataType)
                 dataTypesList.currentIndex = index
-                startDate.text = dataSelectionList[currentIndex].startDate.toLocaleDateString(Qt.locale(),dateFormat)
-                startTime.text = dataSelectionList[currentIndex].startDate.toLocaleTimeString(Qt.locale(),timeFormat)
-                endDate.text = dataSelectionList[currentIndex].endDate.toLocaleDateString(Qt.locale(),dateFormat)
-                endTime.text = dataSelectionList[currentIndex].endDate.toLocaleTimeString(Qt.locale(),timeFormat)
+                startDate.text = dataSelectionList[currentIndex].startDate
+                startTime.text = dataSelectionList[currentIndex].startTime
+                endDate.text = dataSelectionList[currentIndex].endDate
+                endTime.text = dataSelectionList[currentIndex].endTime
             }
         }
     }
     Component.onCompleted: {
-        startDateTime.setHours(startDateTime.getHours() - 4)
+        var startDateTime = new Date(Date.now())
+        var endDateTime = new Date(Date.now())
+        startDateTime.setHours(startDateTime.getHours() - 8)
         startDate.text = startDateTime.toLocaleDateString(Qt.locale(),dateFormat)
         startTime.text = startDateTime.toLocaleTimeString(Qt.locale(),timeFormat)
         endDate.text = endDateTime.toLocaleDateString(Qt.locale(),dateFormat)
         endTime.text = endDateTime.toLocaleTimeString(Qt.locale(),timeFormat)
+    }
+
+    Connections{
+        target: controller
+        function onRequestComplete(data){
+            const newData = {
+                            id: Math.random(10).toString(),
+                            dataType: dataTypeSelection,
+                            location: locationSelection,
+                            startDate: startDate.text,
+                            startTime: startTime.text,
+                            endDate: endDate.text,
+                            endTime: endTime.text
+                        }
+            dataSelectionList = dataSelectionList.concat(newData)
+            dataListModel.append(newData)
+        }
+    }
+    states: [
+        State{
+            name: "dataRequestDisabled"
+            PropertyChanges {
+                target: addButton
+                enabled: false
+            }
+            PropertyChanges {
+                target: updateButton
+                enabled: false
+            }
+        }
+
+    ]
+
+    function validDateTimeInput(date){
+        if(!date instanceof Date || isNaN(date)){
+            return false
+        }
+        return true
     }
 }

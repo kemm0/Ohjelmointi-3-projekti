@@ -15,6 +15,7 @@ std::map<QString, std::vector<std::shared_ptr<Data> > > Backend::getExistingData
 
 void Backend::fetchNewData(DataRequest request)
 {
+    qDebug()<<"Fetched: " + request;
     apiCaller_->fetchData(request);
 }
 
@@ -28,18 +29,9 @@ std::vector<std::shared_ptr<Data> > Backend::loadPreferences(QString filepath)
     return {};
 }
 
-QMap<QString, QVector<QString> > Backend::availableLocationsByAPI()
-{
-    auto APIs = apiCaller_->getAPIs();
-    QMap<QString,QVector<QString>> locationsByAPI;
-    for(auto const& api : APIs){
-        locationsByAPI[api.first] = APIs[api.first]->availableLocations();
-    }
-    return locationsByAPI;
-}
-
 void Backend::requestParsed(std::shared_ptr<Data> data)
 {
     qDebug()<<"request complete";
-    emit requestComplete(data->getDataValues());
+    emit requestComplete(data);
+    emit test(data.get());
 }

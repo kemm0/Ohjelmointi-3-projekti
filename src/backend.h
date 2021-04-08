@@ -14,23 +14,20 @@ class Backend : public QObject
 public:
     explicit Backend(QObject *parent = nullptr);
     std::map<QString, std::vector<std::shared_ptr<Data>>> getExistingData(QString id);
-    void fetchNewData(DataRequest request);
     std::vector<std::shared_ptr<Data>> loadData(QString filepath);
     std::vector<std::shared_ptr<Data>> loadPreferences(QString filepath);
-    QMap<QString,QVector<QString>> availableLocationsByAPI();
+
+signals:
+    void test(Data* data);
+    void requestComplete(std::shared_ptr<Data> data);
 
 private Q_SLOTS:
     void requestParsed(std::shared_ptr<Data> data);
-
-signals:
-    void requestComplete(std::vector<std::pair<QDateTime,qreal>>);
+    void fetchNewData(DataRequest request);
 
 private:
     std::shared_ptr<DataModel> dataModel_;
     std::shared_ptr<API_caller> apiCaller_;
-
-signals:
-
 };
 
 #endif // BACKEND_H

@@ -1,9 +1,6 @@
 #include "api_ilmatieteenlaitos.hh"
 
 const QString API_Ilmatieteenlaitos::datetimeFormat = "yyyy-MM-dd'T'hh:mm':00Z'";
-const QVector<QString> API_Ilmatieteenlaitos::locations = {
-    "Pirkkala","Helsinki","Tampere"
-};
 
 API_Ilmatieteenlaitos::API_Ilmatieteenlaitos(QObject *parent) : API(parent)
 {
@@ -55,13 +52,8 @@ void API_Ilmatieteenlaitos::parse(QNetworkReply *reply)
     reply->deleteLater();
 
     auto data = std::make_shared<Data>();
-    data->setData("id", "datatype", "unit", values);
+    data->setData("brööt_ID", "datatype", "unit", values);
     emit dataParsed(data);
-}
-
-QVector<QString> API_Ilmatieteenlaitos::availableLocations()
-{
-    return locations;
 }
 
 QString API_Ilmatieteenlaitos::formURL(DataRequest request)
