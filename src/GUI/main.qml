@@ -11,7 +11,7 @@ Window {
     width: 1280
     height: 960
     visible: true
-    title: qsTr("Upea GUI")
+    title: qsTr("App")
     color: "#e3e3e3"
     signal dataAdded(var properties)
     signal dataRemoved(var id)
@@ -68,11 +68,16 @@ Window {
             function onDataAdded(dataProperties){
                 dataAdded(dataProperties)
             }
-            function onDataRemoved(dataID){
+            function onDataRemoved(index,dataID){
+                graphView.removeSeries(index)
                 dataRemoved(dataID)
             }
             function onDataModified(dataProperties){
                 dataModified(dataProperties)
+            }
+            function onDataNameChanged(index,name){
+                console.log(index,name)
+                graphView.changeSeriesName(index,name)
             }
         }
     }

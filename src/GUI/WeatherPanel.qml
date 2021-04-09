@@ -5,7 +5,7 @@ import QtQuick.Controls 2.15
   */
 
 Item{
-    id: weatherPanel
+    id: root
     property alias dataTypeSelection: dataTypesList.currentText
     property alias locationSelection: locationsList.currentText
     clip: true
@@ -18,7 +18,8 @@ Item{
 
     signal dataAdded(var dataProperties)
     signal dataModified(var dataProperties)
-    signal dataRemoved(var ID)
+    signal dataRemoved(var index, var ID)
+    signal dataNameChanged(var index, var name)
 
     Column {
         padding: 10
@@ -63,18 +64,14 @@ Item{
                 id: startDate
                 onTextChanged: {
                     var date = Date.fromLocaleDateString(Qt.locale(), startDate.text, dateFormat)
-                    if(!validDateTimeInput(date)){
-                        weatherPanel.state = ""
-                    }
+                    validDateTimeInput(date, startDate)
                 }
             }
             TextField {
                 id: startTime
                 onTextChanged: {
                     var date = Date.fromLocaleTimeString(Qt.locale(), startTime.text, timeFormat)
-                    if(!date instanceof Date || isNaN(date)){
-                        console.log("Bad date")
-                    }
+                    validDateTimeInput(date, startTime)
                 }
             }
         }
@@ -86,18 +83,14 @@ Item{
                 id: endDate
                 onTextChanged: {
                     var date = Date.fromLocaleDateString(Qt.locale(), endDate.text, dateFormat)
-                    if(!date instanceof Date || isNaN(date)){
-                        console.log("Bad date")
-                    }
+                    validDateTimeInput(date, endDate)
                 }
             }
             TextField {
                 id: endTime
                 onTextChanged: {
                     var date = Date.fromLocaleTimeString(Qt.locale(), endTime.text, timeFormat)
-                    if(!date instanceof Date || isNaN(date)){
-                        console.log("Bad date")
-                    }
+                    validDateTimeInput(date, endTime)
                 }
             }
         }
@@ -115,7 +108,7 @@ Item{
                                     endTime: endTime.text
                                 }
                     console.log(newData.startDate, newData.startTime, newData.endDate, newData.endTime)
-                    weatherPanel.dataAdded(newData)
+                    root.dataAdded(newData)
                 }
             }
             Button {
@@ -135,7 +128,7 @@ Item{
                                     }
                         dataSelectionList[dataList.currentIndex] = updatedData
                         dataListModel.set(dataList.currentIndex,updatedData)
-                        weatherPanel.dataModified(updatedData)
+                        root.dataModified(updatedData)
                     }
                 }
             }
@@ -148,7 +141,7 @@ Item{
                         const removedID = dataSelectionList[index].id
                         dataListModel.remove(index)
                         dataSelectionList.splice(index,1)
-                        weatherPanel.dataRemoved(removedID)
+                        root.dataRemoved(index,removedID)
                     }
                 }
             }
@@ -187,22 +180,36 @@ Item{
         model: ListModel{
             id: dataListModel
         }
-        delegate: Text{
-            text: dataType + " (" + id + ")"
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    dataList.currentIndex = index
-                    dataList.forceActiveFocus()
+        delegate:
+            TextInput{
+                id: textDelegate
+                text: dataType + ", " + location + " (%1)".arg(id)
+                readOnly: true
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        dataList.currentIndex = index
+                    }
+                    onDoubleClicked: {
+                        parent.enabled = true
+                        parent.forceActiveFocus()
+                        parent.readOnly = false
+                    }
                 }
-            }
+                onAccepted: {
+                    parent.focus = false
+                    readOnly = true
+                    dataNameChanged(dataList.currentIndex, textDelegate.text + " (%1)".arg(dataListModel.get(dataList.currentIndex).unit))
+                }
         }
         highlight: Rectangle {color: "lightsteelblue"; radius: 5}
         focus: true
         onCurrentIndexChanged: {
             if(dataSelectionList.length != 0 && dataSelectionList[currentIndex]){
-                const index = dataTypesList.indexOfValue(dataSelectionList[currentIndex].dataType)
-                dataTypesList.currentIndex = index
+                const dataTypeIndex = dataTypesList.indexOfValue(dataSelectionList[currentIndex].dataType)
+                dataTypesList.currentIndex = dataTypeIndex
+                const locationIndex = locationsList.indexOfValue(dataSelectionList[currentIndex].location)
+                locationsList.currentIndex = locationIndex
                 startDate.text = dataSelectionList[currentIndex].startDate
                 startTime.text = dataSelectionList[currentIndex].startTime
                 endDate.text = dataSelectionList[currentIndex].endDate
@@ -224,9 +231,10 @@ Item{
         target: controller
         function onRequestComplete(data){
             const newData = {
-                            id: Math.random(10).toString(),
+                            id: data.id,
                             dataType: dataTypeSelection,
                             location: locationSelection,
+                            unit: data.unit,
                             startDate: startDate.text,
                             startTime: startTime.text,
                             endDate: endDate.text,
@@ -234,6 +242,7 @@ Item{
                         }
             dataSelectionList = dataSelectionList.concat(newData)
             dataListModel.append(newData)
+            dataList.currentIndex = dataListModel.count - 1
         }
     }
     states: [
@@ -251,10 +260,14 @@ Item{
 
     ]
 
-    function validDateTimeInput(date){
+    function validDateTimeInput(date,field){
         if(!date instanceof Date || isNaN(date)){
-            return false
+            root.state = "dataRequestDisabled"
+            field.color = "red"
         }
-        return true
+        else{
+            root.state = ""
+            field.color = ""
+        }
     }
 }

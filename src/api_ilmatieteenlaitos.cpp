@@ -51,8 +51,7 @@ void API_Ilmatieteenlaitos::parse(QNetworkReply *reply)
     //qDebug() << answer;
     reply->deleteLater();
 
-    auto data = std::make_shared<Data>();
-    data->setData("brööt_ID", "datatype", "unit", values);
+    auto data = std::make_shared<Data>("datatype", "unit", values);
     emit dataParsed(data);
 }
 

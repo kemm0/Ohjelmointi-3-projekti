@@ -9,32 +9,21 @@ class Data : public QObject
 {
     Q_OBJECT
 public:
-     Data(QObject *parent = nullptr);
-     virtual ~Data();
-    /**
-     * @brief setData
-     * @param id
-     * @param datatype
-     * @param unit
-     * @param dataValues
-     */
-    virtual void setData(QString id, QString datatype, QString unit,dataVector dataValues);
+     Data(QString datatype, QString unit, dataVector dataValues, QObject *parent = nullptr);
+     ~Data();
 
-    virtual QString getId();
-    virtual QString getDatatype();
-    virtual QString getUnit();
-    virtual dataVector getDataValues();
+    QString getId();
+    QString getDatatype();
+    QString getUnit();
+    dataVector getDataValues();
 
 
 private:
-
-QString id_;
-QString datatype_;
-QString unit_;
-dataVector dataValues_;
-dataVector monthlyAvg_;
-dataVector monthlyMinMaxAvg_;
-
+    static int idCounter;
+    QString id_;
+    QString datatype_;
+    QString unit_;
+    dataVector dataValues_;
 };
 
 #endif // DATA_HH

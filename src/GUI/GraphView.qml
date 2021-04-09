@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 import Qt.labs.platform 1.0
 
 /*
-  Contains the Graph and Graph graphMenu
+  Contains the graph and graph toolbar
   */
 
 Item{
@@ -152,7 +152,9 @@ Item{
         if(yMin < yAxis.min) yAxis.min = yMin
         if(yMax > yAxis.max) yAxis.max = yMax
 
-        var series = chart.createSeries(ChartView.SeriesTypeLine,data.id,xAxis,yAxis)
+        var name = data.datatype + ' ' + data.id + ' (%1)'.arg(data.unit)
+
+        var series = chart.createSeries(ChartView.SeriesTypeLine, name,xAxis,yAxis)
 
         for(var i = 0; i < values.length; i++){
             series.append(dates[i].getTime(),values[i])
@@ -164,16 +166,16 @@ Item{
             s.axisY = yAxis
         }
     }
-    function removeSeries(id){
-        var series = chart.series(id)
+    function removeSeries(index){
+        var series = chart.series(index)
         graphView.chart.removeSeries(series)
     }
-    function modifySeries(id){
-        var series = chart.series(id)
-        series.removePoints(0,series.count)
-        for(var i = 0; i < 5; i++){
-            series.append(Math.random(),Math.random())
-        }
+    function modifySeries(data){
+        var series = chart.series(index)
+    }
+    function changeSeriesName(index, name){
+        var series = chart.series(index)
+        series.name = name
     }
 
     Component.onCompleted: {

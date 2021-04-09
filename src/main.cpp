@@ -23,6 +23,8 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
+    app.setWindowIcon(QIcon("../kumivene-solutions/res/stonks.JPG"));
+
     auto backend = std::make_shared<Backend>();
     auto controller = std::make_shared<Controller>(backend);
 

@@ -15,6 +15,8 @@ void Controller::sendDataToView(std::shared_ptr<Data> data)
     qmlData.insert("id",data->getId());
     qmlData.insert("dates",dates);
     qmlData.insert("values",values);
+    qmlData.insert("unit",data->getUnit());
+    qmlData.insert("datatype",data->getDatatype());
     emit requestComplete(qmlData);
 }
 
