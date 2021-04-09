@@ -51,7 +51,7 @@ void API_Ilmatieteenlaitos::parse(QNetworkReply *reply)
     //qDebug() << answer;
     reply->deleteLater();
 
-    auto data = std::make_shared<Data>("datatype", "unit", values);
+    auto data = std::make_shared<Data>("Temperature", "Celsius", values, "Tampere");
     emit dataParsed(data);
 }
 

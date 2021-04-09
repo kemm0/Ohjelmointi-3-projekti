@@ -11,7 +11,8 @@ struct DataRequest{
     QDateTime endTime;
     QString location;
     operator QString() const {
-        return "datatype: " + datatype + ", start time: " + startTime.toString() + ", end time: " + endTime.toString() + ", location: " + location;
+        return "datatype: " + datatype + ", start time: " + startTime.toString() +
+                ", end time: " + endTime.toString() + ", location: " + location;
     }
 };
 

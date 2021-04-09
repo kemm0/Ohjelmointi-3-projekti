@@ -3,10 +3,9 @@
         <file>main.qml</file>
         <file>TabMenu.qml</file>
         <file>GraphView.qml</file>
-        <file>WeatherPanel.qml</file>
-        <file>PowerPanel.qml</file>
         <file>SaveDataWindow.qml</file>
         <file>LoadDataWindow.qml</file>
         <file>SaveImageWindow.qml</file>
+        <file>DataPanel.qml</file>
     </qresource>
 </RCC>

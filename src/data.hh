@@ -9,12 +9,13 @@ class Data : public QObject
 {
     Q_OBJECT
 public:
-     Data(QString datatype, QString unit, dataVector dataValues, QObject *parent = nullptr);
+     Data(QString datatype, QString unit, dataVector dataValues, QString location, QObject *parent = nullptr);
      ~Data();
 
     QString getId();
     QString getDatatype();
     QString getUnit();
+    QString getLocation();
     dataVector getDataValues();
 
 
@@ -23,6 +24,7 @@ private:
     QString id_;
     QString datatype_;
     QString unit_;
+    QString location_;
     dataVector dataValues_;
 };
 

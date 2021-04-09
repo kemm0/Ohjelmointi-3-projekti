@@ -6,11 +6,11 @@ import QtQuick.Controls 2.15
 */
 TabBar {
     TabButton {
-        text: "Power"
+        text: "Weather"
         width: implicitWidth
     }
     TabButton {
-        text: "Weather"
+        text: "Power"
         width: implicitWidth
     }
 }

@@ -36,11 +36,40 @@ Window {
             anchors.top: tabs.bottom
             anchors.bottom: parent.bottom
             clip: true
-            PowerPanel{
-                id: powerpanel
-            }
-            WeatherPanel{
+            DataPanel{
                 id: weatherpanel
+                dataTypesModel: ListModel{
+                    ListElement {text: "Temperature"}
+                    ListElement {text: "Average maximum temperature"}
+                    ListElement {text: "Average minimum temperature"}
+                    ListElement {text: "Average temperature"}
+                    ListElement {text: "Observed wind"}
+                    ListElement {text: "Observed cloudiness"}
+                    ListElement {text: "Predicted wind"}
+                    ListElement {text: "Predicted temperature"}
+                }
+                locationsModel: ListModel {
+                    ListElement {text: "Tampere"}
+                    ListElement {text: "Helsinki"}
+                    ListElement {text: "Turku"}
+                    ListElement {text: "Pirkkala"}
+                }
+            }
+            DataPanel{
+                id: powerpanel
+                dataTypesModel: ListModel {
+                    ListElement {text: "Electricity consumption"}
+                    ListElement {text: "Electricity production"}
+                    ListElement {text: "Electricity consumption forecast 24h"}
+                    ListElement {text: "Electricity production forecast 24h"}
+                    ListElement {text: "Wind power production"}
+                    ListElement {text: "Nuclear power production"}
+                    ListElement {text: "Hydro power production"}
+                    ListElement {text: "Power forms percentages"}
+                }
+                locationsModel: ListModel {
+                    ListElement {text: "Finland"}
+                }
             }
         }
         }

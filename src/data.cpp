@@ -7,11 +7,12 @@
 
 int Data::idCounter = 0;
 
-Data::Data(QString datatype, QString unit, dataVector dataValues, QObject *parent)
+Data::Data(QString datatype, QString unit, dataVector dataValues, QString location, QObject *parent)
     : QObject(parent),
       id_(QString::number(idCounter++)),
       datatype_(datatype),
       unit_(unit),
+      location_(location),
       dataValues_(dataValues)
 {
 
@@ -35,6 +36,11 @@ QString Data::getDatatype()
 QString Data::getUnit()
 {
     return unit_;
+}
+
+QString Data::getLocation()
+{
+    return location_;
 }
 
 dataVector Data::getDataValues()

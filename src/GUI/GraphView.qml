@@ -152,7 +152,7 @@ Item{
         if(yMin < yAxis.min) yAxis.min = yMin
         if(yMax > yAxis.max) yAxis.max = yMax
 
-        var name = data.datatype + ' ' + data.id + ' (%1)'.arg(data.unit)
+        var name = data.datatype + ', ' + data.location + ' (%1)'.arg(data.id) + ' (%1)'.arg(data.unit)
 
         var series = chart.createSeries(ChartView.SeriesTypeLine, name,xAxis,yAxis)
 

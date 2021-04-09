@@ -13,6 +13,7 @@ void Controller::sendDataToView(std::shared_ptr<Data> data)
         values.append(value);
     }
     qmlData.insert("id",data->getId());
+    qmlData.insert("location",data->getLocation());
     qmlData.insert("dates",dates);
     qmlData.insert("values",values);
     qmlData.insert("unit",data->getUnit());
