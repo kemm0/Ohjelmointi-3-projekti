@@ -85,11 +85,15 @@ Window {
             function onDataAdded(dataProperties){
                 dataAdded(dataProperties)
             }
-            function onDataRemoved(dataID){
-                dataRemoved(dataID)
+            function onDataRemoved(id){
+                graphView.removeSeries(id)
+                dataRemoved(id)
             }
             function onDataModified(dataProperties){
                 dataModified(dataProperties)
+            }
+            function onDataNameChanged(id,name){
+                graphView.changeSeriesName(id,name)
             }
         }
         Connections{
@@ -97,16 +101,15 @@ Window {
             function onDataAdded(dataProperties){
                 dataAdded(dataProperties)
             }
-            function onDataRemoved(index,dataID){
-                graphView.removeSeries(index)
-                dataRemoved(dataID)
+            function onDataRemoved(id){
+                graphView.removeSeries(id)
+                dataRemoved(id)
             }
             function onDataModified(dataProperties){
                 dataModified(dataProperties)
             }
-            function onDataNameChanged(index,name){
-                console.log(index,name)
-                graphView.changeSeriesName(index,name)
+            function onDataNameChanged(id,name){
+                graphView.changeSeriesName(id,name)
             }
         }
     }

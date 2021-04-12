@@ -14,6 +14,7 @@ Item{
     property alias chart: chart
     property var chartImg
 
+    property var seriesMap: ({})
     clip: true
     ChartView {
         id: chart
@@ -165,16 +166,18 @@ Item{
             s.axisX = xAxis
             s.axisY = yAxis
         }
+        seriesMap[data.id] = series
     }
-    function removeSeries(index){
-        var series = chart.series(index)
+    function removeSeries(id){
+        var series = chart.series(seriesMap[id].name)
         graphView.chart.removeSeries(series)
+        delete seriesMap[id]
     }
     function modifySeries(data){
         var series = chart.series(index)
     }
-    function changeSeriesName(index, name){
-        var series = chart.series(index)
+    function changeSeriesName(id, name){
+        var series = chart.series(seriesMap[id].name)
         series.name = name
     }
 

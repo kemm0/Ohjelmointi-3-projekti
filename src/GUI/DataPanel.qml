@@ -18,8 +18,8 @@ Item{
 
     signal dataAdded(var dataProperties)
     signal dataModified(var dataProperties)
-    signal dataRemoved(var index, var ID)
-    signal dataNameChanged(var index, var name)
+    signal dataRemoved(var id)
+    signal dataNameChanged(var id, var name)
 
     required property var dataTypesModel
     required property var locationsModel
@@ -121,7 +121,7 @@ Item{
                         const index = dataList.currentIndex
                         const removedID = dataListModel.get(index).id
                         dataListModel.remove(index)
-                        root.dataRemoved(index,removedID)
+                        root.dataRemoved(removedID)
                     }
                 }
             }
@@ -179,7 +179,7 @@ Item{
                 onAccepted: {
                     parent.focus = false
                     readOnly = true
-                    dataNameChanged(dataList.currentIndex, textDelegate.text + ", " +  " (%1)".arg(dataListModel.get(dataList.currentIndex).unit))
+                    dataNameChanged(dataListModel.get(dataList.currentIndex).id, textDelegate.text + ", " +  " (%1)".arg(dataListModel.get(dataList.currentIndex).unit))
                 }
         }
         highlight: Rectangle {color: "lightsteelblue"; radius: 5}

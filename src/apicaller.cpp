@@ -9,7 +9,7 @@ APICaller::APICaller(QObject *parent) :
 
 void APICaller::error(QNetworkReply::NetworkError error)
 {
-    Q_UNUSED(error);
+    qDebug()<<error;
     auto *reply = qobject_cast<QNetworkReply *>(sender());
     qDebug() << reply->readAll();
     reply->deleteLater();

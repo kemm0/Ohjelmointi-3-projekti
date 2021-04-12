@@ -4,8 +4,7 @@
 #include <QObject>
 #include <memory>
 #include "datarequest.h"
-#include "apicaller.hh"
-#include "apicallerfmi.hh"
+#include "data.hh"
 
 class APICallManager : public QObject
 {

@@ -1,23 +1,39 @@
 #include "apicallerfmi.hh"
 
 const QString APICallerFMI::datetimeFormat = "yyyy-MM-dd'T'hh:mm':00Z'";
+const QVector<QString> APICallerFMI::datatypes_ = {
+    "Temperature","Average maximum temperature", "Average minimum temperature",
+    "Average temperature", "Observed wind", "Observed cloudiness",
+    "Predicted wind", "Predicted temperature"
+};
 
 APICallerFMI::APICallerFMI(QObject *parent) : APICaller(parent)
 {
     baseURL_ = "http://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=";
-    dataTypeParameters.insert("Temperature",{});
     dataTypeParameters["Temperature"].insert("code","t2m");
     dataTypeParameters["Temperature"].insert("unit","celsius");
+    dataTypeParameters["Temperature"].insert("query","fmi::observations::weather::simple");
     dataTypeParameters["Average temperature"].insert("code","TA_PT1H_AVG");
     dataTypeParameters["Average temperature"].insert("unit","celsius");
+    dataTypeParameters["Average temperature"].insert("query","fmi::observations::weather::simple");
     dataTypeParameters["Average maximum temperature"].insert("code","TA_PT1H_MAX");
     dataTypeParameters["Average maximum temperature"].insert("unit","celsius");
+    dataTypeParameters["Average maximum temperature"].insert("query","fmi::observations::weather::simple");
     dataTypeParameters["Average minimum temperature"].insert("code","TA_PT1H_MIN");
     dataTypeParameters["Average minimum temperature"].insert("unit","celsius");
+    dataTypeParameters["Average minimum temperature"].insert("query","fmi::observations::weather::simple");
     dataTypeParameters["Observed wind"].insert("code","ws_10min");
     dataTypeParameters["Observed wind"].insert("unit","m/s");
+    dataTypeParameters["Observed wind"].insert("query","fmi::observations::weather::simple");
     dataTypeParameters["Observed cloudiness"].insert("code","n_man");
-    dataTypeParameters["Observed cloudiness"].insert("unit","");
+    dataTypeParameters["Observed cloudiness"].insert("unit","okta");
+    dataTypeParameters["Observed cloudiness"].insert("query","fmi::observations::weather::simple");
+    dataTypeParameters["Predicted wind"].insert("code","WindSpeedMS");
+    dataTypeParameters["Predicted wind"].insert("unit","m/s");
+    dataTypeParameters["Predicted wind"].insert("query","fmi::forecast::hirlam::surface::point::simple");
+    dataTypeParameters["Predicted temperature"].insert("code","Temperature");
+    dataTypeParameters["Predicted temperature"].insert("unit","celsius");
+    dataTypeParameters["Predicted temperature"].insert("query","fmi::forecast::hirlam::surface::point::simple");
 }
 
 void APICallerFMI::parse(QNetworkReply *reply)
@@ -75,15 +91,15 @@ void APICallerFMI::parse(QNetworkReply *reply)
 QString APICallerFMI::formURL(DataRequest request)
 {
     dataRequest_ = request;
-    QString queryUrl = QString("fmi::observations::weather::simple");
+    QString query = dataTypeParameters[dataRequest_.datatype]["query"];
 
     QString startTime = request.startTime.toString(datetimeFormat);
     QString endTime = request.endTime.toString(datetimeFormat);
     QString parameterUrl = QString("&place=%1&starttime=%2&endtime=%3&timestep=30&parameters=%4")
             .arg(dataRequest_.location,startTime,endTime,dataTypeParameters[dataRequest_.datatype]["code"]);
 
-    qDebug()<<"URL formed: " + baseURL_ + queryUrl + parameterUrl;
-    return baseURL_+ queryUrl + parameterUrl; //"fmi::observations::weather::simple&place=Pirkkala&starttime=2021-01-19T09:00:00Z&endtime=2021-01-24T14:00:00Z&timestep=30&parameters=t2m";
+    qDebug()<<"URL formed: " + baseURL_ + query + parameterUrl;
+    return baseURL_+ query + parameterUrl; //"fmi::observations::weather::simple&place=Pirkkala&starttime=2021-01-19T09:00:00Z&endtime=2021-01-24T14:00:00Z&timestep=30&parameters=t2m";
 }
 
 void APICallerFMI::fetchData(DataRequest request)
@@ -97,4 +113,9 @@ void APICallerFMI::fetchData(DataRequest request)
 
     //connect to error slot if error signaled
     connect(reply, &QNetworkReply::errorOccurred, this, &APICallerFMI::error);
+}
+
+QVector<QString> APICallerFMI::dataTypes()
+{
+    return datatypes_;
 }

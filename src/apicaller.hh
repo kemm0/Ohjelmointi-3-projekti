@@ -20,7 +20,7 @@ public:
 protected Q_SLOTS:
     virtual void parse(QNetworkReply *reply) = 0;
     virtual void error(QNetworkReply::NetworkError error);
-    virtual QString formURL(DataRequest) = 0;
+    virtual QString formURL(DataRequest dataRequest) = 0;
 
 signals:
      void dataParsed(std::shared_ptr<Data>);
