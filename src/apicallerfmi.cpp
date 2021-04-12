@@ -8,6 +8,16 @@ APICallerFMI::APICallerFMI(QObject *parent) : APICaller(parent)
     dataTypeParameters.insert("Temperature",{});
     dataTypeParameters["Temperature"].insert("code","t2m");
     dataTypeParameters["Temperature"].insert("unit","celsius");
+    dataTypeParameters["Average temperature"].insert("code","TA_PT1H_AVG");
+    dataTypeParameters["Average temperature"].insert("unit","celsius");
+    dataTypeParameters["Average maximum temperature"].insert("code","TA_PT1H_MAX");
+    dataTypeParameters["Average maximum temperature"].insert("unit","celsius");
+    dataTypeParameters["Average minimum temperature"].insert("code","TA_PT1H_MIN");
+    dataTypeParameters["Average minimum temperature"].insert("unit","celsius");
+    dataTypeParameters["Observed wind"].insert("code","ws_10min");
+    dataTypeParameters["Observed wind"].insert("unit","m/s");
+    dataTypeParameters["Observed cloudiness"].insert("code","n_man");
+    dataTypeParameters["Observed cloudiness"].insert("unit","");
 }
 
 void APICallerFMI::parse(QNetworkReply *reply)
@@ -34,8 +44,8 @@ void APICallerFMI::parse(QNetworkReply *reply)
             }
 
             else if (xml.name() == "ParameterValue"){
-                double tempValue = xml.readElementText().toDouble();
-                values.push_back(qreal(tempValue));
+                double value = xml.readElementText().toDouble();
+                values.push_back(qreal(value));
             }
         }
     }
