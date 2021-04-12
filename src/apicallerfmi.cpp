@@ -75,13 +75,15 @@ void APICallerFMI::parse(QNetworkReply *reply)
 QString APICallerFMI::formURL(DataRequest request)
 {
     dataRequest_ = request;
+    QString queryUrl = QString("fmi::observations::weather::simple");
+
     QString startTime = request.startTime.toString(datetimeFormat);
     QString endTime = request.endTime.toString(datetimeFormat);
-    QString parameterUrl = QString("fmi::observations::weather::simple&place=%1&starttime=%2&endtime=%3&timestep=30&parameters=%4")
+    QString parameterUrl = QString("&place=%1&starttime=%2&endtime=%3&timestep=30&parameters=%4")
             .arg(dataRequest_.location,startTime,endTime,dataTypeParameters[dataRequest_.datatype]["code"]);
 
-    qDebug()<<"URL formed: " + baseURL_ + parameterUrl;
-    return baseURL_ + parameterUrl; //"fmi::observations::weather::simple&place=Pirkkala&starttime=2021-01-19T09:00:00Z&endtime=2021-01-24T14:00:00Z&timestep=30&parameters=t2m";
+    qDebug()<<"URL formed: " + baseURL_ + queryUrl + parameterUrl;
+    return baseURL_+ queryUrl + parameterUrl; //"fmi::observations::weather::simple&place=Pirkkala&starttime=2021-01-19T09:00:00Z&endtime=2021-01-24T14:00:00Z&timestep=30&parameters=t2m";
 }
 
 void APICallerFMI::fetchData(DataRequest request)
