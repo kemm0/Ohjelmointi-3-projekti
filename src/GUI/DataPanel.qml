@@ -91,7 +91,6 @@ Item{
                                     endDate: endDate.text,
                                     endTime: endTime.text
                                 }
-                    console.log(newData.startDate, newData.startTime, newData.endDate, newData.endTime)
                     root.dataAdded(newData)
                 }
             }

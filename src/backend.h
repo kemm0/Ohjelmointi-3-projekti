@@ -2,11 +2,11 @@
 #define BACKEND_H
 
 #include <QObject>
-#include "datamodel.hh"
-#include "api_caller.h"
+#include "datamanager.hh"
+#include "apicallmanager.h"
 #include <memory>
 #include "data.hh"
-#include "DataRequest.h"
+#include "datarequest.h"
 
 class Backend : public QObject
 {
@@ -19,15 +19,16 @@ public:
 
 signals:
     void test(Data* data);
-    void requestComplete(std::shared_ptr<Data> data);
+    void dataAdded(std::shared_ptr<Data> data);
 
-private Q_SLOTS:
-    void requestParsed(std::shared_ptr<Data> data);
+public Q_SLOTS:
+    void forwardData(std::shared_ptr<Data> data);
+    void removeData(QString& id);
     void fetchNewData(DataRequest request);
 
 private:
-    std::shared_ptr<DataModel> dataModel_;
-    std::shared_ptr<API_caller> apiCaller_;
+    std::shared_ptr<DataManager> dataManager_;
+    std::shared_ptr<APICallManager> apiCallManager_;
 };
 
 #endif // BACKEND_H

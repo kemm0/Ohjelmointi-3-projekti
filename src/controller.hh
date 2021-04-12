@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <memory>
-#include "datamodel.hh"
+#include "datamanager.hh"
 #include "data.hh"
 #include "backend.h"
 
@@ -13,7 +13,7 @@ class Controller : public QObject
 
 public slots:
     void sendDataToView(std::shared_ptr<Data> data);
-    void test(Data* data);
+    void removeData(QVariant id);
 public:
     explicit Controller(std::shared_ptr<Backend> backend,
                         QObject *parent = nullptr);

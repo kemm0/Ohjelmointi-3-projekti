@@ -2,10 +2,10 @@
 
 Backend::Backend(QObject *parent) : QObject(parent)
 {
-    apiCaller_ = std::make_shared<API_caller>();
-    for (std::pair<QString, std::shared_ptr<API>> api : apiCaller_->getAPIs()) {
-        connect(api.second.get(), &API::dataParsed, this, &Backend::requestParsed);
-    }
+    apiCallManager_ = std::make_shared<APICallManager>();
+    dataManager_ = std::make_shared<DataManager>();
+    connect(apiCallManager_.get(),&APICallManager::dataFetched,dataManager_.get(),&DataManager::saveData);
+    connect(dataManager_.get(),&DataManager::dataAdded,this,&Backend::forwardData);
 }
 
 std::map<QString, std::vector<std::shared_ptr<Data> > > Backend::getExistingData(QString id)
@@ -16,7 +16,7 @@ std::map<QString, std::vector<std::shared_ptr<Data> > > Backend::getExistingData
 void Backend::fetchNewData(DataRequest request)
 {
     qDebug()<<"Fetched: " + request;
-    apiCaller_->fetchData(request);
+    apiCallManager_->fetchData(request);
 }
 
 std::vector<std::shared_ptr<Data> > Backend::loadData(QString filepath)
@@ -29,9 +29,12 @@ std::vector<std::shared_ptr<Data> > Backend::loadPreferences(QString filepath)
     return {};
 }
 
-void Backend::requestParsed(std::shared_ptr<Data> data)
+void Backend::forwardData(std::shared_ptr<Data> data)
 {
-    qDebug()<<"request complete";
-    emit requestComplete(data);
-    emit test(data.get());
+    emit dataAdded(data);
+}
+
+void Backend::removeData(QString& id)
+{
+    dataManager_->removeData(id);
 }

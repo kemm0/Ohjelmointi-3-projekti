@@ -10,13 +10,13 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        src/api.cpp \
-        src/api_caller.cpp \
-        src/api_ilmatieteenlaitos.cpp \
+        src/apicaller.cpp \
+        src/apicallerfmi.cpp \
+        src/apicallmanager.cpp \
         src/backend.cpp \
         src/controller.cpp \
         src/data.cpp \
-        src/datamodel.cpp \
+        src/datamanager.cpp \
         src/main.cpp
 
 RESOURCES += \
@@ -39,13 +39,13 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
 
 HEADERS += \
-    src/DataRequest.h \
-    src/api.hh \
-    src/api_caller.h \
-    src/api_ilmatieteenlaitos.hh \
+    src/apicallerfmi.hh \
+    src/datamanager.hh \
+    src/datarequest.h \
+    src/apicaller.hh \
+    src/apicallmanager.h \
     src/backend.h \
     src/controller.hh \
-    src/data.hh \
-    src/datamodel.hh
+    src/data.hh
 
 

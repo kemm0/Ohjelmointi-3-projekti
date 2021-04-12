@@ -1,5 +1,5 @@
 #include "controller.hh"
-#include "DataRequest.h"
+#include "datarequest.h"
 
 void Controller::sendDataToView(std::shared_ptr<Data> data)
 {
@@ -21,9 +21,10 @@ void Controller::sendDataToView(std::shared_ptr<Data> data)
     emit requestComplete(qmlData);
 }
 
-void Controller::test(Data *data)
+void Controller::removeData(QVariant id)
 {
-    qDebug(":D:D");
+    QString dataID = id.toString();
+    backend_->removeData(dataID);
 }
 
 Controller::Controller(std::shared_ptr<Backend> backend, QObject *parent)
@@ -48,13 +49,11 @@ void Controller::getNewData(QVariant properties)
     request.location = propertyMap["location"].toString();
     request.startTime = QDateTime::fromString(startTimeString,dateFormat);
     request.endTime = QDateTime::fromString(endTimeString,dateFormat);
-    qDebug()<<request;
     emit getNewData(request);
 }
 
 void  Controller::getExistingData()
 {
-    qDebug()<<":-D";
 }
 
 void Controller::loadData()
@@ -69,6 +68,7 @@ void Controller::setView(QObject *view)
 {
     view_ = view;
     QObject::connect(view,SIGNAL(dataAdded(QVariant)),this,SLOT(getNewData(QVariant)));
+    QObject::connect(view, SIGNAL(dataRemoved(QVariant)),this, SLOT(removeData(QVariant)));
     QObject::connect(this,SIGNAL(getNewData(DataRequest)),backend_.get(),SLOT(fetchNewData(DataRequest)));
-    QObject::connect(backend_.get(),SIGNAL(requestComplete(std::shared_ptr<Data>)),this,SLOT(sendDataToView(std::shared_ptr<Data>)));
+    QObject::connect(backend_.get(),SIGNAL(dataAdded(std::shared_ptr<Data>)),this,SLOT(sendDataToView(std::shared_ptr<Data>)));
 }
