@@ -11,6 +11,7 @@ CONFIG += c++11
 
 SOURCES += \
         src/apicaller.cpp \
+        src/apicallerfingrid.cpp \
         src/apicallerfmi.cpp \
         src/apicallmanager.cpp \
         src/backend.cpp \
@@ -39,6 +40,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
 
 HEADERS += \
+    src/apicallerfingrid.hh \
     src/apicallerfmi.hh \
     src/datamanager.hh \
     src/datarequest.h \

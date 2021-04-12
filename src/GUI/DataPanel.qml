@@ -99,7 +99,6 @@ Item{
                 text: "Update"
                 onClicked: {
                     if(dataListModel.count != 0){
-
                         const updatedData = {
                                         id: dataListModel.get(dataList.currentIndex).id,
                                         dataType: dataTypeSelection,
@@ -212,7 +211,7 @@ Item{
     Connections{
         target: controller
         function onRequestComplete(data){
-            var dataTypeFound = find(dataTypesModel,function(item) {return item.text === data.datatype});
+            var dataTypeFound = dataTypeExists(dataTypesModel,data.datatype);
             if(dataTypeFound){
                 const newData = {
                                 id: data.id,
@@ -254,12 +253,12 @@ Item{
             field.color = ""
         }
     }
-    function find(model, criteria) {
-      for(var i = 0; i < model.count; ++i){
-          if (criteria(model.get(i))){
-              return model.get(i)
-          }
-      return null
-      }
+    function dataTypeExists(model,datatype){
+        for(var i = 0; i < model.count; ++i){
+            if(model.get(i).text == datatype){
+                return true
+            }
+        }
+        return false
     }
 }
