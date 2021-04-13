@@ -11,7 +11,6 @@ Window {
     height: 300
     visible: true
     title: qsTr("Save data to file")
-    required property var dataID
     signal accepted(var filename, var url)
     Item{
         anchors.fill: parent
@@ -42,9 +41,8 @@ Window {
             Button{
                 text: "Save"
                 onClicked:{
-                    //save file
-                    console.log(dataID)
                     accepted(fileNameInput.text, folderInput.text)
+                    close()
                 }
             }
         }

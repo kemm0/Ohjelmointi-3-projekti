@@ -9,8 +9,9 @@ FileDialog {
     id: fileDialog
     title: "Load data from a file"
     folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+    signal fileChosen(var filePath)
     onAccepted: {
-        console.log(fileDialog.file)
+        fileChosen(fileDialog.file)
         close()
     }
     onRejected: {

@@ -19,6 +19,7 @@ public:
 public slots:
     void addData(std::shared_ptr<Data> data);
     void saveDataToFile(QString filename, QString path, QString id);
+    void loadDataFromFile(QString filepath);
     void removeData(QString& id);
 
 private:

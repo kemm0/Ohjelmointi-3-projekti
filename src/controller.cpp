@@ -30,8 +30,12 @@ void Controller::removeData(QVariant id)
 
 void Controller::saveData(QVariant filename, QVariant path, QVariant id)
 {
-    qDebug()<< "Url form: " + path.toString();
     emit saveData(filename.toString(),path.toString(),id.toString());
+}
+
+void Controller::loadData(QVariant filePath)
+{
+    backend_->loadData(filePath.toString());
 }
 
 Controller::Controller(std::shared_ptr<Backend> backend, QObject *parent)
@@ -63,10 +67,6 @@ void  Controller::getExistingData()
 {
 }
 
-void Controller::loadData()
-{
-}
-
 void Controller::loadPreferences()
 {
 }
@@ -74,10 +74,19 @@ void Controller::loadPreferences()
 void Controller::setView(QObject *view)
 {
     view_ = view;
+
     QObject::connect(view,SIGNAL(dataAdded(QVariant)),this,SLOT(getNewData(QVariant)));
+
     QObject::connect(view, SIGNAL(dataRemoved(QVariant)),this, SLOT(removeData(QVariant)));
+
     QObject::connect(this,SIGNAL(getNewData(DataRequest)),backend_.get(),SLOT(fetchNewData(DataRequest)));
+
     QObject::connect(backend_.get(),SIGNAL(dataAdded(std::shared_ptr<Data>)),this,SLOT(sendDataToView(std::shared_ptr<Data>)));
-    QObject::connect(view->findChild<QObject*>("dataPanel"),SIGNAL(saveData(QVariant,QVariant,QVariant)),this,SLOT(saveData(QVariant,QVariant,QVariant)));
+
     QObject::connect(this,SIGNAL(saveData(QString,QString,QString)),backend_.get(),SLOT(saveData(QString,QString,QString)));
+
+    for(auto datapanel : view->findChildren<QObject*>("dataPanel")){
+        QObject::connect(datapanel,SIGNAL(saveData(QVariant,QVariant,QVariant)),this,SLOT(saveData(QVariant,QVariant,QVariant)));
+        QObject::connect(datapanel,SIGNAL(loadData(QVariant)),this,SLOT(loadData(QVariant)));
+    }
 }
