@@ -7,6 +7,7 @@ import QtQuick.Controls 2.15
 Item{
     id: root
     clip: true
+    objectName: "dataPanel"
 
     property alias dataTypeSelection: dataTypesList.currentText
     property alias locationSelection: locationsList.currentText
@@ -20,6 +21,7 @@ Item{
     signal dataModified(var dataProperties)
     signal dataRemoved(var id)
     signal dataNameChanged(var id, var name)
+    signal saveData(var filename, var url, var dataID)
 
     required property var dataTypesModel
     required property var locationsModel
@@ -137,6 +139,7 @@ Item{
                         var window = component.createObject(parent,{
                                                                 dataID: dataListModel.get(dataList.currentIndex).id
                                                             })
+                        window.accepted.connect(root.requestDataSave)
                         window.show()
                     }
                 }
@@ -260,5 +263,10 @@ Item{
             }
         }
         return false
+    }
+    function requestDataSave(filename, url){
+        var dataID = dataListModel.get(dataList.currentIndex).id
+        console.log("request:" + filename,url,dataID)
+        saveData(filename,url,dataID)
     }
 }

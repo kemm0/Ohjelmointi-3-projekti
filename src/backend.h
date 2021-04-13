@@ -25,6 +25,7 @@ public Q_SLOTS:
     void forwardData(std::shared_ptr<Data> data);
     void removeData(QString& id);
     void fetchNewData(DataRequest request);
+    void saveData(QString filename, QString path, QString id);
 
 private:
     std::shared_ptr<DataManager> dataManager_;

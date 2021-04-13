@@ -4,7 +4,7 @@ Backend::Backend(QObject *parent) : QObject(parent)
 {
     apiCallManager_ = std::make_shared<APICallManager>();
     dataManager_ = std::make_shared<DataManager>();
-    connect(apiCallManager_.get(),&APICallManager::dataFetched,dataManager_.get(),&DataManager::saveData);
+    connect(apiCallManager_.get(),&APICallManager::dataFetched,dataManager_.get(),&DataManager::addData);
     connect(dataManager_.get(),&DataManager::dataAdded,this,&Backend::forwardData);
 }
 
@@ -17,6 +17,11 @@ void Backend::fetchNewData(DataRequest request)
 {
     qDebug()<<"Fetched: " + request;
     apiCallManager_->fetchData(request);
+}
+
+void Backend::saveData(QString filename, QString path, QString id)
+{
+    dataManager_->saveDataToFile(filename,path,id);
 }
 
 std::vector<std::shared_ptr<Data> > Backend::loadData(QString filepath)
