@@ -24,9 +24,9 @@ void Backend::saveData(QString filename, QString path, QString id)
     dataManager_->saveDataToFile(filename,path,id);
 }
 
-std::vector<std::shared_ptr<Data> > Backend::loadData(QString filepath)
+void Backend::loadData(QString filepath)
 {
-    return {};
+    dataManager_->loadDataFromFile(filepath);
 }
 
 std::vector<std::shared_ptr<Data> > Backend::loadPreferences(QString filepath)

@@ -14,7 +14,6 @@ class Backend : public QObject
 public:
     explicit Backend(QObject *parent = nullptr);
     std::map<QString, std::vector<std::shared_ptr<Data>>> getExistingData(QString id);
-    std::vector<std::shared_ptr<Data>> loadData(QString filepath);
     std::vector<std::shared_ptr<Data>> loadPreferences(QString filepath);
 
 signals:
@@ -26,6 +25,7 @@ public Q_SLOTS:
     void removeData(QString& id);
     void fetchNewData(DataRequest request);
     void saveData(QString filename, QString path, QString id);
+    void loadData(QString filepath);
 
 private:
     std::shared_ptr<DataManager> dataManager_;

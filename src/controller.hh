@@ -15,13 +15,13 @@ public slots:
     void sendDataToView(std::shared_ptr<Data> data);
     void removeData(QVariant id);
     void saveData(QVariant filename, QVariant path, QVariant id);
+    void loadData(QVariant filePath);
 public:
     explicit Controller(std::shared_ptr<Backend> backend,
                         QObject *parent = nullptr);
 
     Q_INVOKABLE void getNewData(QVariant properties);
     Q_INVOKABLE void getExistingData();
-    Q_INVOKABLE void loadData();
     Q_INVOKABLE void loadPreferences();
     void setView(QObject* view);
 

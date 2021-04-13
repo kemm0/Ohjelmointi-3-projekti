@@ -37,20 +37,9 @@ void DataManager::addData(std::shared_ptr<Data> data)
 void DataManager::saveDataToFile(QString filename, QString path, QString id)
 {
     auto data = data_.at(id);
-    QJsonObject jsonObject;
-    jsonObject.insert("datatype",data->getDatatype());
-    jsonObject.insert("unit",data->getUnit());
-    jsonObject.insert("location",data->getLocation());
-    auto dataVector = data->getDataValues();
-    QJsonArray dates;
-    QJsonArray values;
-    for(uint i = 0; i < dataVector.size(); i++){
-        dates.append(QJsonValue::fromVariant((dataVector.at(i).first)));
-        values.append(QJsonValue::fromVariant((dataVector.at(i).second)));
-    }
-    jsonObject.insert("dates",dates);
-    jsonObject.insert("values",values);
+    QJsonObject jsonObject = data->toJSON();
     QUrl fullFilePath = QUrl(path + "/" + filename + ".json").toLocalFile();
+
     QFile file(fullFilePath.toString());
 
     if (!file.open(QIODevice::WriteOnly)) {
@@ -60,7 +49,30 @@ void DataManager::saveDataToFile(QString filename, QString path, QString id)
 
     QJsonDocument saveDocument(jsonObject);
 
+    qDebug()<<"Saving";
+
     file.write(saveDocument.toJson());
+}
+
+void DataManager::loadDataFromFile(QString filepath)
+{
+    QUrl fullFilePath = QUrl(filepath).toLocalFile();
+    QFile file(fullFilePath.toString());
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning("Couldn't open save file.");
+        return;
+    }
+
+    QByteArray loadData = file.readAll();
+
+    QJsonObject jsonObject = QJsonDocument::fromJson(loadData).object();
+
+    std::shared_ptr<Data> newData(Data::fromJSON(jsonObject));
+
+    data_.insert(std::pair<QString,std::shared_ptr<Data>>(newData->getId(),newData));
+
+    emit dataAdded(newData);
 }
 
 void DataManager::removeData(QString &id)

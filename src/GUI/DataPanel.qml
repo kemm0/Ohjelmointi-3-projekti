@@ -22,6 +22,7 @@ Item{
     signal dataRemoved(var id)
     signal dataNameChanged(var id, var name)
     signal saveData(var filename, var url, var dataID)
+    signal loadData(var filePath)
 
     required property var dataTypesModel
     required property var locationsModel
@@ -136,9 +137,7 @@ Item{
                 onClicked: {
                     if(dataListModel.count != 0){
                         var component = Qt.createComponent("SaveDataWindow.qml")
-                        var window = component.createObject(parent,{
-                                                                dataID: dataListModel.get(dataList.currentIndex).id
-                                                            })
+                        var window = component.createObject(root)
                         window.accepted.connect(root.requestDataSave)
                         window.show()
                     }
@@ -149,7 +148,8 @@ Item{
                 text: "Load Data"
                 onClicked: {
                     var component = Qt.createComponent("LoadDataWindow.qml")
-                    var window = component.createObject()
+                    var window = component.createObject(root)
+                    window.fileChosen.connect(root.requestDataLoad)
                 }
             }
         }
@@ -266,7 +266,9 @@ Item{
     }
     function requestDataSave(filename, url){
         var dataID = dataListModel.get(dataList.currentIndex).id
-        console.log("request:" + filename,url,dataID)
         saveData(filename,url,dataID)
+    }
+    function requestDataLoad(filePath){
+        loadData(filePath)
     }
 }
