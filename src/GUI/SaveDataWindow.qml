@@ -12,6 +12,7 @@ Window {
     visible: true
     title: qsTr("Save data to file")
     required property var dataID
+    signal accepted(var filename, var url)
     Item{
         anchors.fill: parent
         Column{
@@ -43,6 +44,7 @@ Window {
                 onClicked:{
                     //save file
                     console.log(dataID)
+                    accepted(fileNameInput.text, folderInput.text)
                 }
             }
         }
@@ -56,7 +58,7 @@ Window {
             options: FolderDialog.ShowDirsOnly
             currentFolder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
             onAccepted: {
-                console.log("You chose: " + folderDialog.folder)
+                console.log(currentFolder)
                 folderInput.text = folderDialog.folder
             }
             onRejected: {

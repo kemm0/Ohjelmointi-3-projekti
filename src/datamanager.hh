@@ -17,7 +17,8 @@ public:
 
     qreal getAverage(QString id);
 public slots:
-    void saveData(std::shared_ptr<Data> data);
+    void addData(std::shared_ptr<Data> data);
+    void saveDataToFile(QString filename, QString path, QString id);
     void removeData(QString& id);
 
 private:

@@ -1,5 +1,6 @@
 #include "controller.hh"
 #include "datarequest.h"
+#include <QQuickItem>
 
 void Controller::sendDataToView(std::shared_ptr<Data> data)
 {
@@ -25,6 +26,12 @@ void Controller::removeData(QVariant id)
 {
     QString dataID = id.toString();
     backend_->removeData(dataID);
+}
+
+void Controller::saveData(QVariant filename, QVariant path, QVariant id)
+{
+    qDebug()<< "Url form: " + path.toString();
+    emit saveData(filename.toString(),path.toString(),id.toString());
 }
 
 Controller::Controller(std::shared_ptr<Backend> backend, QObject *parent)
@@ -71,4 +78,6 @@ void Controller::setView(QObject *view)
     QObject::connect(view, SIGNAL(dataRemoved(QVariant)),this, SLOT(removeData(QVariant)));
     QObject::connect(this,SIGNAL(getNewData(DataRequest)),backend_.get(),SLOT(fetchNewData(DataRequest)));
     QObject::connect(backend_.get(),SIGNAL(dataAdded(std::shared_ptr<Data>)),this,SLOT(sendDataToView(std::shared_ptr<Data>)));
+    QObject::connect(view->findChild<QObject*>("dataPanel"),SIGNAL(saveData(QVariant,QVariant,QVariant)),this,SLOT(saveData(QVariant,QVariant,QVariant)));
+    QObject::connect(this,SIGNAL(saveData(QString,QString,QString)),backend_.get(),SLOT(saveData(QString,QString,QString)));
 }
