@@ -76,9 +76,11 @@ Item{
             }
         }
         LineSeries {
+            visible: false
             axisX: xAxis
             axisY: yAxis
         }
+
         Connections{
             target: controller
             function onRequestComplete(data){

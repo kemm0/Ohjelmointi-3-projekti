@@ -16,6 +16,7 @@ public slots:
     void removeData(QVariant id);
     void saveData(QVariant filename, QVariant path, QVariant id);
     void loadData(QVariant filePath);
+    void backendError(QString errorMessage);
 public:
     explicit Controller(std::shared_ptr<Backend> backend,
                         QObject *parent = nullptr);
@@ -29,6 +30,7 @@ signals:
     void getNewData(DataRequest request);
     void requestComplete(QMap<QString,QVariant> data);
     void saveData(QString filename, QString path, QString id);
+    void error(QString errorMessage);
 
 private:
     std::shared_ptr<Backend> backend_;

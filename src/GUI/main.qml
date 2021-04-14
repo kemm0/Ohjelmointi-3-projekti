@@ -112,5 +112,29 @@ Window {
                 graphView.changeSeriesName(id,name)
             }
         }
+        Connections{
+            target: controller
+            function onError(errorMessage){
+                var dialog = dialogComponent.createObject(mainWindow, {message: errorMessage})
+                dialog.open()
+            }
+        }
+    }
+    Component{
+        id: dialogComponent
+        Dialog {
+            id: dialog
+            required property var message
+            title: "Oops!"
+            standardButtons: Dialog.Ok
+
+            Text {
+                id: text
+                text: message
+            }
+
+            onAccepted: close()
+            onRejected: close()
+        }
     }
 }

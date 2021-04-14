@@ -38,10 +38,16 @@ void Controller::loadData(QVariant filePath)
     backend_->loadData(filePath.toString());
 }
 
+void Controller::backendError(QString errorMessage)
+{
+    emit error(errorMessage);
+}
+
 Controller::Controller(std::shared_ptr<Backend> backend, QObject *parent)
     : QObject(parent),
       backend_{backend}
 {
+    QObject::connect(backend_.get(),SIGNAL(error(QString)),this,SLOT(backendError(QString)));
 }
 
 void Controller::getNewData(QVariant properties)

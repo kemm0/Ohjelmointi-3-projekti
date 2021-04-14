@@ -61,20 +61,20 @@ dataVector Data::getDataValues()
     return dataValues_;
 }
 
-Data *Data::fromJSON(QJsonObject &document)
+Data *Data::fromJSON(QJsonObject &jsonObject)
 {
     Data* newData = new Data();
 
-    QString datatype = document["datatype"].toString();
-    QString unit = document["unit"].toString();
-    QString location = document["location"].toString();
+    QString datatype = jsonObject["datatype"].toString();
+    QString unit = jsonObject["unit"].toString();
+    QString location = jsonObject["location"].toString();
 
     newData->setDatatype(datatype);
     newData->setUnit(unit);
     newData->setLocation(location);
 
-    QJsonArray jsonDates = document["dates"].toArray();
-    QJsonArray jsonValues = document["values"].toArray();
+    QJsonArray jsonDates = jsonObject["dates"].toArray();
+    QJsonArray jsonValues = jsonObject["values"].toArray();
 
     std::vector<std::pair<QDateTime,qreal>> dataVector = {};
 

@@ -12,23 +12,40 @@ public:
 
 signals:
 
-
-    // APICaller interface
 public:
+    /**
+     * @brief fetchData creates a QNetworkRequest to request data from the Fingrid API
+     * @param dataRequest
+     */
     void fetchData(DataRequest dataRequest);
-    static QVector<QString> dataTypes();
 
-protected slots:
+    /**
+     * @brief dataTypes
+     * @return QList of the datatypes that the Fingrid API handles
+     */
+    static QList<QString> dataTypes();
+
+public slots:
+
+    /**
+     * @brief parse parses data from the API reply and creates a data object based on it
+     * @param reply
+     */
     void parse(QNetworkReply *reply);
+
+    /**
+     * @brief formURL forms the API call url based on parameters in dataRequest
+     * @param dataRequest
+     * @return
+     */
     QString formURL(DataRequest dataRequest);
 
 private:
     static const QString API_KEY;
     static const QString baseUrl_;
-    static const QVector<QString> datatypes_;
     static const QString datetimeFormat_;
     static const QString responseDatetimeFormat_;
-    QMap<QString,QMap<QString,QString>> dataTypeParameters;
+    static const QMap<QString,QMap<QString,QString>> dataRequestParameters;
 };
 
 #endif // APICALLERFINGRID_HH

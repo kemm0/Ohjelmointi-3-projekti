@@ -24,6 +24,7 @@ protected Q_SLOTS:
 
 signals:
      void dataParsed(std::shared_ptr<Data>);
+     void requestError(QString errorMessage);
 
 protected:
     QNetworkAccessManager *manager_;

@@ -9,16 +9,17 @@ class APICallerFMI : public APICaller
 public:
     explicit APICallerFMI(QObject *parent = nullptr);
     void fetchData(DataRequest dataRequest);
-    static QVector<QString> dataTypes();
+    static QList<QString> dataTypes();
 
 private Q_SLOTS:
     void parse(QNetworkReply *reply);
     QString formURL(DataRequest request);
 
 private:
-    static const QVector<QString> datatypes_;
+    std::vector<std::pair<QDateTime,qreal>> calculateAverage(std::vector<std::pair<QDateTime,qreal>> &values);
     static const QString datetimeFormat;
-    QMap<QString,QMap<QString,QString>> dataTypeParameters;
+    static const QMap<QString,QMap<QString,QString>> requestParameters_;
+    static const QString baseURL_;
 };
 
 #endif // APICALLERFMI_H

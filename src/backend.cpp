@@ -6,11 +6,7 @@ Backend::Backend(QObject *parent) : QObject(parent)
     dataManager_ = std::make_shared<DataManager>();
     connect(apiCallManager_.get(),&APICallManager::dataFetched,dataManager_.get(),&DataManager::addData);
     connect(dataManager_.get(),&DataManager::dataAdded,this,&Backend::forwardData);
-}
-
-std::map<QString, std::vector<std::shared_ptr<Data> > > Backend::getExistingData(QString id)
-{
-    return {};
+    connect(apiCallManager_.get(),&APICallManager::requestError,this,&Backend::error);
 }
 
 void Backend::fetchNewData(DataRequest request)
@@ -29,9 +25,19 @@ void Backend::loadData(QString filepath)
     dataManager_->loadDataFromFile(filepath);
 }
 
-std::vector<std::shared_ptr<Data> > Backend::loadPreferences(QString filepath)
+void Backend::forwardError(QString &errorMessage)
 {
-    return {};
+    emit error(errorMessage);
+}
+
+void Backend::loadPreferences(QString filepath)
+{
+
+}
+
+void Backend::savePreferences(QString filename, QString path)
+{
+
 }
 
 void Backend::forwardData(std::shared_ptr<Data> data)

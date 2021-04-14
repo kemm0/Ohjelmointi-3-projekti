@@ -21,7 +21,17 @@ public:
     QString getLocation();
     dataVector getDataValues();
 
-    static Data* fromJSON(QJsonObject& document);
+    /**
+     * @brief fromJSON creates a data object from a QjsonObject
+     * @param jsonObject from which the data object is created
+     * @return the created data object
+     */
+    static Data* fromJSON(QJsonObject& jsonObject);
+
+    /**
+     * @brief toJSON creates a QJsonobject from a data object
+     * @return the created QJsonObject
+     */
     QJsonObject toJSON();
 
     void setDatatype(QString &datatype);
@@ -30,6 +40,9 @@ public:
     void addDataValues(dataVector &dataValues);
     void setDataValues(dataVector &dataValues);
 
+    /**
+     * @brief print prints the member variable values of the data object
+     */
     void print();
 
 
