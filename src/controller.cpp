@@ -48,6 +48,12 @@ Controller::Controller(std::shared_ptr<Backend> backend, QObject *parent)
       backend_{backend}
 {
     QObject::connect(backend_.get(),SIGNAL(error(QString)),this,SLOT(backendError(QString)));
+
+    QObject::connect(this,SIGNAL(getNewData(DataRequest)),backend_.get(),SLOT(fetchNewData(DataRequest)));
+
+    QObject::connect(backend_.get(),SIGNAL(dataAdded(std::shared_ptr<Data>)),this,SLOT(sendDataToView(std::shared_ptr<Data>)));
+
+    QObject::connect(this,SIGNAL(saveData(QString,QString,QString)),backend_.get(),SLOT(saveData(QString,QString,QString)));
 }
 
 void Controller::getNewData(QVariant properties)
@@ -84,12 +90,6 @@ void Controller::setView(QObject *view)
     QObject::connect(view,SIGNAL(dataAdded(QVariant)),this,SLOT(getNewData(QVariant)));
 
     QObject::connect(view, SIGNAL(dataRemoved(QVariant)),this, SLOT(removeData(QVariant)));
-
-    QObject::connect(this,SIGNAL(getNewData(DataRequest)),backend_.get(),SLOT(fetchNewData(DataRequest)));
-
-    QObject::connect(backend_.get(),SIGNAL(dataAdded(std::shared_ptr<Data>)),this,SLOT(sendDataToView(std::shared_ptr<Data>)));
-
-    QObject::connect(this,SIGNAL(saveData(QString,QString,QString)),backend_.get(),SLOT(saveData(QString,QString,QString)));
 
     for(auto datapanel : view->findChildren<QObject*>("dataPanel")){
         QObject::connect(datapanel,SIGNAL(saveData(QVariant,QVariant,QVariant)),this,SLOT(saveData(QVariant,QVariant,QVariant)));
