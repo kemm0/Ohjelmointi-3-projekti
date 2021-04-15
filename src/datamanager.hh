@@ -35,6 +35,21 @@ public slots:
     void loadDataFromFile(QString filepath);
 
     /**
+     * @brief savePrefToFile saves user preferences to a json file
+     * @param filename : name of the file (without file extension)
+     * @param path : path to the folder where the file is stored
+     * @param id : id of the preference saved
+     */
+    void savePrefToFile(QString filename, QString path, QString id);
+
+    /**
+     * @brief loadPrefFromFile : loads a json file and makes an api-call with the preference data
+     * @param filepath : path of the file
+     */
+    void loadPrefFromFile(QString filepath);
+
+
+    /**
      * @brief removeData removes data object from the data_ map
      * @param id : id of the data to be removed
      */

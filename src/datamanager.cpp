@@ -59,6 +59,16 @@ void DataManager::loadDataFromFile(QString filepath)
     emit dataAdded(newData);
 }
 
+void DataManager::savePrefToFile(QString filename, QString path, QString id)
+{
+
+}
+
+void DataManager::loadPrefFromFile(QString filepath)
+{
+
+}
+
 void DataManager::removeData(QString &id)
 {
     data_.erase(id);
