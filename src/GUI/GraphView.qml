@@ -130,7 +130,7 @@ Item{
     }
     function saveChartImage(folder,filename){
         var filePath
-        if(OS === 'WINDOWS'){ //OS variable is set in main.cpp
+        if(Qt.platform.os === 'windows'){
             filePath = folder.substring(8,folder.length) + "/" + filename + ".png"
         }
         else{

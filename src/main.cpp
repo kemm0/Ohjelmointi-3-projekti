@@ -14,13 +14,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-    QString OperatingSystem;
-#ifdef linux
-    OperatingSystem = "LINUX";
-#elif defined(_WIN32)
-    OperatingSystem = "WINDOWS";
-#endif
-
     QApplication app(argc, argv);
 
     app.setWindowIcon(QIcon("../kumivene-solutions/res/stonks.JPG"));
@@ -32,7 +25,6 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("controller", controller.get());
-    engine.rootContext()->setContextProperty("OS", OperatingSystem);
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
