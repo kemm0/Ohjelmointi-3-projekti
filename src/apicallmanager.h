@@ -48,6 +48,8 @@ private slots:
 
 private:
     void loadAPIConfig();
+    void createFetchInstance(DataRequest dataRequest);
+    QVector<DataRequest> splitRequest(DataRequest dataRequest);
     QMap<QString,QString> apiConfig;
 };
 
