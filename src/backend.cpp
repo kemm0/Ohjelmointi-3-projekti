@@ -23,8 +23,11 @@ void Backend::fetchNewData(QVariant properties)
     DataRequest request;
     request.datatype = propertyMap["dataType"].toString();
     request.location = propertyMap["location"].toString();
+    request.dataSource = propertyMap["dataSource"].toString();
     request.startTime = QDateTime::fromString(startTimeString,dateFormat);
     request.endTime = QDateTime::fromString(endTimeString,dateFormat);
+
+    qDebug()<<request;
 
     apiCallManager_->fetchData(request);
 }

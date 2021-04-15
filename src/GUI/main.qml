@@ -37,10 +37,8 @@ Window {
             anchors.bottom: parent.bottom
             clip: true
             DataPanel{
-                id: weatherpanel
-                apisModel: ListModel{
-                    ListElement {text: "FMI"}
-                }
+                id: fmiPanel
+                dataSource: "FMI"
                 dataTypesModel: ListModel{
                     ListElement {text: "Temperature"}
                     ListElement {text: "Average maximum temperature"}
@@ -59,10 +57,8 @@ Window {
                 }
             }
             DataPanel{
-                id: powerpanel
-                apisModel: ListModel{
-                    ListElement {text: "Fingrid"}
-                }
+                id: fingridPanel
+                dataSource: "Fingrid"
                 dataTypesModel: ListModel {
                     ListElement {text: "Electricity consumption"}
                     ListElement {text: "Electricity production"}
@@ -87,7 +83,7 @@ Window {
         anchors.bottom: parent.bottom
         id: graphView
         Connections{
-            target: powerpanel
+            target: fingridPanel
             function onDataAdded(dataProperties){
                 dataAdded(dataProperties)
             }
@@ -103,7 +99,7 @@ Window {
             }
         }
         Connections{
-            target: weatherpanel
+            target: fmiPanel
             function onDataAdded(dataProperties){
                 dataAdded(dataProperties)
             }

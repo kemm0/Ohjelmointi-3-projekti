@@ -12,10 +12,11 @@ Item{
     property alias dataTypeSelection: dataTypesList.currentText
     property alias locationSelection: locationsList.currentText
 
-    property var idCounter: 0
-
     property string dateFormat: 'dd.MM.yyyy'
     property string timeFormat: 'hh.mm'
+
+    property var startTimeOffset: 8
+    property var dataSource: ""
 
     signal dataAdded(var dataProperties)
     signal dataModified(var dataProperties)
@@ -24,7 +25,6 @@ Item{
     signal saveData(var filename, var url, var dataID)
     signal loadData(var filePath)
 
-    required property var apisModel
     required property var dataTypesModel
     required property var locationsModel
 
@@ -32,10 +32,8 @@ Item{
         padding: 10
         spacing: 5
         id: options
-        ComboBox {
-            id: apisList
-            width: 300
-            model: apisModel
+        Label {
+            text: "Datatype"
         }
         ComboBox {
             id: dataTypesList
@@ -43,6 +41,9 @@ Item{
             model: dataTypesModel
         }
 
+        Label {
+            text: "Location"
+        }
         ComboBox {
             id: locationsList
             width: 300
@@ -94,6 +95,7 @@ Item{
                 onClicked: {
                     const newData = {
                                     dataType: dataTypeSelection,
+                                    dataSource: dataSource,
                                     location: locationSelection,
                                     startDate: startDate.text,
                                     startTime: startTime.text,
@@ -101,6 +103,7 @@ Item{
                                     endTime: endTime.text
                                 }
                     root.dataAdded(newData)
+                    backend.fetchNewData(newData)
                 }
             }
             Button {
@@ -131,6 +134,7 @@ Item{
                         const removedID = dataListModel.get(index).id
                         dataListModel.remove(index)
                         root.dataRemoved(removedID)
+                        backend.removeData(removedID)
                     }
                 }
             }
@@ -210,7 +214,7 @@ Item{
     Component.onCompleted: {
         var startDateTime = new Date(Date.now())
         var endDateTime = new Date(Date.now())
-        startDateTime.setHours(startDateTime.getHours() - 8)
+        startDateTime.setHours(startDateTime.getHours() - startTimeOffset)
         startDate.text = startDateTime.toLocaleDateString(Qt.locale(),dateFormat)
         startTime.text = startDateTime.toLocaleTimeString(Qt.locale(),timeFormat)
         endDate.text = endDateTime.toLocaleDateString(Qt.locale(),dateFormat)
@@ -272,9 +276,9 @@ Item{
     }
     function requestDataSave(filename, url){
         var dataID = dataListModel.get(dataList.currentIndex).id
-        saveData(filename,url,dataID)
+        backend.saveData(filename,url,dataID)
     }
     function requestDataLoad(filePath){
-        loadData(filePath)
+        backend.loadData(filePath)
     }
 }

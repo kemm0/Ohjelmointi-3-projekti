@@ -9,7 +9,8 @@
 int Data::idCounter = 0;
 const QString Data::jsonDateTimeFormat = "yyyy-MM-dd'T'hh:mm:'00.000'";
 
-Data::Data(QString datatype, QString unit, dataVector dataValues, QString location, QObject *parent)
+Data::Data(QString datatype, QString unit, dataVector dataValues,
+           QString location, QObject *parent)
     : QObject(parent),
       id_(QString::number(idCounter++)),
       datatype_(datatype),

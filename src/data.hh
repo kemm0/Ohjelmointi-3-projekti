@@ -45,7 +45,6 @@ public:
      */
     void print();
 
-
 private:
     static int idCounter;
     QString id_;

@@ -5,7 +5,6 @@
 #include <QQuickStyle>
 #include <memory>
 #include "data.hh"
-#include "controller.hh"
 #include "backend.h"
 #include <typeinfo>
 int main(int argc, char *argv[])
@@ -19,7 +18,6 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon("../kumivene-solutions/res/stonks.JPG"));
 
     auto backend = std::make_shared<Backend>();
-    auto controller = std::make_shared<Controller>(backend);
 
     QQuickStyle::setStyle("Material");
 
@@ -32,6 +30,5 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
-    controller->setView(engine.rootObjects()[0]);
     return app.exec();
 }

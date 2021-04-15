@@ -15,7 +15,6 @@ SOURCES += \
         src/apicallerfmi.cpp \
         src/apicallmanager.cpp \
         src/backend.cpp \
-        src/controller.cpp \
         src/data.cpp \
         src/datamanager.cpp \
         src/main.cpp
@@ -47,7 +46,6 @@ HEADERS += \
     src/apicaller.hh \
     src/apicallmanager.h \
     src/backend.h \
-    src/controller.hh \
     src/data.hh
 
 
