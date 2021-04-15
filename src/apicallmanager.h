@@ -46,6 +46,9 @@ private slots:
      */
     void forwardErrorMessage(QString errorMessage);
 
+private:
+    void loadAPIConfig();
+    QMap<QString,QString> apiConfig;
 };
 
 #endif // APICALLMANAGER_H

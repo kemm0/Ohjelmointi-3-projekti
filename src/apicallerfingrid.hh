@@ -8,7 +8,7 @@ class APICallerFingrid : public APICaller
 {
     Q_OBJECT
 public:
-    explicit APICallerFingrid(QObject *parent = nullptr);
+    explicit APICallerFingrid(QString apiKey, QObject *parent = nullptr);
 
 signals:
 
@@ -41,7 +41,7 @@ public slots:
     QString formURL(DataRequest dataRequest);
 
 private:
-    static const QString API_KEY;
+    const QString apiKey_;
     static const QString baseUrl_;
     static const QString datetimeFormat_;
     static const QString responseDatetimeFormat_;

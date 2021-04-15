@@ -1,7 +1,5 @@
 #include "apicallerfingrid.hh"
 
-const QString APICallerFingrid::API_KEY = "";
-
 
 const QString APICallerFingrid::baseUrl_ = "https://api.fingrid.fi/v1/variable/%1/events/csv?start_time=%2&end_time=%3";
 const QString APICallerFingrid::datetimeFormat_ = "yyyy-MM-dd'T'hh:mm':00Z'";
@@ -39,14 +37,16 @@ const QMap<QString,QMap<QString,QString>> APICallerFingrid::dataRequestParameter
 
 const QString APICallerFingrid::responseDatetimeFormat_ = "yyyy-MM-dd'T'hh:mm':00+0000'";
 
-APICallerFingrid::APICallerFingrid(QObject *parent) : APICaller(parent)
+APICallerFingrid::APICallerFingrid(QString apiKey, QObject *parent) :
+    APICaller(parent),
+    apiKey_(apiKey)
 {
 }
 
 void APICallerFingrid::fetchData(DataRequest dataRequest)
 {
-    if(API_KEY == ""){
-        emit requestError(QString("API key missing! Define the API key in apicallerfingrid.cpp"));
+    if(apiKey_ == ""){
+        emit requestError(QString("API key missing! Define the API key in apiconfig.txt"));
         return;
     }
 
@@ -54,7 +54,7 @@ void APICallerFingrid::fetchData(DataRequest dataRequest)
     QNetworkRequest req = QNetworkRequest(QString(formURL(dataRequest)));
 
     //sets the api key to the request header
-    req.setRawHeader(QString("x-api-key").toUtf8(),QString(API_KEY).toUtf8());
+    req.setRawHeader(QString("x-api-key").toUtf8(),QString(apiKey_).toUtf8());
 
     //the reply that was created from the request
     QNetworkReply *reply = manager_->get(req);
