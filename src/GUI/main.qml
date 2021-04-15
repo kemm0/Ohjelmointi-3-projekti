@@ -115,6 +115,7 @@ Window {
         Connections{
             target: controller
             function onError(errorMessage){
+                console.log(errorMessage)
                 var dialog = dialogComponent.createObject(mainWindow, {message: errorMessage})
                 dialog.open()
             }

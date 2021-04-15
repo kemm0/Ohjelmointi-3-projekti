@@ -46,7 +46,6 @@ APICallerFingrid::APICallerFingrid(QObject *parent) : APICaller(parent)
 void APICallerFingrid::fetchData(DataRequest dataRequest)
 {
     if(API_KEY == ""){
-        qDebug()<<"API key missing! Define the API key in apicallerfingrid.cpp";
         emit requestError(QString("API key missing! Define the API key in apicallerfingrid.cpp"));
         return;
     }
