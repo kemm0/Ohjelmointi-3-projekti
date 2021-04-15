@@ -13,17 +13,13 @@ APICallManager::APICallManager(QObject *parent) :
 
 void APICallManager::fetchData(DataRequest dataRequest)
 {
-    if(APICallerFMI::dataTypes().contains(dataRequest.datatype)){
-        auto api = new APICallerFMI(this);
-        connect(api,&APICallerFMI::dataParsed,this,&APICallManager::forwardData);
-        connect(api,&APICallerFMI::requestError,this,&APICallManager::forwardErrorMessage);
-        api->fetchData(dataRequest);
-    }
-    else if(APICallerFingrid::dataTypes().contains(dataRequest.datatype)){
-        auto api = new APICallerFingrid(apiConfig.value("FINGRID_API_KEY"),this);
-        connect(api,&APICallerFingrid::dataParsed,this,&APICallManager::forwardData);
-        connect(api,&APICallerFingrid::requestError,this,&APICallManager::forwardErrorMessage);
-        api->fetchData(dataRequest);
+    if (dataRequest.startTime.daysTo(dataRequest.endTime) < 7) {
+        createFetchInstance(dataRequest);
+    } else {
+        for (DataRequest& part : splitRequest(dataRequest))
+        {
+            createFetchInstance(part);
+        }
     }
 }
 
@@ -59,4 +55,41 @@ void APICallManager::loadAPIConfig()
         QString value = parts[1];
         apiConfig[key] = value;
     }
+}
+
+void APICallManager::createFetchInstance(DataRequest dataRequest)
+{
+    if(APICallerFMI::dataTypes().contains(dataRequest.datatype)){
+        auto api = new APICallerFMI(this);
+        connect(api,&APICallerFMI::dataParsed,this,&APICallManager::forwardData);
+        connect(api,&APICallerFMI::requestError,this,&APICallManager::forwardErrorMessage);
+        api->fetchData(dataRequest);
+    }
+    else if(APICallerFingrid::dataTypes().contains(dataRequest.datatype)){
+        auto api = new APICallerFingrid(apiConfig.value("FINGRID_API_KEY"),this);
+        connect(api,&APICallerFingrid::dataParsed,this,&APICallManager::forwardData);
+        connect(api,&APICallerFingrid::requestError,this,&APICallManager::forwardErrorMessage);
+        api->fetchData(dataRequest);
+    }
+}
+
+QVector<DataRequest> APICallManager::splitRequest(DataRequest dataRequest)
+{
+    QVector<DataRequest> parts = {};
+    QDateTime split = dataRequest.startTime;
+    while (split < dataRequest.endTime)
+    {
+        DataRequest part;
+        part.datatype = dataRequest.datatype;
+        part.location = dataRequest.location;
+        part.startTime = split;
+        if (split.addDays(7) > dataRequest.endTime) {
+            split = dataRequest.endTime;
+        } else {
+            split = split.addDays(7);
+        }
+        part.endTime = split;
+        parts.push_back(part);
+    }
+    return parts;
 }
