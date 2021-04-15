@@ -12,25 +12,11 @@ class Controller : public QObject
     Q_OBJECT
 
 public slots:
-    void sendDataToView(std::shared_ptr<Data> data);
-    void removeData(QVariant id);
-    void saveData(QVariant filename, QVariant path, QVariant id);
-    void loadData(QVariant filePath);
-    void backendError(QString errorMessage);
 public:
     explicit Controller(std::shared_ptr<Backend> backend,
                         QObject *parent = nullptr);
 
-    Q_INVOKABLE void getNewData(QVariant properties);
-    Q_INVOKABLE void getExistingData();
-    Q_INVOKABLE void loadPreferences();
     void setView(QObject* view);
-
-signals:
-    void getNewData(DataRequest request);
-    void requestComplete(QMap<QString,QVariant> data);
-    void saveData(QString filename, QString path, QString id);
-    void error(QString errorMessage);
 
 private:
     std::shared_ptr<Backend> backend_;

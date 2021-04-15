@@ -21,7 +21,7 @@ signals:
      * the data manager
      * @param data : the data that was added
      */
-    void dataAdded(std::shared_ptr<Data> data);
+    void dataAdded(QMap<QString,QVariant> data);
 
     /**
      * @brief error signals an error message
@@ -30,23 +30,18 @@ signals:
     void error(QString errorMessage);
 
 public Q_SLOTS:
-    /**
-     * @brief forwardData forwards created data (to controller)
-     * @param data
-     */
-    void forwardData(std::shared_ptr<Data> data);
 
     /**
      * @brief removeData sends signal to dataManager to remove data
      * @param id
      */
-    void removeData(QString& id);
+    Q_INVOKABLE void removeData(QVariant id);
 
     /**
      * @brief fetchNewData sends signal to apiCallManager to create a new request
      * @param request
      */
-    void fetchNewData(DataRequest request);
+    Q_INVOKABLE void fetchNewData(QVariant properties);
 
     /**
      * @brief saveData signals the dataManager to save data to a file
@@ -54,26 +49,20 @@ public Q_SLOTS:
      * @param path
      * @param id
      */
-    void saveData(QString filename, QString path, QString id);
+    Q_INVOKABLE void saveData(QVariant filename, QVariant path, QVariant id);
 
     /**
      * @brief loadData signals the dataManager to load data from a file
      * @param filepath
      */
-    void loadData(QString filepath);
-
-    /**
-     * @brief forwardError sends an error message signal
-     * @param errorMessage
-     */
-    void forwardError(QString &errorMessage);
+    Q_INVOKABLE void loadData(QVariant filePath);
 
     /**
      * @brief loadPreferences signals (the dataManager?) to load preferences
      * from a file and create data objects based on the preferences
      * @param filepath : the path to the preferences file
      */
-    void loadPreferences(QString filepath);
+    Q_INVOKABLE void loadPreferences(QVariant filepath);
 
     /**
      * @brief savePreferences signals (the dataManager?) to save current
@@ -81,7 +70,16 @@ public Q_SLOTS:
      * @param filename
      * @param path
      */
-    void savePreferences(QString filename, QString path);
+    Q_INVOKABLE void savePreferences(QVariant filename, QVariant filepath);
+
+    /**
+     * @brief forwardData forwards the data that was added to dataManager
+     * @param data the data from dataManager
+     */
+private Q_SLOTS:
+    void forwardData(std::shared_ptr<Data> data);
+
+    void sendError(QString errorMessage);
 
 private:
     std::shared_ptr<DataManager> dataManager_;

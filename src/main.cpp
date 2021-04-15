@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     QQuickStyle::setStyle("Material");
 
     QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty("controller", controller.get());
+    engine.rootContext()->setContextProperty("backend", backend.get());
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {

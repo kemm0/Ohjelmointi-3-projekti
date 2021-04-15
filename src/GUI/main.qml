@@ -38,6 +38,9 @@ Window {
             clip: true
             DataPanel{
                 id: weatherpanel
+                apisModel: ListModel{
+                    ListElement {text: "FMI"}
+                }
                 dataTypesModel: ListModel{
                     ListElement {text: "Temperature"}
                     ListElement {text: "Average maximum temperature"}
@@ -57,6 +60,9 @@ Window {
             }
             DataPanel{
                 id: powerpanel
+                apisModel: ListModel{
+                    ListElement {text: "Fingrid"}
+                }
                 dataTypesModel: ListModel {
                     ListElement {text: "Electricity consumption"}
                     ListElement {text: "Electricity production"}
@@ -113,7 +119,7 @@ Window {
             }
         }
         Connections{
-            target: controller
+            target: backend
             function onError(errorMessage){
                 console.log(errorMessage)
                 var dialog = dialogComponent.createObject(mainWindow, {message: errorMessage})

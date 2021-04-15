@@ -82,8 +82,8 @@ Item{
         }
 
         Connections{
-            target: controller
-            function onRequestComplete(data){
+            target: backend
+            function onDataAdded(data){
                 addSeries(data)
             }
         }

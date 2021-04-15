@@ -24,6 +24,7 @@ Item{
     signal saveData(var filename, var url, var dataID)
     signal loadData(var filePath)
 
+    required property var apisModel
     required property var dataTypesModel
     required property var locationsModel
 
@@ -31,6 +32,11 @@ Item{
         padding: 10
         spacing: 5
         id: options
+        ComboBox {
+            id: apisList
+            width: 300
+            model: apisModel
+        }
         ComboBox {
             id: dataTypesList
             width: 300
@@ -212,8 +218,8 @@ Item{
     }
 
     Connections{
-        target: controller
-        function onRequestComplete(data){
+        target: backend
+        function onDataAdded(data){
             var dataTypeFound = dataTypeExists(dataTypesModel,data.datatype);
             if(dataTypeFound){
                 const newData = {
