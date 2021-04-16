@@ -120,11 +120,7 @@ void APICallerFMI::parse(QNetworkReply *reply)
     //qDebug() << answer;
     reply->deleteLater();
 
-    auto data = std::make_shared<Data>(
-                dataRequest_.datatype,
-                requestParameters_[dataRequest_.datatype]["unit"],
-                dataVector,
-                dataRequest_.location);
+    auto data = createDataObject(dataVector,requestParameters_[dataRequest_.datatype]["unit"]);
     emit dataParsed(data);
 }
 

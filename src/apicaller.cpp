@@ -25,6 +25,20 @@ void APICaller::error(QNetworkReply::NetworkError error)
     reply->deleteLater();
 }
 
+std::shared_ptr<Data> APICaller::createDataObject(std::vector<std::pair<QDateTime, qreal> > dataVector, QString unit)
+{
+    auto data = std::make_shared<Data>(
+                dataRequest_.datatype,
+                unit,
+                dataVector,
+                dataRequest_.location);
+    if (dataRequest_.isSplit){
+        data->makeSplit();
+        data->giveSplitId(dataRequest_.splitId);
+    }
+    return data;
+}
+
 QString APICaller::formURL(DataRequest dataRequest)
 {
     return "";

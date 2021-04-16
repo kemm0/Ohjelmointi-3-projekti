@@ -27,6 +27,7 @@ signals:
      void requestError(QString errorMessage);
 
 protected:
+    std::shared_ptr<Data> createDataObject(std::vector<std::pair<QDateTime,qreal>> dataVector, QString unit);
     QNetworkAccessManager *manager_;
     DataRequest dataRequest_;
     QString baseURL_;

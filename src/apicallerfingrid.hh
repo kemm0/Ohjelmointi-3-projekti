@@ -45,7 +45,7 @@ private:
     static const QString baseUrl_;
     static const QString datetimeFormat_;
     static const QString responseDatetimeFormat_;
-    static const QMap<QString,QMap<QString,QString>> dataRequestParameters;
+    static const QMap<QString,QMap<QString,QString>> requestParameters_;
 };
 
 #endif // APICALLERFINGRID_HH

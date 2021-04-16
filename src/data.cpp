@@ -37,6 +37,26 @@ Data::~Data()
 
 }
 
+void Data::makeSplit()
+{
+    isSplit_ = true;
+}
+
+bool Data::isSplit()
+{
+    return isSplit_;
+}
+
+void Data::giveSplitId(QPair<int, int> splitId)
+{
+    splitId_ = splitId;
+}
+
+QPair<int, int> Data::getSplitId()
+{
+   return splitId_;
+}
+
 QString Data::getId()
 {
     return id_;

@@ -15,6 +15,10 @@ public:
      Data(QObject *parent = nullptr);
      ~Data();
 
+    void makeSplit();
+    bool isSplit();
+    void giveSplitId(QPair<int, int> splitId);
+    QPair<int, int> getSplitId();
     QString getId();
     QString getDatatype();
     QString getUnit();
@@ -47,6 +51,8 @@ public:
 
 private:
     static int idCounter;
+    bool isSplit_ = false;
+    QPair<int, int> splitId_;
     QString id_;
     QString datatype_;
     QString unit_;

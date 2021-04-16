@@ -5,7 +5,10 @@
 #include <QDateTime>
 #include <QDebug>
 
+
 struct DataRequest{
+    bool isSplit = false;
+    QPair<int, int> splitId;
     QString datatype;
     QString dataSource;
     QDateTime startTime;

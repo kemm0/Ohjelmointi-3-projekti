@@ -4,7 +4,7 @@
 const QString APICallerFingrid::baseUrl_ = "https://api.fingrid.fi/v1/variable/%1/events/csv?start_time=%2&end_time=%3";
 const QString APICallerFingrid::datetimeFormat_ = "yyyy-MM-dd'T'hh:mm':00Z'";
 
-const QMap<QString,QMap<QString,QString>> APICallerFingrid::dataRequestParameters{
+const QMap<QString,QMap<QString,QString>> APICallerFingrid::requestParameters_{
     {"Electricity consumption", {
             {"id","124"},
             {"unit", "GWh/h"}
@@ -65,7 +65,7 @@ void APICallerFingrid::fetchData(DataRequest dataRequest)
 
 QList<QString> APICallerFingrid::dataTypes()
 {
-    return dataRequestParameters.keys();
+    return requestParameters_.keys();
 }
 
 void APICallerFingrid::parse(QNetworkReply *reply)
@@ -103,12 +103,7 @@ void APICallerFingrid::parse(QNetworkReply *reply)
     reply->deleteLater();
 
     // Create data object from the parsed data
-    auto data = std::make_shared<Data>(
-                dataRequest_.datatype,
-                dataRequestParameters[dataRequest_.datatype]["unit"],
-                dataVector,
-                dataRequest_.location);
-
+    auto data = createDataObject(dataVector,requestParameters_[dataRequest_.datatype]["unit"]);
     emit dataParsed(data);
 }
 
@@ -117,7 +112,7 @@ QString APICallerFingrid::formURL(DataRequest dataRequest)
     dataRequest_ = dataRequest;
     QString startTime = dataRequest_.startTime.toString(datetimeFormat_);
     QString endTime = dataRequest_.endTime.toString(datetimeFormat_);
-    QString requestUrl =  baseUrl_.arg(dataRequestParameters[dataRequest_.datatype]["id"],
+    QString requestUrl =  baseUrl_.arg(requestParameters_[dataRequest_.datatype]["id"],
             startTime,endTime);
     qDebug()<<requestUrl;
     return requestUrl;
