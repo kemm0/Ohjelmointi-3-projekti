@@ -27,8 +27,6 @@ void Backend::fetchNewData(QVariant properties)
     request.startTime = QDateTime::fromString(startTimeString,dateFormat);
     request.endTime = QDateTime::fromString(endTimeString,dateFormat);
 
-    qDebug()<<request;
-
     apiCallManager_->fetchData(request);
 }
 
@@ -67,13 +65,14 @@ void Backend::forwardData(std::shared_ptr<Data> data)
         dates.append(date);
         values.append(value);
     }
+
     dataMap.insert("id",data->getId());
     dataMap.insert("location",data->getLocation());
     dataMap.insert("dates",dates);
     dataMap.insert("values",values);
     dataMap.insert("unit",data->getUnit());
     dataMap.insert("datatype",data->getDatatype());
-
+    qDebug()<<"Data forwarded by backend to view";
     emit dataAdded(dataMap);
 }
 

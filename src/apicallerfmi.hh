@@ -16,10 +16,18 @@ private Q_SLOTS:
     QString formURL(DataRequest request);
 
 private:
-    std::vector<std::pair<QDateTime,qreal>> calculateAverage(std::vector<std::pair<QDateTime,qreal>> &values);
+
+    bool requestSplit;
+    QMap<int,DataRequest> splitRequests_;
+    QVector<QNetworkReply*> replies;
+
+    std::vector<std::pair<QDateTime,qreal>> dataVector;
     static const QString datetimeFormat;
     static const QMap<QString,QMap<QString,QString>> requestParameters_;
     static const QString baseURL_;
+
+    QMap<int,DataRequest> splitDataRequest(DataRequest& request, int &splitFactor);
+    std::vector<std::pair<QDateTime,qreal>> calculateAverage(std::vector<std::pair<QDateTime,qreal>> &values);
 };
 
 #endif // APICALLERFMI_H

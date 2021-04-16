@@ -48,11 +48,7 @@ private slots:
 
 private:
     void loadAPIConfig();
-    void createFetchInstance(DataRequest dataRequest);
-    QVector<DataRequest> splitRequest(DataRequest dataRequest);
     QMap<QString,QString> apiConfig_;
-    QPair<int, int> splitId_;
-    QMap<int, QPair<int, QMap<int, std::shared_ptr<Data>>>> incompleteRequests_;
 };
 
 #endif // APICALLMANAGER_H

@@ -15,6 +15,7 @@ Item{
     property var chartImg
 
     property var seriesMap: ({})
+    property var activeSeries
     clip: true
     ChartView {
         id: chart
@@ -44,8 +45,51 @@ Item{
             id: scrollMask
             visible: false
         }
+        Rectangle {
+            id: posInfo
+            visible: false
+            width: posInfoText.implicitWidth
+            height: posInfoText.implicitHeight
+            Text{
+                id: posInfoText
+                property var date: new Date()
+                text: ""
+            }
+        }
+        Rectangle {
+            id: info
+            visible: false
+            anchors.horizontalCenter: chart.horizontalCenter
+            anchors.verticalCenter: chart.verticalCenter
+            width: chart.width / 2
+            height: chart.height / 2
+            Text{
+                id: infoText
+                anchors.horizontalCenter: info.horizontalCenter
+                anchors.verticalCenter: info.verticalCenter
+                text: ""
+            }
+        }
+
         MouseArea{
             anchors.fill: parent
+            hoverEnabled: true
+            onPositionChanged: {
+                if(activeSeries){
+                    posInfo.visible = true
+                    var p = Qt.point(mouse.x, mouse.y)
+                    posInfo.x = mouse.x + 20
+                    posInfo.y = mouse.y + 20
+                    var chartpoint = chart.mapToValue(p, activeSeries)
+                    posInfoText.date.setTime(chartpoint.x)
+                    posInfoText.text = posInfoText.date.toString()
+                    .substring(0,21) + ", " + chartpoint.y.toFixed(2)
+                }
+            }
+            onExited: {
+                posInfo.visible = false
+            }
+
             onWheel: {
                 var zoomAmount = wheel.angleDelta.y / 120
                 if(zoomAmount > 0){
@@ -85,6 +129,9 @@ Item{
             target: backend
             function onDataAdded(data){
                 addSeries(data)
+            }
+            function onError(message){
+                info.visible = false
             }
         }
     }
@@ -145,9 +192,8 @@ Item{
     function addSeries(data) {
         var dates = data.dates
         var values = data.values
-
-        if(dates[0] < xAxis.min) xAxis.min = dates[0]
-        if(dates[dates.length-1] > xAxis.max) xAxis.max = dates[dates.length-1]
+        if(dates[0].getTime() < xAxis.min.getTime()) xAxis.min = dates[0]
+        if(dates[dates.length-1].getTime() > xAxis.max.getTime()) xAxis.max = dates[dates.length-1]
 
         var yMin = Math.min(...values)
         var yMax = Math.max(...values)
@@ -169,6 +215,7 @@ Item{
             s.axisY = yAxis
         }
         seriesMap[data.id] = series
+        info.visible = false
     }
     function removeSeries(id){
         var series = chart.series(seriesMap[id].name)
@@ -181,6 +228,13 @@ Item{
     function changeSeriesName(id, name){
         var series = chart.series(seriesMap[id].name)
         series.name = name
+    }
+    function changeActiveSeries(id){
+        activeSeries = seriesMap[id]
+    }
+    function showMessage(message){
+        info.visible = true
+        infoText.text = message
     }
 
     Component.onCompleted: {
