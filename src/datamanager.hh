@@ -40,7 +40,7 @@ public slots:
      * @param path : path to the folder where the file is stored
      * @param id : id of the preference saved
      */
-    void savePrefToFile(QString filename, QString path, QString id);
+    void savePrefToFile(QString filename, QString path);
 
     /**
      * @brief loadPrefFromFile : loads a json file and makes an api-call with the preference data
