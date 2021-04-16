@@ -48,12 +48,15 @@ void Backend::loadData(QVariant filePath)
 
 void Backend::loadPreferences(QVariant filePath)
 {
-
+    QString filePathString = filePath.toString();
+    dataManager_->loadPrefFromFile(filePathString);
 }
 
 void Backend::savePreferences(QVariant filename, QVariant filepath)
 {
-
+    QString filenameString = filename.toString();
+    QString pathString = filepath.toString();
+    dataManager_->savePrefToFile(filenameString,pathString);
 }
 
 void Backend::forwardData(std::shared_ptr<Data> data)
