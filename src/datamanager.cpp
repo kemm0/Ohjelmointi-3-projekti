@@ -61,6 +61,7 @@ void DataManager::loadDataFromFile(QString filepath)
 
 void DataManager::savePrefToFile(QString filename, QString path)
 {
+    //tää pitäis muokkailla erilaiseks sillee et tallentaa asetukset datan sijasta
     auto data = data_.at(0);
     QJsonObject jsonObject = data->toJSON();
     QUrl fullFilePath = QUrl(path + "/" + filename + ".data").toLocalFile();
@@ -81,6 +82,7 @@ void DataManager::savePrefToFile(QString filename, QString path)
 
 void DataManager::loadPrefFromFile(QString filepath)
 {
+    //Tää pitäis muokata niin, että tehdään apikutsu
     QUrl fullFilePath = QUrl(filepath).toLocalFile();
     QFile file(fullFilePath.toString());
 
