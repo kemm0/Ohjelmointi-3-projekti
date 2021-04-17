@@ -15,6 +15,10 @@ Item{
     property var chartImg
 
     property var seriesMap: ({})
+    property var activeSeries
+    property int xScaleZoom: 0
+    property int yScaleZoom: 0
+
     clip: true
     ChartView {
         id: chart
@@ -44,8 +48,68 @@ Item{
             id: scrollMask
             visible: false
         }
+        Rectangle {
+            id: posInfo
+            visible: false
+            width: posInfoText.implicitWidth
+            height: posInfoText.implicitHeight
+            Text{
+                id: posInfoText
+                property var date: new Date()
+                text: ""
+            }
+        }
+        Rectangle {
+            id: info
+            visible: false
+            anchors.horizontalCenter: chart.horizontalCenter
+            anchors.verticalCenter: chart.verticalCenter
+            width: chart.width / 2
+            height: chart.height / 2
+            Text{
+                id: infoText
+                anchors.horizontalCenter: info.horizontalCenter
+                anchors.verticalCenter: info.verticalCenter
+                text: ""
+            }
+        }
+        Rectangle{
+            id: recZoom
+            border.color: "steelblue"
+            border.width: 1
+            color: "steelblue"
+            opacity: 0.3
+            visible: false
+            transform: Scale { origin.x: 0; origin.y: 0; xScale: xScaleZoom; yScale: yScaleZoom}
+        }
         MouseArea{
             anchors.fill: parent
+            hoverEnabled: true
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            onPositionChanged: {
+                if(activeSeries){
+                    posInfo.visible = true
+                    var p = Qt.point(mouse.x, mouse.y)
+                    posInfo.x = mouse.x + 20
+                    posInfo.y = mouse.y + 20
+                    var chartpoint = chart.mapToValue(p, activeSeries)
+                    posInfoText.date.setTime(chartpoint.x)
+                    posInfoText.text = posInfoText.date.toString()
+                    .substring(0,21) + ", " + chartpoint.y.toFixed(2)
+                }
+            }
+            onExited: {
+                posInfo.visible = false
+            }
+            onReleased: {
+                if(mouse.button == Qt.RightButton){
+                    var x = (mouseX >= recZoom.x) ? recZoom.x : mouseX
+                    var y = (mouseY >= recZoom.y) ? recZoom.y : mouseY
+                    chart.zoomIn(Qt.rect(x, y, recZoom.width, recZoom.height));
+                    recZoom.visible = false;
+                }
+            }
+
             onWheel: {
                 var zoomAmount = wheel.angleDelta.y / 120
                 if(zoomAmount > 0){
@@ -56,12 +120,31 @@ Item{
                 }
             }
             onMouseXChanged: {
+
+                if((mouse.buttons & Qt.RightButton) == Qt.RightButton){
+                    if (mouseY - recZoom.y >= 0) {
+                        yScaleZoom = 1;
+                        recZoom.height = mouseY - recZoom.y;
+                    } else {
+                        yScaleZoom = -1;
+                        recZoom.height = recZoom.y - mouseY;
+                    }
+                }
                 if((mouse.buttons & Qt.LeftButton) == Qt.LeftButton){
                     chart.scrollLeft(mouseX - scrollMask.x)
                     scrollMask.x = mouseX
                 }
             }
             onMouseYChanged: {
+                if((mouse.buttons & Qt.RightButton) == Qt.RightButton){
+                    if (mouseX - recZoom.x >= 0) {
+                        xScaleZoom = 1;
+                        recZoom.width = mouseX - recZoom.x;
+                    } else {
+                        xScaleZoom = -1;
+                        recZoom.width = recZoom.x - mouseX;
+                    }
+                }
                 if((mouse.buttons & Qt.LeftButton) == Qt.LeftButton){
                     chart.scrollUp(mouseY - scrollMask.y)
                     scrollMask.y = mouseY
@@ -69,6 +152,11 @@ Item{
             }
 
             onPressed: {
+                if(mouse.button == Qt.RightButton){
+                    recZoom.x = mouseX;
+                    recZoom.y = mouseY;
+                    recZoom.visible = true;
+                }
                 if (mouse.button == Qt.LeftButton) {
                     scrollMask.x = mouseX
                     scrollMask.y = mouseY
@@ -85,6 +173,9 @@ Item{
             target: backend
             function onDataAdded(data){
                 addSeries(data)
+            }
+            function onError(message){
+                info.visible = false
             }
         }
     }
@@ -145,9 +236,8 @@ Item{
     function addSeries(data) {
         var dates = data.dates
         var values = data.values
-
-        if(dates[0] < xAxis.min) xAxis.min = dates[0]
-        if(dates[dates.length-1] > xAxis.max) xAxis.max = dates[dates.length-1]
+        if(dates[0].getTime() < xAxis.min.getTime()) xAxis.min = dates[0]
+        if(dates[dates.length-1].getTime() > xAxis.max.getTime()) xAxis.max = dates[dates.length-1]
 
         var yMin = Math.min(...values)
         var yMax = Math.max(...values)
@@ -163,12 +253,14 @@ Item{
             series.append(dates[i].getTime(),values[i])
         }
 
-        for(var j = 0; j < chart.count; j++){
+        /**for(var j = 0; j < chart.count; j++){
             var s = chart.series(j)
             s.axisX = xAxis
             s.axisY = yAxis
-        }
+        }**/
+
         seriesMap[data.id] = series
+        info.visible = false
     }
     function removeSeries(id){
         var series = chart.series(seriesMap[id].name)
@@ -181,6 +273,13 @@ Item{
     function changeSeriesName(id, name){
         var series = chart.series(seriesMap[id].name)
         series.name = name
+    }
+    function changeActiveSeries(id){
+        activeSeries = seriesMap[id]
+    }
+    function showMessage(message){
+        info.visible = true
+        infoText.text = message
     }
 
     Component.onCompleted: {

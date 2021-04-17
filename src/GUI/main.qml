@@ -86,6 +86,7 @@ Window {
             target: fingridPanel
             function onDataAdded(dataProperties){
                 dataAdded(dataProperties)
+                graphView.showMessage("Getting data...")
             }
             function onDataRemoved(id){
                 graphView.removeSeries(id)
@@ -96,12 +97,16 @@ Window {
             }
             function onDataNameChanged(id,name){
                 graphView.changeSeriesName(id,name)
+            }
+            function onActiveDataChanged(id){
+                graphView.changeActiveSeries(id)
             }
         }
         Connections{
             target: fmiPanel
             function onDataAdded(dataProperties){
                 dataAdded(dataProperties)
+                graphView.showMessage("Getting data...")
             }
             function onDataRemoved(id){
                 graphView.removeSeries(id)
@@ -112,6 +117,9 @@ Window {
             }
             function onDataNameChanged(id,name){
                 graphView.changeSeriesName(id,name)
+            }
+            function onActiveDataChanged(id){
+                graphView.changeActiveSeries(id)
             }
         }
         Connections{
