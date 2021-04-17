@@ -249,6 +249,8 @@ Item{
 
         var series = chart.createSeries(ChartView.SeriesTypeLine, name,xAxis,yAxis)
 
+        series.useOpenGL = true
+
         for(var i = 0; i < values.length; i++){
             series.append(dates[i].getTime(),values[i])
         }
