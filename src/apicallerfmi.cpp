@@ -10,7 +10,7 @@ const QMap<QString,QMap<QString,QString>> APICallerFMI::requestParameters_{
             {"code","t2m"},
             {"unit", "celsius"},
             {"query", "fmi::observations::weather::simple"},
-            {"maxRequestRange", "7"},
+            {"maxRequestRange", "6"},
             {"timestep", "30"},
             {"type", "observation"}
         }},
@@ -42,7 +42,7 @@ const QMap<QString,QMap<QString,QString>> APICallerFMI::requestParameters_{
             {"code","ws_10min"},
             {"unit", "m/s"},
             {"query", "fmi::observations::weather::simple"},
-            {"maxRequestRange", "7"},
+            {"maxRequestRange", "6"},
             {"timestep", "30"},
             {"type", "observation"}
         }},
@@ -50,7 +50,7 @@ const QMap<QString,QMap<QString,QString>> APICallerFMI::requestParameters_{
             {"code","n_man"},
             {"unit", "okta"},
             {"query", "fmi::observations::weather::simple"},
-            {"maxRequestRange", "7"},
+            {"maxRequestRange", "6"},
             {"timestep", "30"},
             {"type", "observation"}
         }},
@@ -58,7 +58,7 @@ const QMap<QString,QMap<QString,QString>> APICallerFMI::requestParameters_{
             {"code","WindSpeedMS"},
             {"unit", "m/s"},
             {"query", "fmi::forecast::hirlam::surface::point::simple"},
-            {"maxRequestRange", "7"},
+            {"maxRequestRange", "6"},
             {"timestep", "30"},
             {"type", "forecast"}
         }},
@@ -66,7 +66,7 @@ const QMap<QString,QMap<QString,QString>> APICallerFMI::requestParameters_{
             {"code","Temperature"},
             {"unit", "celsius"},
             {"query", "fmi::forecast::hirlam::surface::point::simple"},
-            {"maxRequestRange", "7"},
+            {"maxRequestRange", "6"},
             {"timestep", "30"},
             {"type", "forecast"}
         }},

@@ -16,6 +16,9 @@ Item{
 
     property var seriesMap: ({})
     property var activeSeries
+    property int xScaleZoom: 0
+    property int yScaleZoom: 0
+
     clip: true
     ChartView {
         id: chart
@@ -70,10 +73,19 @@ Item{
                 text: ""
             }
         }
-
+        Rectangle{
+            id: recZoom
+            border.color: "steelblue"
+            border.width: 1
+            color: "steelblue"
+            opacity: 0.3
+            visible: false
+            transform: Scale { origin.x: 0; origin.y: 0; xScale: xScaleZoom; yScale: yScaleZoom}
+        }
         MouseArea{
             anchors.fill: parent
             hoverEnabled: true
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
             onPositionChanged: {
                 if(activeSeries){
                     posInfo.visible = true
@@ -89,6 +101,14 @@ Item{
             onExited: {
                 posInfo.visible = false
             }
+            onReleased: {
+                if(mouse.button == Qt.RightButton){
+                    var x = (mouseX >= recZoom.x) ? recZoom.x : mouseX
+                    var y = (mouseY >= recZoom.y) ? recZoom.y : mouseY
+                    chart.zoomIn(Qt.rect(x, y, recZoom.width, recZoom.height));
+                    recZoom.visible = false;
+                }
+            }
 
             onWheel: {
                 var zoomAmount = wheel.angleDelta.y / 120
@@ -100,12 +120,31 @@ Item{
                 }
             }
             onMouseXChanged: {
+
+                if((mouse.buttons & Qt.RightButton) == Qt.RightButton){
+                    if (mouseY - recZoom.y >= 0) {
+                        yScaleZoom = 1;
+                        recZoom.height = mouseY - recZoom.y;
+                    } else {
+                        yScaleZoom = -1;
+                        recZoom.height = recZoom.y - mouseY;
+                    }
+                }
                 if((mouse.buttons & Qt.LeftButton) == Qt.LeftButton){
                     chart.scrollLeft(mouseX - scrollMask.x)
                     scrollMask.x = mouseX
                 }
             }
             onMouseYChanged: {
+                if((mouse.buttons & Qt.RightButton) == Qt.RightButton){
+                    if (mouseX - recZoom.x >= 0) {
+                        xScaleZoom = 1;
+                        recZoom.width = mouseX - recZoom.x;
+                    } else {
+                        xScaleZoom = -1;
+                        recZoom.width = recZoom.x - mouseX;
+                    }
+                }
                 if((mouse.buttons & Qt.LeftButton) == Qt.LeftButton){
                     chart.scrollUp(mouseY - scrollMask.y)
                     scrollMask.y = mouseY
@@ -113,6 +152,11 @@ Item{
             }
 
             onPressed: {
+                if(mouse.button == Qt.RightButton){
+                    recZoom.x = mouseX;
+                    recZoom.y = mouseY;
+                    recZoom.visible = true;
+                }
                 if (mouse.button == Qt.LeftButton) {
                     scrollMask.x = mouseX
                     scrollMask.y = mouseY
@@ -209,11 +253,12 @@ Item{
             series.append(dates[i].getTime(),values[i])
         }
 
-        for(var j = 0; j < chart.count; j++){
+        /**for(var j = 0; j < chart.count; j++){
             var s = chart.series(j)
             s.axisX = xAxis
             s.axisY = yAxis
-        }
+        }**/
+
         seriesMap[data.id] = series
         info.visible = false
     }

@@ -5,6 +5,9 @@
 #include <QDateTime>
 #include <vector>
 #include <QJsonObject>
+#include <QtCharts>
+
+using namespace QtCharts;
 
 typedef std::vector<std::pair<QDateTime, qreal>> dataVector;
 class Data : public QObject
