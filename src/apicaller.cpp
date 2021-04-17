@@ -1,7 +1,8 @@
 #include "apicaller.hh"
 
 APICaller::APICaller(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    dataRequest_({})
 {
     manager_ = new QNetworkAccessManager(this);
     connect(manager_,&QNetworkAccessManager::finished, this, &APICaller::parse);
