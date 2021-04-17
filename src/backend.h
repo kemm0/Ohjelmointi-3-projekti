@@ -7,6 +7,8 @@
 #include <memory>
 #include "data.hh"
 #include "datarequest.h"
+#include "apicallerfmi.hh"
+#include "apicallerfingrid.hh"
 
 class Backend : public QObject
 {

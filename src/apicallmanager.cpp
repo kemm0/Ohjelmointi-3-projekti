@@ -1,5 +1,4 @@
 #include "apicallmanager.h"
-#include "apicaller.hh"
 #include "apicallerfmi.hh"
 #include "apicallerfingrid.hh"
 #include <QFile>
@@ -12,21 +11,30 @@ APICallManager::APICallManager(QObject *parent) :
     loadAPIConfig();
 }
 
+void APICallManager::Register(const QString &apiName, APICaller::CreateAPICallerFn createFn)
+{
+    apiCallers[apiName] = createFn;
+}
+
+APICaller *APICallManager::CreateAPICaller(const QString &apiName)
+{
+    if( !apiCallers.contains(apiName) ){
+        return nullptr;
+    }
+    return apiCallers[apiName]();
+}
+
 void APICallManager::fetchData(DataRequest dataRequest)
 {
-    if(APICallerFMI::dataTypes().contains(dataRequest.datatype)){
-        auto api = new APICallerFMI(this);
-        connect(api,&APICallerFMI::dataParsed,this,&APICallManager::forwardData);
-        connect(api,&APICallerFMI::requestError,this,&APICallManager::forwardErrorMessage);
+    if(apiCallers.contains(dataRequest.dataSource)){
+        auto api = apiCallers[dataRequest.dataSource]();
+        connect(api,&APICaller::dataParsed,this,&APICallManager::forwardData);
+        connect(api,&APICaller::requestError,this,&APICallManager::forwardErrorMessage);
         api->fetchData(dataRequest);
     }
-    else if(APICallerFingrid::dataTypes().contains(dataRequest.datatype)){
-        auto api = new APICallerFingrid(apiConfig_.value("FINGRID_API_KEY"),this);
-        connect(api,&APICallerFingrid::dataParsed,this,&APICallManager::forwardData);
-        connect(api,&APICallerFingrid::requestError,this,&APICallManager::forwardErrorMessage);
-        api->fetchData(dataRequest);
+    else{
+        emit requestError("No API service registered with name " + dataRequest.dataSource);
     }
-
 }
 
 void APICallManager::forwardData(std::shared_ptr<Data> data)

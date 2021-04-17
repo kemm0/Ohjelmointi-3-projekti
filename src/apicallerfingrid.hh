@@ -25,6 +25,8 @@ public:
      */
     static QList<QString> dataTypes();
 
+    static APICaller * Create() { return new APICallerFingrid("yuN5mupVbEa0uBOcGuEIK8Vhev3LoMyc77EYISc8"); }
+
 public slots:
 
     /**

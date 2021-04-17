@@ -7,6 +7,8 @@ Backend::Backend(QObject *parent) : QObject(parent)
     connect(apiCallManager_.get(), &APICallManager::dataFetched, dataManager_.get(), &DataManager::addData);
     connect(apiCallManager_.get(), &APICallManager::requestError, this, &Backend::sendError);
     connect(dataManager_.get(), &DataManager::dataAdded, this, &Backend::forwardData);
+    apiCallManager_->Register("FMI",&APICallerFMI::Create);
+    apiCallManager_->Register("Fingrid",&APICallerFingrid::Create);
 }
 
 void Backend::fetchNewData(QVariant properties)

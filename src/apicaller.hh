@@ -14,6 +14,7 @@ class APICaller : public QObject
 {
     Q_OBJECT
 public:
+    typedef APICaller* (*CreateAPICallerFn)(void);
     explicit APICaller(QObject *parent = nullptr);
     virtual void fetchData(DataRequest dataRequest) = 0;
 
