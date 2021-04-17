@@ -25,6 +25,8 @@ public:
      */
     static QList<QString> dataTypes();
 
+    static APICaller * Create(QString apiKey) { return new APICallerFingrid(apiKey); }
+
 public slots:
 
     /**
@@ -41,11 +43,17 @@ public slots:
     QString formURL(DataRequest dataRequest);
 
 private:
-    const QString apiKey_;
     static const QString baseUrl_;
     static const QString datetimeFormat_;
     static const QString responseDatetimeFormat_;
     static const QMap<QString,QMap<QString,QString>> requestParameters_;
+    QMap<int,DataRequest> splitRequests_;
+    QMap<int,std::vector<std::pair<QDateTime,qreal>>> dataVectors_;
+    void calculatePercentages();
+    void createNetworkRequest(DataRequest &request);
+    QVector<QNetworkReply*> replies;
+    bool requestSplit;
+    int requestCounter;
 };
 
 #endif // APICALLERFINGRID_HH

@@ -4,13 +4,17 @@
 #include <QObject>
 #include <memory>
 #include "datarequest.h"
+#include "apicaller.hh"
 #include "data.hh"
 
 class APICallManager : public QObject
 {
     Q_OBJECT
 public:
+
     explicit APICallManager(QObject *parent = nullptr);
+    void Register(const QString &apiName, const QString &apiKey, APICaller::CreateAPICallerFn createFn);
+    APICaller *CreateAPICaller(const QString &apiName);
 
     /**
      * @brief fetchData routes the dataRequest to the APICaller that handles the
@@ -47,8 +51,8 @@ private slots:
     void forwardErrorMessage(QString errorMessage);
 
 private:
-    void loadAPIConfig();
-    QMap<QString,QString> apiConfig_;
+    QMap<QString,APICaller::CreateAPICallerFn> apiCallers;
+    QMap<QString, QString> apiKeys;
 };
 
 #endif // APICALLMANAGER_H

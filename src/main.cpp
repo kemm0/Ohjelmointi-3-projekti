@@ -17,7 +17,9 @@ int main(int argc, char *argv[])
 
     app.setWindowIcon(QIcon("../kumivene-solutions/res/stonks.JPG"));
 
-    auto backend = std::make_shared<Backend>();
+    QString apiConfigPath = "../kumivene-solutions/apiconfig.txt";
+
+    auto backend = std::make_shared<Backend>(apiConfigPath);
 
     QQuickStyle::setStyle("Material");
 

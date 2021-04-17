@@ -72,8 +72,8 @@ const QMap<QString,QMap<QString,QString>> APICallerFMI::requestParameters_{
         }},
 };
 
-APICallerFMI::APICallerFMI(QObject *parent) :
-    APICaller(parent),
+APICallerFMI::APICallerFMI(QString apiKey, QObject *parent) :
+    APICaller(apiKey, parent),
     requestSplit(false),
     splitRequests_({})
 {

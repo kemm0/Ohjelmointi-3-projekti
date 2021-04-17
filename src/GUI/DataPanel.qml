@@ -108,25 +108,6 @@ Item{
                 }
             }
             Button {
-                id: updateButton
-                text: "Update"
-                onClicked: {
-                    if(dataListModel.count != 0){
-                        const updatedData = {
-                                        id: dataListModel.get(dataList.currentIndex).id,
-                                        dataType: dataTypeSelection,
-                                        location: locationSelection,
-                                        startDate: startDate.text,
-                                        startTime: startTime.text,
-                                        endDate: endDate.text,
-                                        endTime: endTime.text
-                                    }
-                        dataListModel.set(dataList.currentIndex,updatedData)
-                        root.dataModified(updatedData)
-                    }
-                }
-            }
-            Button {
                 id: clearButton
                 text: "Remove"
                 onClicked: {

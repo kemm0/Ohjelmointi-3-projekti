@@ -271,8 +271,9 @@ Item{
         series.name = name
     }
     function changeActiveSeries(id){
-        activeSeries = seriesMap[id]
-        activeSeries.visible = true
+        if(seriesMap[id]){
+            activeSeries = seriesMap[id]
+        }
     }
     function showMessage(message){
         info.visible = true

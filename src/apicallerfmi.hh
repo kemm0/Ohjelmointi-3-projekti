@@ -7,9 +7,10 @@ class APICallerFMI : public APICaller
 {
     Q_OBJECT
 public:
-    explicit APICallerFMI(QObject *parent = nullptr);
+    explicit APICallerFMI(QString apiKey, QObject *parent = nullptr);
     void fetchData(DataRequest dataRequest);
     static QList<QString> dataTypes();
+    static APICaller * Create(QString apiKey) { return new APICallerFMI(apiKey); }
 
 private Q_SLOTS:
     void parse(QNetworkReply *reply);
