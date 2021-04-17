@@ -100,10 +100,18 @@ void APICallerFingrid::parse(QNetworkReply *reply)
         std::pair<QDateTime,qreal> value = std::make_pair(dates[i],values[i]);
         dataVector.push_back(value);
     }
+    if(dataVector.size() == 0){
+        emit requestError(QString("No data found!"));
+    }
     reply->deleteLater();
 
     // Create data object from the parsed data
-    auto data = createDataObject(dataVector,requestParameters_[dataRequest_.datatype]["unit"]);
+    auto data = std::make_shared<Data>(
+                dataRequest_.datatype,
+                requestParameters_[dataRequest_.datatype]["unit"],
+                dataVector,
+                dataRequest_.location);
+
     emit dataParsed(data);
 }
 

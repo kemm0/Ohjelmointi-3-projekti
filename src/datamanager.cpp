@@ -15,6 +15,7 @@ DataManager::DataManager(QObject *parent) : QObject(parent)
 void DataManager::addData(std::shared_ptr<Data> data)
 {
     data_.insert(std::pair<QString,std::shared_ptr<Data>>(data->getId(),data));
+    qDebug()<<"Data added to datamanager";
     emit dataAdded(data);
 }
 
