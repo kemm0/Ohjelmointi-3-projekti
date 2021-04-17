@@ -62,8 +62,9 @@ void DataManager::loadDataFromFile(QString filepath)
 
 void DataManager::savePrefToFile(QString filename, QString path)
 {
-    auto data = data_.at(0);
-    QJsonObject jsonObject = data->toJSON();
+    //tää pitäis muokkailla erilaiseks sillee et tallentaa asetukset datan sijasta
+
+    QJsonArray jsonArray = toJSONPref();
     QUrl fullFilePath = QUrl(path + "/" + filename + ".data").toLocalFile();
 
     QFile file(fullFilePath.toString());
@@ -73,7 +74,7 @@ void DataManager::savePrefToFile(QString filename, QString path)
         return;
     }
 
-    QJsonDocument saveDocument(jsonObject);
+    QJsonDocument saveDocument(jsonArray);
 
     qDebug()<<"Saving";
 
@@ -82,6 +83,7 @@ void DataManager::savePrefToFile(QString filename, QString path)
 
 void DataManager::loadPrefFromFile(QString filepath)
 {
+    //Tää pitäis muokata niin, että tehdään apikutsu
     QUrl fullFilePath = QUrl(filepath).toLocalFile();
     QFile file(fullFilePath.toString());
 
@@ -99,6 +101,21 @@ void DataManager::loadPrefFromFile(QString filepath)
     data_.insert(std::pair<QString,std::shared_ptr<Data>>(newData->getId(),newData));
 
     emit dataAdded(newData);
+
+}
+
+QJsonArray DataManager::toJSONPref()
+{
+    QJsonArray jsonArray;
+
+    for (auto value : data_){
+        QJsonObject jsonObject;
+        jsonObject.insert("location",value.second->getLocation());
+        jsonObject.insert("datatype", value.second->getDatatype());
+        jsonArray.push_back(jsonObject);
+    }
+
+    return jsonArray;
 
 }
 
