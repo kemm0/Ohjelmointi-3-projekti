@@ -236,14 +236,19 @@ Item{
     function addSeries(data) {
         var dates = data.dates
         var values = data.values
-        if(dates[0].getTime() < xAxis.min.getTime()) xAxis.min = dates[0]
-        if(dates[dates.length-1].getTime() > xAxis.max.getTime()) xAxis.max = dates[dates.length-1]
+        infoText.text = ":D"
+        //if(dates[0].getTime() < xAxis.min.getTime()) xAxis.min = dates[0]
+        //if(dates[dates.length-1].getTime() > xAxis.max.getTime()) xAxis.max = dates[dates.length-1]
 
         var yMin = Math.min(...values)
         var yMax = Math.max(...values)
 
-        if(yMin < yAxis.min) yAxis.min = yMin
-        if(yMax > yAxis.max) yAxis.max = yMax
+        //if(yMin < yAxis.min) yAxis.min = yMin
+        //if(yMax > yAxis.max) yAxis.max = yMax
+        xAxis.min = dates[0]
+        xAxis.max = dates[dates.length-1]
+        yAxis.min = yMin
+        yAxis.max = yMax
 
         var name = data.datatype + ', ' + data.location + ' (%1)'.arg(data.id) + ' (%1)'.arg(data.unit)
 
@@ -278,6 +283,7 @@ Item{
     }
     function changeActiveSeries(id){
         activeSeries = seriesMap[id]
+        activeSeries.visible = true
     }
     function showMessage(message){
         info.visible = true
