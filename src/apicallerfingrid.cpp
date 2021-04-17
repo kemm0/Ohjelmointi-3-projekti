@@ -32,7 +32,8 @@ const QMap<QString,QMap<QString,QString>> APICallerFingrid::requestParameters_{
     {"Hydro power production", {
             {"id","191"},
             {"unit", "GW"}
-        }}
+        }},
+    {"Power forms percentages", {}}
 };
 
 const QString APICallerFingrid::responseDatetimeFormat_ = "yyyy-MM-dd'T'hh:mm':00+0000'";
@@ -50,6 +51,12 @@ void APICallerFingrid::fetchData(DataRequest dataRequest)
         return;
     }
 
+    if (dataRequest.datatype == "Power forms percentages") {
+        handlePercentageRequest(dataRequest);
+        handlingPercentageRequest = true;
+    }
+    else {
+
     //Create one API request based on the parameters in dataRequest
     QNetworkRequest req = QNetworkRequest(QString(formURL(dataRequest)));
 
@@ -61,6 +68,7 @@ void APICallerFingrid::fetchData(DataRequest dataRequest)
 
     //connect to error slot if error signaled
     connect(reply, &QNetworkReply::errorOccurred, this, &APICallerFingrid::error);
+    }
 }
 
 QList<QString> APICallerFingrid::dataTypes()
@@ -112,7 +120,15 @@ void APICallerFingrid::parse(QNetworkReply *reply)
                 dataVector,
                 dataRequest_.location);
 
+    if (handlingPercentageRequest){
+        powerProductionValues.push_back(data);
+        if (powerProductionValues.length() == 3) {
+            countPercentages();
+        }
+    }
+    else {
     emit dataParsed(data);
+    }
 }
 
 QString APICallerFingrid::formURL(DataRequest dataRequest)
@@ -124,4 +140,39 @@ QString APICallerFingrid::formURL(DataRequest dataRequest)
             startTime,endTime);
     qDebug()<<requestUrl;
     return requestUrl;
+}
+
+void APICallerFingrid::handlePercentageRequest(DataRequest dataRequest)
+{
+    DataRequest windRequest = dataRequest;
+    windRequest.datatype = "Wind power production";
+    fetchData(windRequest);
+
+    DataRequest hydroRequest = dataRequest;
+    hydroRequest.datatype = "Hydro power production";
+    fetchData(hydroRequest);
+
+    DataRequest nuclearRequest = dataRequest;
+    nuclearRequest.datatype = "Nuclear power production";
+    fetchData(nuclearRequest);
+}
+
+void APICallerFingrid::countPercentages()
+{
+
+    for (auto power : powerProductionValues)
+    {
+        auto powerValues = power->getDataValues();
+        for (unsigned long int i = 0; i < power->getDataValues().size(); i++)
+        {
+            powerValues[i].second = power->getDataValues()[i].second/(powerProductionValues[0]->getDataValues()[i].second +
+                    powerProductionValues[1]->getDataValues()[i].second + powerProductionValues[2]->getDataValues()[i].second);
+        }
+        auto data = power;
+        data->setDataValues(powerValues);
+        emit dataParsed(data);
+        powerValues.clear();
+    }
+    handlingPercentageRequest = false;
+    powerProductionValues.clear();
 }

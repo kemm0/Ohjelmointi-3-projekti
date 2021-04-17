@@ -41,6 +41,11 @@ public slots:
     QString formURL(DataRequest dataRequest);
 
 private:
+    void handlePercentageRequest(DataRequest dataRequest);
+    void countPercentages();
+    QVector<std::shared_ptr<Data>> powerProductionValues = {};
+    bool handlingPercentageRequest = false;
+
     const QString apiKey_;
     static const QString baseUrl_;
     static const QString datetimeFormat_;
