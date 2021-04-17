@@ -14,7 +14,7 @@ class Backend : public QObject
 {
     Q_OBJECT
 public:
-    explicit Backend(QObject *parent = nullptr);
+    explicit Backend(QString apiConfigPath, QObject *parent = nullptr);
 
 signals:
 
@@ -86,6 +86,9 @@ private Q_SLOTS:
 private:
     std::shared_ptr<DataManager> dataManager_;
     std::shared_ptr<APICallManager> apiCallManager_;
+    QMap<QString,QString> apiConfig_;
+
+    void loadAPIConfig(QString path);
 };
 
 #endif // BACKEND_H

@@ -25,7 +25,7 @@ public:
      */
     static QList<QString> dataTypes();
 
-    static APICaller * Create() { return new APICallerFingrid("yuN5mupVbEa0uBOcGuEIK8Vhev3LoMyc77EYISc8"); }
+    static APICaller * Create(QString apiKey) { return new APICallerFingrid(apiKey); }
 
 public slots:
 
@@ -43,8 +43,6 @@ public slots:
     QString formURL(DataRequest dataRequest);
 
 private:
-
-    const QString apiKey_;
     static const QString baseUrl_;
     static const QString datetimeFormat_;
     static const QString responseDatetimeFormat_;

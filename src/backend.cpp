@@ -1,14 +1,17 @@
 #include "backend.h"
 
-Backend::Backend(QObject *parent) : QObject(parent)
+Backend::Backend(QString apiConfigPath, QObject *parent) :
+    QObject(parent),
+    apiConfig_({})
 {
+    loadAPIConfig(apiConfigPath);
     apiCallManager_ = std::make_shared<APICallManager>();
     dataManager_ = std::make_shared<DataManager>();
     connect(apiCallManager_.get(), &APICallManager::dataFetched, dataManager_.get(), &DataManager::addData);
     connect(apiCallManager_.get(), &APICallManager::requestError, this, &Backend::sendError);
     connect(dataManager_.get(), &DataManager::dataAdded, this, &Backend::forwardData);
-    apiCallManager_->Register("FMI",&APICallerFMI::Create);
-    apiCallManager_->Register("Fingrid",&APICallerFingrid::Create);
+    apiCallManager_->Register("FMI","",&APICallerFMI::Create);
+    apiCallManager_->Register("Fingrid",apiConfig_["FINGRID_API_KEY"],&APICallerFingrid::Create);
 }
 
 void Backend::fetchNewData(QVariant properties)
@@ -90,4 +93,28 @@ void Backend::removeData(QVariant id)
 {
     QString idString = id.toString();
     dataManager_->removeData(idString);
+}
+
+void Backend::loadAPIConfig(QString path)
+{
+    QFile apiConfigFile(path);
+
+    if (!apiConfigFile.open(QIODevice::ReadOnly)) {
+        qWarning("Couldn't open apiconfig.txt file. Make sure it's in the "
+        "project root folder");
+
+        emit error("Couldn't open apiconfig.txt file. Make sure "
+        "it's in the project root folder");
+        return;
+    }
+
+    QTextStream in(&apiConfigFile);
+
+    while(!in.atEnd()){
+        QString line = in.readLine();
+        auto parts = line.split("=");
+        QString key = parts[0];
+        QString value = parts[1];
+        apiConfig_[key] = value;
+    }
 }

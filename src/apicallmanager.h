@@ -13,7 +13,7 @@ class APICallManager : public QObject
 public:
 
     explicit APICallManager(QObject *parent = nullptr);
-    void Register(const QString &apiName, APICaller::CreateAPICallerFn createFn);
+    void Register(const QString &apiName, const QString &apiKey, APICaller::CreateAPICallerFn createFn);
     APICaller *CreateAPICaller(const QString &apiName);
 
     /**
@@ -51,9 +51,8 @@ private slots:
     void forwardErrorMessage(QString errorMessage);
 
 private:
-    void loadAPIConfig();
-    QMap<QString,QString> apiConfig_;
     QMap<QString,APICaller::CreateAPICallerFn> apiCallers;
+    QMap<QString, QString> apiKeys;
 };
 
 #endif // APICALLMANAGER_H

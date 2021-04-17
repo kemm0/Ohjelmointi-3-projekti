@@ -14,8 +14,8 @@ class APICaller : public QObject
 {
     Q_OBJECT
 public:
-    typedef APICaller* (*CreateAPICallerFn)(void);
-    explicit APICaller(QObject *parent = nullptr);
+    typedef APICaller* (*CreateAPICallerFn)(QString apiKey);
+    explicit APICaller(QString apiKey, QObject *parent = nullptr);
     virtual void fetchData(DataRequest dataRequest) = 0;
 
 protected Q_SLOTS:
@@ -28,6 +28,7 @@ signals:
      void requestError(QString errorMessage);
 
 protected:
+    QString apiKey_;
     DataRequest dataRequest_;
     QNetworkAccessManager *manager_;
     QString baseURL_;

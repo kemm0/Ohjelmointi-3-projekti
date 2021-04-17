@@ -41,8 +41,7 @@ const QMap<QString,QMap<QString,QString>> APICallerFingrid::requestParameters_{
 const QString APICallerFingrid::responseDatetimeFormat_ = "yyyy-MM-dd'T'hh:mm':00+0000'";
 
 APICallerFingrid::APICallerFingrid(QString apiKey, QObject *parent) :
-    APICaller(parent),
-    apiKey_(apiKey),
+    APICaller(apiKey,parent),
     replies({}),
     requestSplit(false),
     requestCounter(0),

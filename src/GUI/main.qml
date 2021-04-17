@@ -92,9 +92,6 @@ Window {
                 graphView.removeSeries(id)
                 dataRemoved(id)
             }
-            function onDataModified(dataProperties){
-                dataModified(dataProperties)
-            }
             function onDataNameChanged(id,name){
                 graphView.changeSeriesName(id,name)
             }
@@ -111,9 +108,6 @@ Window {
             function onDataRemoved(id){
                 graphView.removeSeries(id)
                 dataRemoved(id)
-            }
-            function onDataModified(dataProperties){
-                dataModified(dataProperties)
             }
             function onDataNameChanged(id,name){
                 graphView.changeSeriesName(id,name)
