@@ -236,19 +236,14 @@ Item{
     function addSeries(data) {
         var dates = data.dates
         var values = data.values
-        infoText.text = ":D"
-        //if(dates[0].getTime() < xAxis.min.getTime()) xAxis.min = dates[0]
-        //if(dates[dates.length-1].getTime() > xAxis.max.getTime()) xAxis.max = dates[dates.length-1]
+        xAxis.min = dates[0]
+        xAxis.max = dates[dates.length-1]
 
         var yMin = Math.min(...values)
         var yMax = Math.max(...values)
 
-        //if(yMin < yAxis.min) yAxis.min = yMin
-        //if(yMax > yAxis.max) yAxis.max = yMax
-        xAxis.min = dates[0]
-        xAxis.max = dates[dates.length-1]
-        yAxis.min = yMin
-        yAxis.max = yMax
+        if(yMin < yAxis.min) yAxis.min = yMin
+        if(yMax > yAxis.max) yAxis.max = yMax
 
         var name = data.datatype + ', ' + data.location + ' (%1)'.arg(data.id) + ' (%1)'.arg(data.unit)
 
@@ -259,12 +254,6 @@ Item{
         for(var i = 0; i < values.length; i++){
             series.append(dates[i].getTime(),values[i])
         }
-
-        /**for(var j = 0; j < chart.count; j++){
-            var s = chart.series(j)
-            s.axisX = xAxis
-            s.axisY = yAxis
-        }**/
 
         seriesMap[data.id] = series
         info.visible = false
