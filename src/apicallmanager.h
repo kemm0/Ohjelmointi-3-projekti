@@ -7,6 +7,12 @@
 #include "apicaller.hh"
 #include "data.hh"
 
+/**
+ * @brief The APICallManager class is used to register APICaller classes and then
+ * route DataRequest objects to registered APICaller classes for processing the
+ * DataRequest. The routing is made if the dataSource property of the DataRequest
+ * matches the name of the registered APICaller.
+ */
 class APICallManager : public QObject
 {
     Q_OBJECT

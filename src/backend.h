@@ -10,6 +10,11 @@
 #include "apicallerfmi.hh"
 #include "apicallerfingrid.hh"
 
+/**
+ * @brief The Backend class holds the backend application logic. It is used to
+ * handle the different signals coming from the GUI.
+ */
+
 class Backend : public QObject
 {
     Q_OBJECT

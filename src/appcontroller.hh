@@ -4,6 +4,10 @@
 #include <QObject>
 #include "backend.h"
 
+/**
+ * @brief The AppController class is used to connect the signals and slots
+ * of the GUI and backend so that the two can work together.
+ */
 class AppController : public QObject
 {
     Q_OBJECT

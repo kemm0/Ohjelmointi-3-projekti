@@ -6,6 +6,10 @@
 #include <vector>
 #include "data.hh"
 
+/**
+ * @brief The DataManager class is used to store Data objects and make read and write
+ * operations to store the Data objects in a file.
+ */
 class DataManager : public QObject
 {
     Q_OBJECT

@@ -10,7 +10,9 @@
 using namespace QtCharts;
 typedef std::vector<std::pair<QDateTime, qreal>> dataVector;
 /**
- * @brief The Data class
+ * @brief The Data class is one unit of data that holds an id, a datatype, location,
+ * data values and data source. It also has the functionality to create json type
+ * of data based on its member variables.
  */
 class Data : public QObject
 {
