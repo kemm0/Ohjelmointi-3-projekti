@@ -52,7 +52,7 @@ public slots:
      * @brief toJSONPref goes through data_ map and converts location and datatype to json-format
      * @return returns array of datapoints, which include location and datatype
      */
-    QJsonArray toJSONPref();
+    QJsonDocument toJSONPref();
 
     /**
      * @brief removeData removes data object from the data_ map
