@@ -24,7 +24,6 @@ Item{
     signal dataNameChanged(var id, var name)
     signal saveData(var filename, var url, var dataID)
     signal loadData(var filePath)
-    signal activeDataChanged(var id)
 
     required property var dataTypesModel
     required property var locationsModel
@@ -188,7 +187,6 @@ Item{
                 startTime.text = selectedData.startTime
                 endDate.text = selectedData.endDate
                 endTime.text = selectedData.endTime
-                activeDataChanged(selectedData.id)
             }
         }
     }

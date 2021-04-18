@@ -140,9 +140,9 @@ ApplicationWindow {
     function addData(data){
         graphView.showMessage("Rendering...")
         if(dataPanels[data.dataSource]){
-            dataPanels[data.dataSource].addData(data)
             graphView.addSeries(data)
             graphView.hideMessage();
+            dataPanels[data.dataSource].addData(data)
         }
         else{
             showErrorMessage("Error: Unknown data source.")
@@ -154,9 +154,6 @@ ApplicationWindow {
     }
     function changeDataName(id,name){
         graphView.changeSeriesName(id,name)
-    }
-    function changeActiveData(id){
-        graphView.changeActiveSeries(id)
     }
     function showErrorMessage(errorMessage){
         graphView.hideMessage();
@@ -172,7 +169,6 @@ ApplicationWindow {
             dataPanel.dataAdded.connect(requestData)
             dataPanel.dataRemoved.connect(removeData)
             dataPanel.dataNameChanged.connect(changeDataName)
-            dataPanel.activeDataChanged.connect(changeActiveData)
             dataPanel.saveData.connect(saveData)
             dataPanel.loadData.connect(loadData)
         }

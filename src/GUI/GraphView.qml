@@ -15,7 +15,6 @@ Item{
     property var chartImg
 
     property var seriesMap: ({})
-    property var activeSeries
     property int xScaleZoom: 0
     property int yScaleZoom: 0
 
@@ -87,12 +86,12 @@ Item{
             hoverEnabled: true
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             onPositionChanged: {
-                if(activeSeries){
+                if(chart.count != 0){
                     posInfo.visible = true
                     var p = Qt.point(mouse.x, mouse.y)
                     posInfo.x = mouse.x + 20
                     posInfo.y = mouse.y + 20
-                    var chartpoint = chart.mapToValue(p, activeSeries)
+                    var chartpoint = chart.mapToValue(p, chart.series(0))
                     posInfoText.date.setTime(chartpoint.x)
                     posInfoText.text = posInfoText.date.toString()
                     .substring(0,21) + ", " + chartpoint.y.toFixed(2)
@@ -256,11 +255,6 @@ Item{
     function changeSeriesName(id, name){
         var series = chart.series(seriesMap[id].name)
         series.name = name
-    }
-    function changeActiveSeries(id){
-        if(seriesMap[id]){
-            activeSeries = seriesMap[id]
-        }
     }
     function showMessage(message){
         info.visible = true
