@@ -42,11 +42,11 @@ const QString APICallerFingrid::responseDatetimeFormat_ = "yyyy-MM-dd'T'hh:mm':0
 
 APICallerFingrid::APICallerFingrid(QString apiKey, QObject *parent) :
     APICaller(apiKey,parent),
+    splitRequests_({}),
+    dataVectors_({}),
     replies({}),
     requestSplit(false),
     requestCounter(0),
-    splitRequests_({}),
-    dataVectors_({}),
     requestFailed(false)
 {
 }
