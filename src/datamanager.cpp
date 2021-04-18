@@ -72,14 +72,9 @@ void DataManager::savePrefToFile(QString filename, QString path)
     QFile file(fullFilePath.toString());
 
     if (!file.open(QIODevice::WriteOnly)) {
-        qWarning("Couldn't open save file.");
+        qWarning("Couldn't save to this file. Check that the path is valid.");
         return;
     }
-
-    qDebug()<<saveDocument;
-    return;
-
-    qDebug()<<"Saving";
 
     file.write(saveDocument.toJson());
 }
@@ -88,7 +83,6 @@ void DataManager::loadPrefFromFile(QString filepath)
 {
     //Tää pitäis muokata niin, että tehdään apikutsu
     qDebug()<<"Loading preferences...";
-    return;
 
     QUrl fullFilePath = QUrl(filepath).toLocalFile();
     QFile file(fullFilePath.toString());
@@ -102,19 +96,14 @@ void DataManager::loadPrefFromFile(QString filepath)
 
     QJsonObject jsonObject = QJsonDocument::fromJson(loadData).object();
 
-    std::shared_ptr<Data> newData(Data::fromJSON(jsonObject));
-
-    data_.insert(std::pair<QString,std::shared_ptr<Data>>(newData->getId(),newData));
-
-    emit dataAdded(newData);
-
+    emit prefLoaded(jsonObject);
 }
 
 QJsonDocument DataManager::toJSONPref()
 {
     QJsonDocument jsonDocument;
     QJsonObject jsonObject;
-    QJsonArray jsonArray;
+    QJsonArray jsonArray = {};
     for (auto value : data_){
         QJsonObject preference;
         QDateTime startTime = value.second->getDataValues()[0].first;
@@ -122,13 +111,11 @@ QJsonDocument DataManager::toJSONPref()
         preference.insert("datatype", value.second->getDatatype());
         preference.insert("dataSource", value.second->getDataSource());
         preference.insert("startTime",QJsonValue::fromVariant(startTime));
-        jsonArray.append(preference);
+        jsonArray.append(QJsonValue(preference));
     }
-
     jsonObject["preferences"] = jsonArray;
     jsonDocument = QJsonDocument(jsonObject);
     return jsonDocument;
-
 }
 
 void DataManager::removeData(QString &id)

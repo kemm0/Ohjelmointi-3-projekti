@@ -14,6 +14,7 @@ class Data : public QObject
 {
     Q_OBJECT
 public:
+
      Data(QString datatype, QString unit,
           QString location, QString dataSource, QObject *parent = nullptr);
 
@@ -52,6 +53,8 @@ public:
     QString getDataSource() const;
     void setDataSource(const QString &dataSource);
 
+    static const QString jsonDateTimeFormat;
+
 private:
     static int idCounter;
     QString dataSource_;
@@ -60,8 +63,6 @@ private:
     QString unit_;
     QString location_;
     dataVector dataValues_;
-
-    static const QString jsonDateTimeFormat;
 };
 
 #endif // DATA_HH

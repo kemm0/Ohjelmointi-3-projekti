@@ -78,6 +78,8 @@ public Q_SLOTS:
      * @brief forwardData forwards the data that was added to dataManager
      * @param data the data from dataManager
      */
+
+    void requestPrefData(QJsonObject pref);
 private Q_SLOTS:
     void forwardData(std::shared_ptr<Data> data);
 
