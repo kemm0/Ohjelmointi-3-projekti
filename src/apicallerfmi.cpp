@@ -209,8 +209,8 @@ std::vector<std::pair<QDateTime, qreal> > APICallerFMI::calculateAverage(std::ve
     }
     average = sum / values.size();
 
-    averageValues.push_back(std::make_pair(values[0].first,average));
-    averageValues.push_back(std::make_pair(values[values.size()-1].first,average));
+    averageValues.push_back(std::make_pair(dataRequest_.startTime,average));
+    averageValues.push_back(std::make_pair(dataRequest_.endTime,average));
 
     return averageValues;
 }
