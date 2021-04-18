@@ -231,12 +231,7 @@ Item{
                 target: addButton
                 enabled: false
             }
-            PropertyChanges {
-                target: updateButton
-                enabled: false
-            }
         }
-
     ]
 
     function validDateTimeInput(date,field){
