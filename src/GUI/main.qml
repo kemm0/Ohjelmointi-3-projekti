@@ -6,7 +6,7 @@ import QtQuick.Controls.Material 2.12
 import QtCharts 2.15
 
 
-Window {
+ApplicationWindow {
     id: mainWindow
     width: 1280
     height: 960
@@ -16,7 +16,43 @@ Window {
     signal dataAdded(var properties)
     signal dataRemoved(var id)
     signal dataModified(var properties)
-    signal testSignal()
+    signal savePreferences(var filename, var filepath)
+    signal loadPreferences(var filepath)
+    signal dataNameChanged(var id, var name)
+    signal saveData(var filename, var url, var dataID)
+    signal loadData(var filePath)
+
+    property var dataPanels: ({})
+
+    menuBar: MenuBar{
+        Menu {
+            title: qsTr("Save")
+            Action {
+                text: qsTr("Preferences")
+                onTriggered: {
+                    var component = Qt.createComponent("SaveDataWindow.qml")
+                    var window = component.createObject(mainWindow)
+                    window.accepted.connect(mainWindow.savePreferences)
+                    window.show()
+                }
+            }
+        }
+        Menu {
+            title: qsTr("Load")
+            Action {
+                text: qsTr("Preferences")
+                onTriggered: {
+                    var component = Qt.createComponent("LoadDataWindow.qml")
+                    var window = component.createObject(mainWindow)
+                    window.fileChosen.connect(mainWindow.loadPreferences)
+                }
+            }
+        }
+        Menu {
+            title: qsTr("Help")
+            Action { text: qsTr("About") }
+        }
+    }
 
     Rectangle {
         id: settingsView
@@ -82,49 +118,8 @@ Window {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         id: graphView
-        Connections{
-            target: fingridPanel
-            function onDataAdded(dataProperties){
-                dataAdded(dataProperties)
-                graphView.showMessage("Getting data...")
-            }
-            function onDataRemoved(id){
-                graphView.removeSeries(id)
-                dataRemoved(id)
-            }
-            function onDataNameChanged(id,name){
-                graphView.changeSeriesName(id,name)
-            }
-            function onActiveDataChanged(id){
-                graphView.changeActiveSeries(id)
-            }
-        }
-        Connections{
-            target: fmiPanel
-            function onDataAdded(dataProperties){
-                dataAdded(dataProperties)
-                graphView.showMessage("Getting data...")
-            }
-            function onDataRemoved(id){
-                graphView.removeSeries(id)
-                dataRemoved(id)
-            }
-            function onDataNameChanged(id,name){
-                graphView.changeSeriesName(id,name)
-            }
-            function onActiveDataChanged(id){
-                graphView.changeActiveSeries(id)
-            }
-        }
-        Connections{
-            target: backend
-            function onError(errorMessage){
-                console.log(errorMessage)
-                var dialog = dialogComponent.createObject(mainWindow, {message: errorMessage})
-                dialog.open()
-            }
-        }
     }
+
     Component{
         id: dialogComponent
         Dialog {
@@ -140,6 +135,51 @@ Window {
 
             onAccepted: close()
             onRejected: close()
+        }
+    }
+    function requestData(dataProperties){
+        dataAdded(dataProperties)
+        graphView.showMessage("Getting data...")
+    }
+    function addData(data){
+        graphView.showMessage("Rendering...")
+        if(dataPanels[data.dataSource]){
+            dataPanels[data.dataSource].addData(data)
+            graphView.addSeries(data)
+            graphView.hideMessage();
+        }
+        else{
+            showErrorMessage("Error: Unknown data source.")
+        }
+    }
+    function removeData(id){
+        graphView.removeSeries(id)
+        dataRemoved(id)
+    }
+    function changeDataName(id,name){
+        graphView.changeSeriesName(id,name)
+    }
+    function changeActiveData(id){
+        graphView.changeActiveSeries(id)
+    }
+    function showErrorMessage(errorMessage){
+        graphView.hideMessage();
+        var dialog = dialogComponent.createObject(mainWindow, {message: errorMessage})
+        dialog.open()
+    }
+    Component.onCompleted: {
+        dataPanels[fmiPanel.dataSource] = fmiPanel
+        dataPanels[fingridPanel.dataSource] = fingridPanel
+
+        for(const dataSource in dataPanels){
+            console.log(dataSource)
+            const dataPanel = dataPanels[dataSource]
+            dataPanel.dataAdded.connect(requestData)
+            dataPanel.dataRemoved.connect(removeData)
+            dataPanel.dataNameChanged.connect(changeDataName)
+            dataPanel.activeDataChanged.connect(changeActiveData)
+            dataPanel.saveData.connect(saveData)
+            dataPanel.loadData.connect(loadData)
         }
     }
 }

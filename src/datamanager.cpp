@@ -64,6 +64,9 @@ void DataManager::savePrefToFile(QString filename, QString path)
 {
     //tää pitäis muokkailla erilaiseks sillee et tallentaa asetukset datan sijasta
 
+    qDebug()<<"Saving preferences...";
+    return;
+
     QJsonArray jsonArray = toJSONPref();
     QUrl fullFilePath = QUrl(path + "/" + filename + ".data").toLocalFile();
 
@@ -84,6 +87,9 @@ void DataManager::savePrefToFile(QString filename, QString path)
 void DataManager::loadPrefFromFile(QString filepath)
 {
     //Tää pitäis muokata niin, että tehdään apikutsu
+    qDebug()<<"Loading preferences...";
+    return;
+
     QUrl fullFilePath = QUrl(filepath).toLocalFile();
     QFile file(fullFilePath.toString());
 

@@ -14,7 +14,9 @@ class Data : public QObject
 {
     Q_OBJECT
 public:
-     Data(QString datatype, QString unit, dataVector dataValues, QString location, QObject *parent = nullptr);
+     Data(QString datatype, QString unit,
+          QString location, QString dataSource, QObject *parent = nullptr);
+
      Data(QObject *parent = nullptr);
      ~Data();
     QString getId();
@@ -47,8 +49,12 @@ public:
      */
     void print();
 
+    QString getDataSource() const;
+    void setDataSource(const QString &dataSource);
+
 private:
     static int idCounter;
+    QString dataSource_;
     QString id_;
     QString datatype_;
     QString unit_;

@@ -75,13 +75,18 @@ const QMap<QString,QMap<QString,QString>> APICallerFMI::requestParameters_{
 APICallerFMI::APICallerFMI(QString apiKey, QObject *parent) :
     APICaller(apiKey, parent),
     requestSplit(false),
-    splitRequests_({})
+    splitRequests_({}),
+    requestFailed(false)
 {
 
 }
 
 void APICallerFMI::parse(QNetworkReply *reply)
 {
+    if(requestFailed){
+        return;
+    }
+
     DataRequest request = splitRequests_[reply->property("requestID").toInt()];
     qDebug()<< request;
     QXmlStreamReader xml;
@@ -121,6 +126,7 @@ void APICallerFMI::parse(QNetworkReply *reply)
                     "location or give a time range of at least %1 minutes.")
                     .arg(requestParameters_[request.datatype]["timestep"])
                 );
+        requestFailed = true;
         return;
     }
 
@@ -159,8 +165,9 @@ void APICallerFMI::parse(QNetworkReply *reply)
         auto data = std::make_shared<Data>(
                     request.datatype,
                     requestParameters_[request.datatype]["unit"],
-                    dataVector,
-                    request.location);
+                    request.location, dataRequest_.dataSource);
+        data->setDataValues(dataVector);
+
         for(int i = 0; i < replies.size(); i++){
             auto r = replies.at(i);
             r->deleteLater();

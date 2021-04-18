@@ -23,13 +23,13 @@ signals:
      * the data manager
      * @param data : the data that was added
      */
-    void dataAdded(QMap<QString,QVariant> data);
+    void dataAdded(QVariant data);
 
     /**
      * @brief error signals an error message
      * @param errorMessage the message
      */
-    void error(QString errorMessage);
+    void error(QVariant errorMessage);
 
 public Q_SLOTS:
 

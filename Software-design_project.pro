@@ -14,6 +14,7 @@ SOURCES += \
         src/apicallerfingrid.cpp \
         src/apicallerfmi.cpp \
         src/apicallmanager.cpp \
+        src/appcontroller.cpp \
         src/backend.cpp \
         src/data.cpp \
         src/datamanager.cpp \
@@ -41,6 +42,7 @@ DISTFILES += \
 HEADERS += \
     src/apicallerfingrid.hh \
     src/apicallerfmi.hh \
+    src/appcontroller.hh \
     src/datamanager.hh \
     src/datarequest.h \
     src/apicaller.hh \

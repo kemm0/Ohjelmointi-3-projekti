@@ -26,6 +26,7 @@ private:
     static const QString datetimeFormat;
     static const QMap<QString,QMap<QString,QString>> requestParameters_;
     static const QString baseURL_;
+    bool requestFailed;
 
     QMap<int,DataRequest> splitDataRequest(DataRequest& request, int &splitFactor);
     std::vector<std::pair<QDateTime,qreal>> calculateAverage(std::vector<std::pair<QDateTime,qreal>> &values);

@@ -168,16 +168,6 @@ Item{
             axisX: xAxis
             axisY: yAxis
         }
-
-        Connections{
-            target: backend
-            function onDataAdded(data){
-                addSeries(data)
-            }
-            function onError(message){
-                info.visible = false
-            }
-        }
     }
     RowLayout{
         anchors.top: chart.bottom
@@ -256,7 +246,6 @@ Item{
         }
 
         seriesMap[data.id] = series
-        info.visible = false
     }
     function removeSeries(id){
         var series = chart.series(seriesMap[id].name)
@@ -278,6 +267,9 @@ Item{
     function showMessage(message){
         info.visible = true
         infoText.text = message
+    }
+    function hideMessage(){
+        info.visible = false;
     }
 
     Component.onCompleted: {
