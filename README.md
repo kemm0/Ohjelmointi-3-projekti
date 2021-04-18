@@ -9,3 +9,8 @@ OpenSSL (add from maintenance tool)
 apiconfig.txt
     This file must be in the root directory of the project. APICallManager reads the API keys from this file. Format of the file is KEY=VALUE. Each key
     must be defined in their own lines. Define Fingrid API key in this file as FINGRID_API_KEY=KEYHERE.
+    
+HOW TO RUN:
+
+Install dependencies
+Run from Qt creator
