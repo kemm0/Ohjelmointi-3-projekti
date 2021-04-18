@@ -64,8 +64,10 @@ void DataManager::savePrefToFile(QString filename, QString path)
 {
     //tää pitäis muokkailla erilaiseks sillee et tallentaa asetukset datan sijasta
 
-    QJsonArray jsonArray = toJSONPref();
-    QUrl fullFilePath = QUrl(path + "/" + filename + ".data").toLocalFile();
+    qDebug()<<"Saving preferences...";
+
+    QJsonDocument saveDocument = toJSONPref();
+    QUrl fullFilePath = QUrl(path + "/" + filename + ".pref").toLocalFile();
 
     QFile file(fullFilePath.toString());
 
@@ -74,7 +76,8 @@ void DataManager::savePrefToFile(QString filename, QString path)
         return;
     }
 
-    QJsonDocument saveDocument(jsonArray);
+    qDebug()<<saveDocument;
+    return;
 
     qDebug()<<"Saving";
 
@@ -84,6 +87,9 @@ void DataManager::savePrefToFile(QString filename, QString path)
 void DataManager::loadPrefFromFile(QString filepath)
 {
     //Tää pitäis muokata niin, että tehdään apikutsu
+    qDebug()<<"Loading preferences...";
+    return;
+
     QUrl fullFilePath = QUrl(filepath).toLocalFile();
     QFile file(fullFilePath.toString());
 
@@ -104,18 +110,24 @@ void DataManager::loadPrefFromFile(QString filepath)
 
 }
 
-QJsonArray DataManager::toJSONPref()
+QJsonDocument DataManager::toJSONPref()
 {
+    QJsonDocument jsonDocument;
+    QJsonObject jsonObject;
     QJsonArray jsonArray;
-
     for (auto value : data_){
-        QJsonObject jsonObject;
-        jsonObject.insert("location",value.second->getLocation());
-        jsonObject.insert("datatype", value.second->getDatatype());
-        jsonArray.push_back(jsonObject);
+        QJsonObject preference;
+        QDateTime startTime = value.second->getDataValues()[0].first;
+        preference.insert("location",value.second->getLocation());
+        preference.insert("datatype", value.second->getDatatype());
+        preference.insert("dataSource", value.second->getDataSource());
+        preference.insert("startTime",QJsonValue::fromVariant(startTime));
+        jsonArray.append(preference);
     }
 
-    return jsonArray;
+    jsonObject["preferences"] = jsonArray;
+    jsonDocument = QJsonDocument(jsonObject);
+    return jsonDocument;
 
 }
 

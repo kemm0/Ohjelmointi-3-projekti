@@ -23,13 +23,13 @@ signals:
      * the data manager
      * @param data : the data that was added
      */
-    void dataAdded(QMap<QString,QVariant> data);
+    void dataAdded(QVariant data);
 
     /**
      * @brief error signals an error message
      * @param errorMessage the message
      */
-    void error(QString errorMessage);
+    void error(QVariant errorMessage);
 
 public Q_SLOTS:
 
@@ -37,13 +37,13 @@ public Q_SLOTS:
      * @brief removeData sends signal to dataManager to remove data
      * @param id
      */
-    Q_INVOKABLE void removeData(QVariant id);
+    void removeData(QVariant id);
 
     /**
      * @brief fetchNewData sends signal to apiCallManager to create a new request
      * @param request
      */
-    Q_INVOKABLE void fetchNewData(QVariant properties);
+    void fetchNewData(QVariant properties);
 
     /**
      * @brief saveData signals the dataManager to save data to a file
@@ -51,20 +51,20 @@ public Q_SLOTS:
      * @param path
      * @param id
      */
-    Q_INVOKABLE void saveData(QVariant filename, QVariant path, QVariant id);
+    void saveData(QVariant filename, QVariant path, QVariant id);
 
     /**
      * @brief loadData signals the dataManager to load data from a file
      * @param filepath
      */
-    Q_INVOKABLE void loadData(QVariant filePath);
+    void loadData(QVariant filePath);
 
     /**
      * @brief loadPreferences signals (the dataManager?) to load preferences
      * from a file and create data objects based on the preferences
      * @param filepath : the path to the preferences file
      */
-    Q_INVOKABLE void loadPreferences(QVariant filepath);
+    void loadPreferences(QVariant filepath);
 
     /**
      * @brief savePreferences signals (the dataManager?) to save current
@@ -72,7 +72,7 @@ public Q_SLOTS:
      * @param filename
      * @param path
      */
-    Q_INVOKABLE void savePreferences(QVariant filename, QVariant filepath);
+    void savePreferences(QVariant filename, QVariant filepath);
 
     /**
      * @brief forwardData forwards the data that was added to dataManager

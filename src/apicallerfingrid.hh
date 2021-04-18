@@ -54,6 +54,8 @@ private:
     QVector<QNetworkReply*> replies;
     bool requestSplit;
     int requestCounter;
+
+    bool requestFailed;
 };
 
 #endif // APICALLERFINGRID_HH

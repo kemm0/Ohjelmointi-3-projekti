@@ -59,14 +59,15 @@ void Backend::savePreferences(QVariant filename, QVariant filepath)
 {
     QString filenameString = filename.toString();
     QString pathString = filepath.toString();
+    qDebug()<<":D";
     dataManager_->savePrefToFile(filenameString,pathString);
 }
 
 void Backend::forwardData(std::shared_ptr<Data> data)
 {
-    QMap<QString,QVariant> dataMap = {};
-    QList<QVariant> dates = {};
-    QList<QVariant> values = {};
+    QVariantMap dataMap = {};
+    QVariantList dates = {};
+    QVariantList values = {};
     for(uint i = 0; i < data->getDataValues().size(); i++){
         auto date = data->getDataValues()[i].first;
         auto value = data->getDataValues()[i].second;
@@ -80,13 +81,14 @@ void Backend::forwardData(std::shared_ptr<Data> data)
     dataMap.insert("values",values);
     dataMap.insert("unit",data->getUnit());
     dataMap.insert("datatype",data->getDatatype());
+    dataMap.insert("dataSource", data->getDataSource());
     qDebug()<<"Data forwarded by backend to view";
-    emit dataAdded(dataMap);
+    emit dataAdded(QVariant::fromValue(dataMap));
 }
 
 void Backend::sendError(QString errorMessage)
 {
-    emit error(errorMessage);
+    emit error(QVariant::fromValue(errorMessage));
 }
 
 void Backend::removeData(QVariant id)

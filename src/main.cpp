@@ -6,6 +6,7 @@
 #include <memory>
 #include "data.hh"
 #include "backend.h"
+#include "appcontroller.hh"
 #include <typeinfo>
 int main(int argc, char *argv[])
 {
@@ -21,6 +22,8 @@ int main(int argc, char *argv[])
 
     auto backend = std::make_shared<Backend>(apiConfigPath);
 
+    auto controller = std::make_shared<AppController>();
+
     QQuickStyle::setStyle("Material");
 
     QQmlApplicationEngine engine;
@@ -32,5 +35,7 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
+
+    controller->init(backend.get(),engine.rootObjects().first());
     return app.exec();
 }

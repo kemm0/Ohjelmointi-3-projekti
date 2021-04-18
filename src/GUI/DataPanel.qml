@@ -104,7 +104,6 @@ Item{
                                     endTime: endTime.text
                                 }
                     root.dataAdded(newData)
-                    backend.fetchNewData(newData)
                 }
             }
             Button {
@@ -116,7 +115,6 @@ Item{
                         const removedID = dataListModel.get(index).id
                         dataListModel.remove(index)
                         root.dataRemoved(removedID)
-                        backend.removeData(removedID)
                     }
                 }
             }
@@ -203,27 +201,6 @@ Item{
         endDate.text = endDateTime.toLocaleDateString(Qt.locale(),dateFormat)
         endTime.text = endDateTime.toLocaleTimeString(Qt.locale(),timeFormat)
     }
-
-    Connections{
-        target: backend
-        function onDataAdded(data){
-            var dataTypeFound = dataTypeExists(dataTypesModel,data.datatype);
-            if(dataTypeFound){
-                const newData = {
-                                id: data.id,
-                                dataType: data.datatype,
-                                location: data.location,
-                                unit: data.unit,
-                                startDate: startDate.text,
-                                startTime: startTime.text,
-                                endDate: endDate.text,
-                                endTime: endTime.text
-                            }
-                dataListModel.append(newData)
-                dataList.currentIndex = dataListModel.count - 1
-            }
-        }
-    }
     states: [
         State{
             name: "dataRequestDisabled"
@@ -254,9 +231,26 @@ Item{
     }
     function requestDataSave(filename, url){
         var dataID = dataListModel.get(dataList.currentIndex).id
-        backend.saveData(filename,url,dataID)
+        saveData(filename,url,dataID)
     }
     function requestDataLoad(filePath){
-        backend.loadData(filePath)
+        loadData(filePath)
+    }
+    function addData(data){
+        var dataTypeFound = dataTypeExists(dataTypesModel,data.datatype);
+        if(dataTypeFound){
+            const newData = {
+                            id: data.id,
+                            dataType: data.datatype,
+                            location: data.location,
+                            unit: data.unit,
+                            startDate: startDate.text,
+                            startTime: startTime.text,
+                            endDate: endDate.text,
+                            endTime: endTime.text
+                        }
+            dataListModel.append(newData)
+            dataList.currentIndex = dataListModel.count - 1
+        }
     }
 }

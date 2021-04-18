@@ -9,20 +9,22 @@
 int Data::idCounter = 0;
 const QString Data::jsonDateTimeFormat = "yyyy-MM-dd'T'hh:mm:'00.000'";
 
-Data::Data(QString datatype, QString unit, dataVector dataValues,
-           QString location, QObject *parent)
+Data::Data(QString datatype, QString unit,QString location,
+           QString dataSource, QObject *parent)
     : QObject(parent),
+      dataSource_(dataSource),
       id_(QString::number(idCounter++)),
       datatype_(datatype),
       unit_(unit),
       location_(location),
-      dataValues_(dataValues)
+      dataValues_({})
 {
 
 }
 
 Data::Data(QObject *parent) :
     QObject(parent),
+    dataSource_(""),
     id_(QString::number(idCounter++)),
     datatype_(""),
     unit_(""),
@@ -104,6 +106,7 @@ QJsonObject Data::toJSON()
     }
     jsonObject.insert("dates",dates);
     jsonObject.insert("values",values);
+    jsonObject.insert("dataSource", dataSource_);
 
     return jsonObject;
 }
@@ -144,5 +147,15 @@ void Data::print()
         qDebug()<< "Datetime: " << dataValues_[i].first << "Value: " << dataValues_[i].second;
     }
     qDebug()<< "End of data print id: " + id_;
+}
+
+QString Data::getDataSource() const
+{
+    return dataSource_;
+}
+
+void Data::setDataSource(const QString &dataSource)
+{
+    dataSource_ = dataSource;
 }
 

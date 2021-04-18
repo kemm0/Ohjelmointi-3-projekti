@@ -42,11 +42,12 @@ const QString APICallerFingrid::responseDatetimeFormat_ = "yyyy-MM-dd'T'hh:mm':0
 
 APICallerFingrid::APICallerFingrid(QString apiKey, QObject *parent) :
     APICaller(apiKey,parent),
+    splitRequests_({}),
+    dataVectors_({}),
     replies({}),
     requestSplit(false),
     requestCounter(0),
-    splitRequests_({}),
-    dataVectors_({})
+    requestFailed(false)
 {
 }
 
@@ -88,6 +89,9 @@ QList<QString> APICallerFingrid::dataTypes()
 
 void APICallerFingrid::parse(QNetworkReply *reply)
 {
+    if(requestFailed){
+        return;
+    }
     std::vector<QDateTime> dates;
     std::vector<qreal> values;
 
@@ -121,6 +125,7 @@ void APICallerFingrid::parse(QNetworkReply *reply)
     }
     if(dataVectors_[requestID].size() == 0){
         emit requestError(QString("No data found with these parameters!"));
+        requestFailed = true;
         return;
     }
 
@@ -146,8 +151,9 @@ void APICallerFingrid::parse(QNetworkReply *reply)
             auto data = std::make_shared<Data>(
                         dataRequest.datatype,
                         requestParameters_[dataRequest_.datatype]["unit"],
-                        dataVectors_[requestID],
-                        dataRequest.location);
+                        dataRequest.location,
+                        dataRequest_.dataSource);
+            data->setDataValues(dataVectors_[requestID]);
             emit dataParsed(data);
         }
         for(auto networkReply : replies){

@@ -8,7 +8,7 @@
 #include <QXmlStreamReader>
 
 #include "data.hh"
-#include "datarequest.h"
+#include "DataRequest.h"
 
 class APICaller : public QObject
 {
