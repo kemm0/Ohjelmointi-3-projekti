@@ -211,8 +211,8 @@ Item{
             if(dataTypeFound){
                 const newData = {
                                 id: data.id,
-                                dataType: dataTypeSelection,
-                                location: locationSelection,
+                                dataType: data.datatype,
+                                location: data.location,
                                 unit: data.unit,
                                 startDate: startDate.text,
                                 startTime: startTime.text,
