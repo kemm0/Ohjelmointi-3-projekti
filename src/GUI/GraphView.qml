@@ -191,7 +191,7 @@ Item{
         Button{
             text: "Save image"
             onClicked: {
-                var component = Qt.createComponent("SaveImageWindow.qml")
+                var component = Qt.createComponent("SaveDataWindow.qml")
                 var window = component.createObject(parent)
                 window.accepted.connect(saveChartImage)
                 window.show()
@@ -221,7 +221,7 @@ Item{
             text: "y Axis ticks: " + xTickSlider.value.toString()
         }
     }
-    function saveChartImage(folder,filename){
+    function saveChartImage(filename,folder){
         var filePath
         if(Qt.platform.os === 'windows'){
             filePath = folder.substring(8,folder.length)

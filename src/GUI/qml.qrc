@@ -5,7 +5,6 @@
         <file>GraphView.qml</file>
         <file>SaveDataWindow.qml</file>
         <file>LoadDataWindow.qml</file>
-        <file>SaveImageWindow.qml</file>
         <file>DataPanel.qml</file>
     </qresource>
 </RCC>
