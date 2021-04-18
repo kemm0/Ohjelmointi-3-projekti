@@ -38,7 +38,8 @@ const QMap<QString,QMap<QString,QString>> APICallerFingrid::requestParameters_{
         }}
 };
 
-const QString APICallerFingrid::responseDatetimeFormat_ = "yyyy-MM-dd'T'hh:mm':00+0000'";
+const QString APICallerFingrid::responseDatetimeFormat_ =
+        "yyyy-MM-dd'T'hh:mm':00+0000'";
 
 APICallerFingrid::APICallerFingrid(QString apiKey, QObject *parent) :
     APICaller(apiKey,parent),
@@ -81,6 +82,11 @@ void APICallerFingrid::fetchData(DataRequest dataRequest)
 QList<QString> APICallerFingrid::dataTypes()
 {
     return requestParameters_.keys();
+}
+
+APICaller *APICallerFingrid::Create(QString apiKey)
+{
+    return new APICallerFingrid(apiKey);
 }
 
 void APICallerFingrid::parse(QNetworkReply *reply)
@@ -137,22 +143,27 @@ void APICallerFingrid::parse(QNetworkReply *reply)
     }
 
     if(allRepliesFinished){
+
         // Create data object from the parsed data
         if(dataRequest_.datatype == "Power forms percentages"){
             calculatePercentages();
         }
-        for(auto requestID : splitRequests_.keys()){
+        auto requestIDs = splitRequests_.keys();
+        for(auto requestID : requestIDs){
             auto dataRequest = splitRequests_[requestID];
+
             auto data = std::make_shared<Data>(
                         dataRequest.datatype,
                         requestParameters_[dataRequest_.datatype]["unit"],
                         dataRequest.location,
-                        dataRequest_.dataSource);
+                        dataRequest_.dataSource
+                    );
+
             data->setDataValues(dataVectors_[requestID]);
             emit dataParsed(data);
         }
-        for(auto networkReply : replies){
-            networkReply->deleteLater();
+        for(int i = 0; i < replies.size(); i++){
+            replies[i]->deleteLater();
         }
     }
 }
@@ -161,13 +172,18 @@ QString APICallerFingrid::formURL(DataRequest dataRequest)
 {
     QString startTime = dataRequest.startTime.toString(datetimeFormat_);
     QString endTime = dataRequest.endTime.toString(datetimeFormat_);
-    QString requestUrl =  baseUrl_.arg(requestParameters_[dataRequest.datatype]["id"],
-            startTime,endTime);
+
+    QString requestUrl =  baseUrl_.arg(
+                requestParameters_[dataRequest.datatype]["id"],
+                startTime,
+                endTime);
+
     return requestUrl;
 }
 
 void APICallerFingrid::calculatePercentages()
 {
+    // Calculate relative values between each datapoint
     for (uint i = 0 ; i < dataVectors_.first().size(); i++){
         auto &date = dataVectors_.first()[i].first;
         double total = 0;

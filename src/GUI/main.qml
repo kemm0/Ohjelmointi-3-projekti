@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls.Material 2.12
 import QtCharts 2.15
 
+// Main GUI window
 
 ApplicationWindow {
     id: mainWindow
@@ -157,10 +158,14 @@ ApplicationWindow {
     }
     function showErrorMessage(errorMessage){
         graphView.hideMessage();
-        var dialog = dialogComponent.createObject(mainWindow, {message: errorMessage})
+        var dialog = dialogComponent.createObject(mainWindow,
+                                                  {message: errorMessage}
+                                                  )
         dialog.open()
     }
     Component.onCompleted: {
+        //connect all data panels to main window
+
         dataPanels[fmiPanel.dataSource] = fmiPanel
         dataPanels[fingridPanel.dataSource] = fingridPanel
 

@@ -44,10 +44,12 @@ Item{
         }
 
         Rectangle {
+            // used for scroll operations in the mousearea
             id: scrollMask
             visible: false
         }
         Rectangle {
+            // Shows the data point where the user is hovering the mouse
             id: posInfo
             visible: false
             width: posInfoText.implicitWidth
@@ -59,6 +61,7 @@ Item{
             }
         }
         Rectangle {
+            // Shows an info message
             id: info
             visible: false
             anchors.horizontalCenter: chart.horizontalCenter
@@ -73,19 +76,23 @@ Item{
             }
         }
         Rectangle{
+            // used for the right click zoom to a rectangle area in the chart
             id: recZoom
             border.color: "steelblue"
             border.width: 1
             color: "steelblue"
             opacity: 0.3
             visible: false
-            transform: Scale { origin.x: 0; origin.y: 0; xScale: xScaleZoom; yScale: yScaleZoom}
+            transform: Scale { origin.x: 0; origin.y: 0;
+                xScale: xScaleZoom; yScale: yScaleZoom}
         }
         MouseArea{
+            // Handles all mouse events inside the chartview
             anchors.fill: parent
             hoverEnabled: true
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             onPositionChanged: {
+                // show point info
                 if(chart.count != 0){
                     posInfo.visible = true
                     var p = Qt.point(mouse.x, mouse.y)
@@ -101,6 +108,7 @@ Item{
                 posInfo.visible = false
             }
             onReleased: {
+                // zoom to rectangular area
                 if(mouse.button == Qt.RightButton){
                     var x = (mouseX >= recZoom.x) ? recZoom.x : mouseX
                     var y = (mouseY >= recZoom.y) ? recZoom.y : mouseY
@@ -119,7 +127,7 @@ Item{
                 }
             }
             onMouseXChanged: {
-
+                //draw rectangular zoom area
                 if((mouse.buttons & Qt.RightButton) == Qt.RightButton){
                     if (mouseY - recZoom.y >= 0) {
                         yScaleZoom = 1;
@@ -129,12 +137,14 @@ Item{
                         recZoom.height = recZoom.y - mouseY;
                     }
                 }
+                //drag the chart
                 if((mouse.buttons & Qt.LeftButton) == Qt.LeftButton){
                     chart.scrollLeft(mouseX - scrollMask.x)
                     scrollMask.x = mouseX
                 }
             }
             onMouseYChanged: {
+                //draw rectangular zoom area
                 if((mouse.buttons & Qt.RightButton) == Qt.RightButton){
                     if (mouseX - recZoom.x >= 0) {
                         xScaleZoom = 1;
@@ -144,6 +154,7 @@ Item{
                         recZoom.width = recZoom.x - mouseX;
                     }
                 }
+                //drag the chart
                 if((mouse.buttons & Qt.LeftButton) == Qt.LeftButton){
                     chart.scrollUp(mouseY - scrollMask.y)
                     scrollMask.y = mouseY
@@ -151,11 +162,13 @@ Item{
             }
 
             onPressed: {
+                // set rectangular zoom start position
                 if(mouse.button == Qt.RightButton){
                     recZoom.x = mouseX;
                     recZoom.y = mouseY;
                     recZoom.visible = true;
                 }
+                // set drag position
                 if (mouse.button == Qt.LeftButton) {
                     scrollMask.x = mouseX
                     scrollMask.y = mouseY
@@ -211,10 +224,12 @@ Item{
     function saveChartImage(folder,filename){
         var filePath
         if(Qt.platform.os === 'windows'){
-            filePath = folder.substring(8,folder.length) + "/" + filename + ".png"
+            filePath = folder.substring(8,folder.length)
+                    + "/" + filename + ".png"
         }
         else{
-            filePath = folder.substring(7,folder.length) + "/" + filename + ".png"
+            filePath = folder.substring(7,folder.length)
+                    + "/" + filename + ".png"
         }
         chart.grabToImage(function(result){
             result.saveToFile(filePath)
@@ -232,9 +247,11 @@ Item{
         if(yMin < yAxis.min) yAxis.min = yMin
         if(yMax > yAxis.max) yAxis.max = yMax
 
-        var name = data.datatype + ', ' + data.location + ' (%1)'.arg(data.id) + ' (%1)'.arg(data.unit)
+        var name = data.datatype + ', ' + data.location +
+                ' (%1)'.arg(data.id) + ' (%1)'.arg(data.unit)
 
-        var series = chart.createSeries(ChartView.SeriesTypeLine, name,xAxis,yAxis)
+        var series = chart.createSeries(
+                    ChartView.SeriesTypeLine, name,xAxis,yAxis)
 
         series.useOpenGL = true
 

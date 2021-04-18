@@ -143,10 +143,15 @@ void Data::setDataValues(dataVector &dataValues)
 void Data::print()
 {
     qDebug()<< "Printing data id: " + id_;
-    qDebug()<< "Datatype: " << datatype_ << "Unit: " << unit_ << "Location: " << location_;
+
+    qDebug()<< "Datatype: " << datatype_
+            << "Unit: " << unit_
+            << "Location: " << location_;
+
     qDebug()<< "Data values:";
     for(uint i = 0; i < dataValues_.size(); i++){
-        qDebug()<< "Datetime: " << dataValues_[i].first << "Value: " << dataValues_[i].second;
+        qDebug()<< "Datetime: " << dataValues_[i].first
+                << "Value: " << dataValues_[i].second;
     }
     qDebug()<< "End of data print id: " + id_;
 }

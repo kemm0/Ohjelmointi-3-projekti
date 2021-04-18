@@ -97,6 +97,7 @@ void APICallerFMI::parse(QNetworkReply *reply)
     std::vector<QDateTime> dates;
     std::vector<qreal> values;
 
+    //Parse the data from the reply
     while (!xml.atEnd()){
         xml.readNext();
 
@@ -126,6 +127,7 @@ void APICallerFMI::parse(QNetworkReply *reply)
         return;
     }
 
+    // ignore invalid values
     for (unsigned int i = 0; i < values.size();++i){
         if(qIsNaN(values[i]) || qIsInf(values[i])
                 || !dates[i].isValid()){
@@ -146,6 +148,7 @@ void APICallerFMI::parse(QNetworkReply *reply)
         }
     }
 
+    // Create data object from parsed data
     if(allRepliesFinished){
         if(requestParameters_[request.datatype]["type"] == "average"){
             dataVector = calculateAverage(dataVector);
@@ -169,8 +172,6 @@ void APICallerFMI::parse(QNetworkReply *reply)
         }
         emit dataParsed(data);
     }
-
-    //auto data = createDataObject(dataVector,requestParameters_[request.datatype]["unit"]);
 }
 
 QString APICallerFMI::formURL(DataRequest request)
@@ -267,4 +268,9 @@ void APICallerFMI::fetchData(DataRequest request)
 QList<QString> APICallerFMI::dataTypes()
 {
     return requestParameters_.keys();
+}
+
+APICaller *APICallerFMI::Create(QString apiKey)
+{
+    return new APICallerFMI(apiKey);
 }

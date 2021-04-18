@@ -5,6 +5,8 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import Qt.labs.platform 1.0
 
+// a dialog for loading a file
+
 FileDialog {
     id: fileDialog
     title: "Load data from a file"

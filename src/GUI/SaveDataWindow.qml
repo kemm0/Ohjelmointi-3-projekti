@@ -5,6 +5,8 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import Qt.labs.platform 1.0
 
+// a dialog window for selecting file name and folder
+
 Window {
     id: window
     width: 300
@@ -54,7 +56,8 @@ Window {
             id: folderDialog
             title: "Please choose a folder"
             options: FolderDialog.ShowDirsOnly
-            currentFolder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+            currentFolder: StandardPaths.writableLocation(
+                               StandardPaths.DocumentsLocation)
             onAccepted: {
                 folderInput.text = folderDialog.folder
             }

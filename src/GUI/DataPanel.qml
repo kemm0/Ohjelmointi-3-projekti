@@ -57,14 +57,16 @@ Item{
             TextField {
                 id: startDate
                 onTextChanged: {
-                    var date = Date.fromLocaleDateString(Qt.locale(), startDate.text, dateFormat)
+                    var date = Date.fromLocaleDateString(
+                                Qt.locale(), startDate.text, dateFormat)
                     validDateTimeInput(date, startDate)
                 }
             }
             TextField {
                 id: startTime
                 onTextChanged: {
-                    var date = Date.fromLocaleTimeString(Qt.locale(), startTime.text, timeFormat)
+                    var date = Date.fromLocaleTimeString(
+                                Qt.locale(), startTime.text, timeFormat)
                     validDateTimeInput(date, startTime)
                 }
             }
@@ -76,14 +78,16 @@ Item{
             TextField {
                 id: endDate
                 onTextChanged: {
-                    var date = Date.fromLocaleDateString(Qt.locale(), endDate.text, dateFormat)
+                    var date = Date.fromLocaleDateString(
+                                Qt.locale(), endDate.text, dateFormat)
                     validDateTimeInput(date, endDate)
                 }
             }
             TextField {
                 id: endTime
                 onTextChanged: {
-                    var date = Date.fromLocaleTimeString(Qt.locale(), endTime.text, timeFormat)
+                    var date = Date.fromLocaleTimeString(
+                                Qt.locale(), endTime.text, timeFormat)
                     validDateTimeInput(date, endTime)
                 }
             }
@@ -171,16 +175,25 @@ Item{
                 onAccepted: {
                     parent.focus = false
                     readOnly = true
-                    dataNameChanged(dataListModel.get(dataList.currentIndex).id, textDelegate.text + ", " +  " (%1)".arg(dataListModel.get(dataList.currentIndex).unit))
+                    dataNameChanged(
+                                dataListModel.get(dataList.currentIndex).id,
+                                textDelegate.text + ", " +  " (%1)"
+                                .arg(dataListModel.get(dataList.currentIndex)
+                                     .unit))
                 }
         }
         highlight: Rectangle {color: "lightsteelblue"; radius: 5}
         focus: true
         onCurrentIndexChanged: {
+            // set the data input fields to match the values of selected data
+
             if(dataListModel.count != 0 && dataListModel.get(currentIndex)){
-                const dataTypeIndex = dataTypesList.indexOfValue(dataListModel.get(currentIndex).dataType)
+                const dataTypeIndex = dataTypesList.indexOfValue(
+                                        dataListModel.get(currentIndex).dataType)
+
                 dataTypesList.currentIndex = dataTypeIndex
-                const locationIndex = locationsList.indexOfValue(dataListModel.get(currentIndex).location)
+                const locationIndex = locationsList.indexOfValue(
+                                        dataListModel.get(currentIndex).location)
                 locationsList.currentIndex = locationIndex
                 var selectedData = dataListModel.get(currentIndex)
                 startDate.text = selectedData.startDate
@@ -191,6 +204,8 @@ Item{
         }
     }
     Component.onCompleted: {
+        // set initial parameters for the datapanel
+
         var startDateTime = new Date(Date.now())
         var endDateTime = new Date(Date.now())
         startDateTime.setHours(startDateTime.getHours() - startTimeOffset)
@@ -221,7 +236,7 @@ Item{
     }
     function dataTypeExists(model,datatype){
         for(var i = 0; i < model.count; ++i){
-            if(model.get(i).text == datatype){
+            if(model.get(i).text === datatype){
                 return true
             }
         }
