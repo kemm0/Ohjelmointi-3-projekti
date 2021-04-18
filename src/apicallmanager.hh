@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <memory>
-#include "datarequest.h"
+#include "datarequest.hh"
 #include "apicaller.hh"
 #include "data.hh"
 

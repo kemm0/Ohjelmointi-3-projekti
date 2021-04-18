@@ -2,7 +2,7 @@
 #define APPCONTROLLER_HH
 
 #include <QObject>
-#include "backend.h"
+#include "backend.hh"
 
 /**
  * @brief The AppController class is used to connect the signals and slots

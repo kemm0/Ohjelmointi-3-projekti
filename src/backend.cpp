@@ -1,4 +1,4 @@
-#include "backend.h"
+#include "backend.hh"
 
 Backend::Backend(QString apiConfigPath, QObject *parent) :
     QObject(parent),

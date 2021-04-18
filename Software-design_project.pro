@@ -42,12 +42,12 @@ DISTFILES += \
 HEADERS += \
     src/apicallerfingrid.hh \
     src/apicallerfmi.hh \
+    src/apicallmanager.hh \
     src/appcontroller.hh \
+    src/backend.hh \
     src/datamanager.hh \
-    src/datarequest.h \
     src/apicaller.hh \
-    src/apicallmanager.h \
-    src/backend.h \
-    src/data.hh
+    src/data.hh \
+    src/datarequest.hh
 
 

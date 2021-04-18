@@ -3,10 +3,10 @@
 
 #include <QObject>
 #include "datamanager.hh"
-#include "apicallmanager.h"
+#include "apicallmanager.hh"
 #include <memory>
 #include "data.hh"
-#include "datarequest.h"
+#include "datarequest.hh"
 #include "apicallerfmi.hh"
 #include "apicallerfingrid.hh"
 

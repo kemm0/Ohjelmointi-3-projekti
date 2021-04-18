@@ -8,7 +8,7 @@
 #include <QXmlStreamReader>
 
 #include "data.hh"
-#include "DataRequest.h"
+#include "datarequest.hh"
 
 /**
  * @brief The APICaller class is an interface that is used to

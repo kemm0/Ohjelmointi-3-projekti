@@ -5,7 +5,7 @@
 #include <QQuickStyle>
 #include <memory>
 #include "data.hh"
-#include "backend.h"
+#include "backend.hh"
 #include "appcontroller.hh"
 #include <typeinfo>
 int main(int argc, char *argv[])
