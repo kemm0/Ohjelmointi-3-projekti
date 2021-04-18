@@ -15,7 +15,6 @@ FileDialog {
         close()
     }
     onRejected: {
-        console.log("Canceled")
         close()
     }
     Component.onCompleted: visible = true

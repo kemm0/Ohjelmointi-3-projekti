@@ -11,6 +11,8 @@ Backend::Backend(QString apiConfigPath, QObject *parent) :
     connect(apiCallManager_.get(), &APICallManager::requestError, this, &Backend::sendError);
     connect(dataManager_.get(), &DataManager::dataAdded, this, &Backend::forwardData);
     connect(dataManager_.get(),&DataManager::prefLoaded, this, &Backend::requestPrefData);
+    connect(dataManager_.get(), &DataManager::error, this, &Backend::error);
+
     apiCallManager_->Register("FMI","",&APICallerFMI::Create);
     apiCallManager_->Register("Fingrid",apiConfig_["FINGRID_API_KEY"],&APICallerFingrid::Create);
 }
@@ -65,8 +67,6 @@ void Backend::savePreferences(QVariant filename, QVariant filepath)
 
 void Backend::requestPrefData(QJsonObject pref)
 {
-    qDebug()<< pref;
-
     QJsonArray preferences = pref["preferences"].toArray();
 
     for(int i = 0; i < preferences.size(); i++){
@@ -79,7 +79,6 @@ void Backend::requestPrefData(QJsonObject pref)
                     prefObject["startTime"].toString(),Data::jsonDateTimeFormat);
 
         request.endTime = QDateTime::currentDateTime();
-        qDebug()<<request;
 
         apiCallManager_->fetchData(request);
     }
@@ -104,7 +103,6 @@ void Backend::forwardData(std::shared_ptr<Data> data)
     dataMap.insert("unit",data->getUnit());
     dataMap.insert("datatype",data->getDatatype());
     dataMap.insert("dataSource", data->getDataSource());
-    qDebug()<<"Data forwarded by backend to view";
     emit dataAdded(QVariant::fromValue(dataMap));
 }
 

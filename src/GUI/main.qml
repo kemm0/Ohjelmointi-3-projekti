@@ -48,10 +48,6 @@ ApplicationWindow {
                 }
             }
         }
-        Menu {
-            title: qsTr("Help")
-            Action { text: qsTr("About") }
-        }
     }
 
     Rectangle {
@@ -172,7 +168,6 @@ ApplicationWindow {
         dataPanels[fingridPanel.dataSource] = fingridPanel
 
         for(const dataSource in dataPanels){
-            console.log(dataSource)
             const dataPanel = dataPanels[dataSource]
             dataPanel.dataAdded.connect(requestData)
             dataPanel.dataRemoved.connect(removeData)

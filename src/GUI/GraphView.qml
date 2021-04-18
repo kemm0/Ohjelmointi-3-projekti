@@ -217,8 +217,6 @@ Item{
         else{
             filePath = folder.substring(7,folder.length) + "/" + filename + ".png"
         }
-
-        console.log("saved to: " + filePath)
         chart.grabToImage(function(result){
             result.saveToFile(filePath)
         })

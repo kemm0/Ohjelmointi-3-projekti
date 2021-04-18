@@ -39,7 +39,6 @@ void APICallManager::fetchData(DataRequest dataRequest)
 void APICallManager::forwardData(std::shared_ptr<Data> data)
 {
     emit dataFetched(data);
-    qDebug()<<"data Forwarded";
 }
 
 void APICallManager::forwardErrorMessage(QString errorMessage)

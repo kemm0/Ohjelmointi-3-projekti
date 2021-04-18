@@ -71,10 +71,12 @@ Data *Data::fromJSON(QJsonObject &jsonObject)
     QString datatype = jsonObject["datatype"].toString();
     QString unit = jsonObject["unit"].toString();
     QString location = jsonObject["location"].toString();
+    QString dataSource = jsonObject["dataSource"].toString();
 
     newData->setDatatype(datatype);
     newData->setUnit(unit);
     newData->setLocation(location);
+    newData->setDataSource(dataSource);
 
     QJsonArray jsonDates = jsonObject["dates"].toArray();
     QJsonArray jsonValues = jsonObject["values"].toArray();

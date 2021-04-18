@@ -58,11 +58,7 @@ void APICallerFingrid::fetchData(DataRequest dataRequest)
         return;
     }
 
-    qDebug()<<"Datarequest on fetch data: " + dataRequest.datatype;
-
     dataRequest_ = dataRequest;
-
-    qDebug()<<"Fingrid data request: " + dataRequest.datatype;
 
     if (dataRequest.datatype == "Power forms percentages") {
         DataRequest windRequest = dataRequest;
@@ -141,7 +137,6 @@ void APICallerFingrid::parse(QNetworkReply *reply)
     }
 
     if(allRepliesFinished){
-        qDebug()<<"datarequest datatype: " + dataRequest_.datatype;
         // Create data object from the parsed data
         if(dataRequest_.datatype == "Power forms percentages"){
             calculatePercentages();
@@ -168,32 +163,11 @@ QString APICallerFingrid::formURL(DataRequest dataRequest)
     QString endTime = dataRequest.endTime.toString(datetimeFormat_);
     QString requestUrl =  baseUrl_.arg(requestParameters_[dataRequest.datatype]["id"],
             startTime,endTime);
-    qDebug()<<requestUrl;
     return requestUrl;
 }
 
 void APICallerFingrid::calculatePercentages()
 {
-    /**for(auto &dataVector : dataVectors_){ // percentages over the whole time
-        double vectorSum = 0;
-        QDateTime startTime = dataVector[0].first;
-        QDateTime endTime = dataVector[dataVector.size() -1].first;
-        for(auto &pair : dataVector){
-            qDebug()<<QString::number(counter) + " : " + pair.first.toString() + " : " + QString::number(pair.second);
-            vectorSum += pair.second;
-        }
-        total += vectorSum;
-        dataVector.clear();
-        dataVector.push_back(std::make_pair(startTime,vectorSum));
-        dataVector.push_back(std::make_pair(endTime,vectorSum));
-    }
-    for(auto &dataVector : dataVectors_){
-        auto startValue = dataVector[0].second;
-        auto endValue = dataVector[dataVector.size()-1].second;
-        dataVector[0].second = startValue / total;
-        dataVector[dataVector.size()-1].second = endValue / total;
-        qDebug()<< startValue << " " << endValue;
-    }**/
     for (uint i = 0 ; i < dataVectors_.first().size(); i++){
         auto &date = dataVectors_.first()[i].first;
         double total = 0;

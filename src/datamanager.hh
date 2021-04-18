@@ -63,6 +63,7 @@ public slots:
 signals:
     void dataAdded(std::shared_ptr<Data> data);
     void prefLoaded(QJsonObject pref);
+    void error(QString error);
 
 private:
     std::map<QString,std::shared_ptr<Data>> data_;

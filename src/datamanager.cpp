@@ -15,7 +15,6 @@ DataManager::DataManager(QObject *parent) : QObject(parent)
 void DataManager::addData(std::shared_ptr<Data> data)
 {
     data_.insert(std::pair<QString,std::shared_ptr<Data>>(data->getId(),data));
-    qDebug()<<"Data added to datamanager";
     emit dataAdded(data);
 }
 
@@ -28,13 +27,11 @@ void DataManager::saveDataToFile(QString filename, QString path, QString id)
     QFile file(fullFilePath.toString());
 
     if (!file.open(QIODevice::WriteOnly)) {
-        qWarning("Couldn't open save file.");
+        emit error("Could not open file. Check that the path is valid.");
         return;
     }
 
     QJsonDocument saveDocument(jsonObject);
-
-    qDebug()<<"Saving";
 
     file.write(saveDocument.toJson());
 }
@@ -45,7 +42,7 @@ void DataManager::loadDataFromFile(QString filepath)
     QFile file(fullFilePath.toString());
 
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning("Couldn't open save file.");
+        emit error("Could not open file. Check that the path is valid.");
         return;
     }
 
@@ -62,9 +59,6 @@ void DataManager::loadDataFromFile(QString filepath)
 
 void DataManager::savePrefToFile(QString filename, QString path)
 {
-    //tää pitäis muokkailla erilaiseks sillee et tallentaa asetukset datan sijasta
-
-    qDebug()<<"Saving preferences...";
 
     QJsonDocument saveDocument = toJSONPref();
     QUrl fullFilePath = QUrl(path + "/" + filename + ".pref").toLocalFile();
@@ -72,7 +66,7 @@ void DataManager::savePrefToFile(QString filename, QString path)
     QFile file(fullFilePath.toString());
 
     if (!file.open(QIODevice::WriteOnly)) {
-        qWarning("Couldn't save to this file. Check that the path is valid.");
+        emit error("Could not open file. Check that the path is valid.");
         return;
     }
 
@@ -81,14 +75,12 @@ void DataManager::savePrefToFile(QString filename, QString path)
 
 void DataManager::loadPrefFromFile(QString filepath)
 {
-    //Tää pitäis muokata niin, että tehdään apikutsu
-    qDebug()<<"Loading preferences...";
 
     QUrl fullFilePath = QUrl(filepath).toLocalFile();
     QFile file(fullFilePath.toString());
 
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning("Couldn't open save file.");
+        emit error("Could not open file. Check that the path is valid.");
         return;
     }
 

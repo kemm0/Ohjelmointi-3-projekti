@@ -56,11 +56,7 @@ Window {
             options: FolderDialog.ShowDirsOnly
             currentFolder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
             onAccepted: {
-                console.log(currentFolder)
                 folderInput.text = folderDialog.folder
-            }
-            onRejected: {
-                console.log("Canceled")
             }
             Component.onCompleted: visible = true
         }

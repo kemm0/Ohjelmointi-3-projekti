@@ -44,7 +44,6 @@ Window {
             Button{
                 text: "Save"
                 onClicked:{
-                    //send accepted signal
                     window.accepted(folderInput.text,fileNameInput.text)
                     close()
                 }
@@ -60,11 +59,7 @@ Window {
             options: FolderDialog.ShowDirsOnly
             currentFolder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
             onAccepted: {
-                console.log("You chose: " + folderDialog.folder)
                 folderInput.text = folderDialog.folder
-            }
-            onRejected: {
-                console.log("Canceled")
             }
             Component.onCompleted: visible = true
         }

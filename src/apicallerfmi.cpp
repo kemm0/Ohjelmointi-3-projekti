@@ -88,7 +88,7 @@ void APICallerFMI::parse(QNetworkReply *reply)
     }
 
     DataRequest request = splitRequests_[reply->property("requestID").toInt()];
-    qDebug()<< request;
+
     QXmlStreamReader xml;
     QByteArray answer = reply->readAll();
     xml.addData(answer);
@@ -99,7 +99,7 @@ void APICallerFMI::parse(QNetworkReply *reply)
 
     while (!xml.atEnd()){
         xml.readNext();
-        //qDebug()<<xml.name();
+
         if (xml.isStartElement()){
             if(xml.name() == "FeatureCollection"){
             }
@@ -114,10 +114,6 @@ void APICallerFMI::parse(QNetworkReply *reply)
                 values.push_back(qreal(value));
             }
         }
-    }
-
-    if (xml.hasError()){
-        qDebug() << "XML error: " << xml.errorString().data();
     }
 
     if(values.size() == 0){
@@ -149,7 +145,6 @@ void APICallerFMI::parse(QNetworkReply *reply)
             allRepliesFinished = false;
         }
     }
-    qDebug()<<allRepliesFinished;
 
     if(allRepliesFinished){
         if(requestParameters_[request.datatype]["type"] == "average"){
@@ -191,9 +186,7 @@ QString APICallerFMI::formURL(DataRequest request)
                  requestParameters_[request.datatype]["timestep"],
                  requestParameters_[request.datatype]["code"]);
 
-    qDebug()<< baseURL_+ query + parameterUrl;
-
-    return baseURL_+ query + parameterUrl; //"fmi::observations::weather::simple&place=Pirkkala&starttime=2021-01-19T09:00:00Z&endtime=2021-01-24T14:00:00Z&timestep=30&parameters=t2m";
+    return baseURL_+ query + parameterUrl;
 }
 
 std::vector<std::pair<QDateTime, qreal> > APICallerFMI::calculateAverage(std::vector<std::pair<QDateTime, qreal> > &values)
