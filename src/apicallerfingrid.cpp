@@ -120,7 +120,7 @@ void APICallerFingrid::parse(QNetworkReply *reply)
         dataVectors_[requestID].push_back(value);
     }
     if(dataVectors_[requestID].size() == 0){
-        emit requestError(QString("No data found!"));
+        emit requestError(QString("No data found with these parameters!"));
         return;
     }
 

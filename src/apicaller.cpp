@@ -21,9 +21,9 @@ void APICaller::parse(QNetworkReply *reply)
 
 void APICaller::error(QNetworkReply::NetworkError error)
 {
-    qDebug()<<error;
     auto *reply = qobject_cast<QNetworkReply *>(sender());
-    qDebug() << reply->readAll();
+    emit requestError("An error happened during the API request. Here's the full "
+    "error message: \n" + reply->readAll());
     reply->deleteLater();
 }
 
